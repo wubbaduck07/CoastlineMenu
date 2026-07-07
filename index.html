@@ -6,14 +6,6 @@
     <title>Coastline Orange Hotel - Menü Ekranı V2</title>
 
     <style>
-        <!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coastline Orange Hotel - Menü Ekranı V2</title>
-
-    <style>
         /* =========================================
            1. TEMEL AYARLAR VE DEĞİŞKENLER
            ========================================= */
@@ -28,16 +20,15 @@
             --glass-border: rgba(255, 255, 255, 0.12);
         }
 
-          body {
+        body {
             font-family: 'Segoe UI', sans-serif;
-            height: 100vh; /* Burası kesinlikle 100vh kalmalı */
-            width: auto;
+            height: 100vh; 
+            width: 100vw;
             margin: 0;
             overflow: hidden;
             color: white;
             background: var(--base-bg, #039dfc);
             transition: background 2s ease;
-            /* body'deki tüm transform ve scale kodlarını sildik */
         }
 
         /* --- Tema Renkleri --- */
@@ -58,7 +49,7 @@
         }
 
         /* =========================================
-           2. ARKA PLAN VE EFEKTLER
+           2. ARKA PLAN VE EFEKTLER (FPS DOSTU)
            ========================================= */
         .background {
             position: fixed;
@@ -69,24 +60,19 @@
             transition: background 2s ease;
         }
 
-
         .orb {
             position: absolute;
             border-radius: 50%;
-            /* filter: blur(120px); <- TV'Yİ KASAN DÜŞMAN BUYDU, SİLİNDİ */
             transition: background 2s ease, opacity 2s ease;
             will-change: transform;
-            transform: translateZ(0); /* Donanım hızlandırmayı tetikler */
+            transform: translateZ(0);
         }
 
-        /* Işık efektini blur yerine radial-gradient ile veriyoruz (0 Kasma) */
         .orb1 { width: 700px; height: 700px; background: radial-gradient(circle, var(--orb1-color) 0%, transparent 65%); opacity: var(--orb1-opacity); top: -250px; right: -150px; animation: move1 10s ease-in-out infinite; }
         .orb2 { width: 850px; height: 850px; background: radial-gradient(circle, var(--orb2-color) 0%, transparent 65%); opacity: var(--orb2-opacity); bottom: -350px; left: -250px; animation: move2 13s ease-in-out infinite; }
         .orb3 { width: 500px; height: 500px; background: radial-gradient(circle, var(--orb3-color) 0%, transparent 65%); opacity: var(--orb3-opacity); top: 25%; left: 35%; animation: move3 15s ease-in-out infinite; }
 
-        .particles-container {
-            position: fixed; inset: 0; z-index: -10; pointer-events: none;
-        }
+        .particles-container { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
         .particle {
             position: absolute;
@@ -96,22 +82,23 @@
             will-change: transform, opacity;
             animation: randomGlow ease-in-out infinite;
         }
-          .dashboard {
+
+        /* =========================================
+           3. GENEL YERLEŞİM (LAYOUT & ZOOM)
+           ========================================= */
+        .dashboard {
             position: relative;
             z-index: 10; 
             height: 100%;
-            padding: 1.5vh 1.5vw; /* Ekrana göre dinamik iç boşluk */
+            padding: 1.5vh 1.5vw; 
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* İçerikleri yukarı ve aşağı iter */
+            justify-content: space-between; 
             gap: 15px;
-            
-            /* ZOOM AYARI: Ekranın %90'ı kadar küçültür ve tam ortaya hizalar */
-            transform: scale(1);
+            transform: scale(0.92); /* TV ekranına sığdırma ayarı */
             transform-origin: center center; 
         }
 
-        /* --- Üst Kısım (Header) --- */
         .header {
             height: 150px; 
             display: flex; 
@@ -125,29 +112,11 @@
             box-shadow: 0 15px 40px rgba(0,0,0,.20);
         }
 
-        .tv-bug-container {
-            height: 130px; 
-            width: 320px;
-            overflow: hidden; 
-            display: flex;
-            align-items: flex-start; 
-        }
+        .tv-bug-container { height: 130px; width: 320px; overflow: hidden; display: flex; align-items: flex-start; }
+        .tv-bug-logo { width: 80%; height: 190px; object-fit: cover; object-position: top center; margin-top: -5px; will-change: transform, filter; }
 
-        .tv-bug-logo {
-            width: 80%;
-            height: 190px;
-            object-fit: cover;
-            object-position: top center;
-            margin-top: -5px; 
-            will-change: transform, filter;
-        }
-
-        /* --- Dünya Saatleri --- */
         .clocks { display: flex; gap: 45px; }
-        .clock-card {
-            min-width: 195px; text-align: center; padding: 14px 18px; border-radius: 29px;
-            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
-        }
+        .clock-card { min-width: 195px; text-align: center; padding: 14px 18px; border-radius: 29px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); }
         .clock-city { font-size: 25px; opacity: .7; letter-spacing: 5px; margin-bottom: 4px; }
         .clock-time { font-size: 45px; font-weight: 700; }
 
@@ -169,141 +138,68 @@
 
         .slider { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2; }
 
-/* GİDEN SLAYT (Hızlıca ekrandan silinir) */
         .slide { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: row; 
-            justify-content: center; 
-            align-items: center; 
-            padding-bottom: 110px; 
-            
-            opacity: 0; 
-            transform: translateY(30px) scale(0.9); 
-            /* Sadece 0.3 saniyede hızlıca yok olur */
+            position: absolute; width: 100%; height: 100%; display: flex; flex-direction: row; 
+            justify-content: center; align-items: center; padding-bottom: 110px; 
+            opacity: 0; transform: translateY(30px) scale(0.9); 
             transition: opacity 0.3s ease, transform 0.3s ease; 
             pointer-events: none;
         }
 
-        /* GELEN SLAYT (Bekleyip yumuşakça girer) */
         .slide.active { 
-            opacity: 1; 
-            transform: translateY(0) scale(1); 
-            
-            /* Eski slaytın kaybolması için 0.3 saniye bekler (gecikme), sonra 1 saniyede girer */
+            opacity: 1; transform: translateY(0) scale(1); 
             transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1) 0.3s, transform 1s cubic-bezier(0.25, 1, 0.5, 1) 0.3s; 
             pointer-events: auto;
         }
 
-        /* --- İkili Ekran Yerleşimi --- */
-        .split-half {
-            flex: 1; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            padding: 0 20px;
-        }
-
+        .split-half { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 0 20px; }
         .right-half { border-left: 1px solid rgba(255, 255, 255, 0.15); }
-
-        .slide-content { 
-            position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; 
-        }
-
-        .slide img {
-            width: 240px; height: 170px; object-fit: cover; border-radius: 20%; margin-bottom: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 3px solid rgba(255,255,255,0.2);
-            animation: float 4s ease-in-out infinite; 
-        }
-
-        .slide h1 { 
-            font-size: 38px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; 
-            text-shadow: 0 10px 20px rgba(0,0,0,0.4); display: flex; flex-wrap: wrap; 
-            justify-content: center; text-align: center;
-        }
-
+        .slide-content { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        
+        .slide img { width: 240px; height: 170px; object-fit: cover; border-radius: 20%; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 3px solid rgba(255,255,255,0.2); animation: float 4s ease-in-out infinite; }
+        .slide h1 { font-size: 38px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; text-shadow: 0 10px 20px rgba(0,0,0,0.4); display: flex; flex-wrap: wrap; justify-content: center; text-align: center; }
         .word { display: inline-block; opacity: 0; transform: translateY(30px) scale(0.8); }
         .slide.active .word { animation: wordFadeIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-
-        .price-tag {
-            font-size: 24px; color: #ff8c00; font-weight: bold; background: rgba(0,0,0,0.4);
-            padding: 2px 18px; border-radius: 35px; display: inline-block;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255, 140, 0, 0.3);
-        }
-
-/* VİDEO ARAYÜZÜ (REKLAM ARASI) STİLLERİ */
-        .video-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; 
-            z-index: 50; 
-            opacity: 0;
-            pointer-events: none; /* Görünmezken arkadaki menü etkileşimini bozmaz */
-            transition: opacity 1s ease-in-out; overflow: hidden;
-        }
-
-        .video-overlay.show { 
-            opacity: 1; 
-            pointer-events: auto;
-        }
-
-        #promoVideo {
-            width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; 
-        }
-
-        /* --- Alt Kayan Yazı --- */
-        .ticker { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 110px; 
-            background: rgba(0,0,0,.25); backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255,255,255,.1); display: flex;
-            align-items: center; justify-content: center;
-        }
-
-        .ticker-static {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 8px; font-size: 28px; font-weight: 800; letter-spacing: 1px;
-        }
+        
+        .price-tag { font-size: 24px; color: #ff8c00; font-weight: bold; background: rgba(0,0,0,0.4); padding: 2px 18px; border-radius: 35px; display: inline-block; box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255, 140, 0, 0.3); }
 
         /* =========================================
-           6. ALT PANEL (FOOTER)
+           5. REKLAM VİDEOSU VE TICKER
+           ========================================= */
+        .video-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; 
+            z-index: -10; opacity: 0; pointer-events: none; transition: opacity 1s ease-in-out; overflow: hidden;
+        }
+        .video-overlay.show { z-index: 50; opacity: 1; pointer-events: auto; }
+        #promoVideo { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+
+        .ticker { position: absolute; bottom: 0; left: 0; width: 100%; height: 110px; background: rgba(0,0,0,.25); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; }
+        .ticker-static { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 28px; font-weight: 800; letter-spacing: 1px; }
+
+        /* =========================================
+           6. FOOTER
            ========================================= */
         .footer { height: 150px; display: grid; grid-template-columns: 0.5fr 1fr; gap: 16px; }
-
-        .weather-card { 
-            border-radius: 36px; background: var(--glass); backdrop-filter: blur(30px); 
-            border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;
-        }
-
+        .weather-card { border-radius: 36px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; }
         .weather-inner { display: flex; align-items: center; }
         .weather-icon { width: 75px; height: 75px; margin-right: 20px; position: relative; }
         .temp { font-size: 52px; font-weight: 700; } 
         .location { font-size: 18px; opacity: .8; }
 
-        /* --- İncelemeler ve Logolar --- */
         .review-card { padding: 10px 15px; width: 100%; }
         .review-grid { display: flex; width: 100%; justify-content: space-evenly; align-items: center; }
         .review-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .score { font-weight: 800; font-size: 19px; color: white; margin-top: 3px; text-shadow: 0 2px 5px rgba(0,0,0,0.4); }
         .score small { font-size: 12px; opacity: 0.7; margin-left: 2px; }
         .item-stars { font-size: 12px; letter-spacing: 2px; filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.4)); }
-
-        .brand-logo {
-            height: 38px; width: auto; max-width: 110px; object-fit: contain;
-            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5)); 
-            will-change: transform; animation: float 20s ease-in-out infinite;
-        }
-
+        
+        .brand-logo { height: 38px; width: auto; max-width: 110px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5)); will-change: transform; animation: float 20s ease-in-out infinite; }
         .review-item:nth-child(1) .brand-logo { animation-delay: 0s; }
-        .review-item:nth-child(2) .brand-logo { animation-delay: 0,5s; }
+        .review-item:nth-child(2) .brand-logo { animation-delay: 0.5s; }
         .review-item:nth-child(3) .brand-logo { animation-delay: 1s; }
 
         /* =========================================
-           7. ANİMASYONLAR (KEYFRAMES)
+           7. ANİMASYONLAR
            ========================================= */
         @keyframes move1 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-150px,120px);} }
         @keyframes move2 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(180px,-100px);} }
@@ -313,7 +209,6 @@
         @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes randomGlow { 0% { opacity: 0; transform: scale(0.5) translateY(0); } 50% { opacity: 1; transform: scale(4.5) translateY(-30px); } 100% { opacity: 0; transform: scale(0.5) translateY(-60px); } }
         
-        /* Hava Durumu İkon Animasyonları */
         .icon-sun { width: 48px; height: 48px; background: #ffd54f; border-radius: 50%; position: absolute; top: 13px; left: 13px; box-shadow: 0 0 20px #ffd54f; animation: pulseIcon 3s ease infinite; will-change: transform, opacity; transform: translateZ(0); }
         .icon-moon { width: 40px; height: 40px; border-radius: 50%; position: absolute; top: 15px; left: 15px; box-shadow: inset -10px -8px 0 0 #e2e8f0; animation: pulseIcon 4s ease infinite; will-change: transform, opacity; transform: translateZ(0); }
         .icon-cloud { width: 50px; height: 18px; background: #f8fafc; border-radius: 20px; position: absolute; top: 35px; left: 10px; box-shadow: 0 0 15px rgba(255,255,255,0.4); animation: floatIcon 4s ease-in-out infinite; will-change: transform; transform: translateZ(0); }
@@ -330,6 +225,21 @@
 </head>
 
 <body>
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            const errorDiv = document.createElement("div");
+            errorDiv.style.cssText = "position:absolute; top:20px; left:20px; z-index:99999; background:red; color:white; padding:15px; border-radius:10px; font-size:24px; font-weight:bold; max-width: 80%;";
+            errorDiv.innerHTML = "🚨 HATA YAKALANDI:<br>" + message + "<br>Satır: " + lineno;
+            document.body.appendChild(errorDiv);
+            return true;
+        };
+        window.addEventListener('unhandledrejection', function(event) {
+            const errorDiv = document.createElement("div");
+            errorDiv.style.cssText = "position:absolute; top:120px; left:20px; z-index:99999; background:darkred; color:white; padding:15px; border-radius:10px; font-size:24px; font-weight:bold;";
+            errorDiv.innerHTML = "🚨 PROMISE HATASI:<br>" + (event.reason.message || event.reason);
+            document.body.appendChild(errorDiv);
+        });
+    </script>
 
     <div class="background">
         <div class="orb orb1"></div>
@@ -352,9 +262,8 @@
             </div>
         </div>
 
-<div class="main-panel">
+        <div class="main-panel">
             <div class="slider" id="dynamicSlider"></div>
-            
             <div class="ticker">
                 <div class="ticker-static">
                     <div>🍳 BREAKFAST 08:00 - 10:30 &nbsp; • &nbsp; 🍽️ RESTAURANT 12:00 - 22:00 &nbsp; • &nbsp; 🍹 LOBBY BAR 08:00 - 00:00</div>
@@ -363,8 +272,8 @@
             </div>
         </div>
 
-<div class="video-overlay" id="promoVideoContainer">
-            <iframe id="promoVideo" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        <div class="video-overlay" id="promoVideoContainer">
+            <iframe id="promoVideo" src="https://player.vimeo.com/video/1207572562?api=1&controls=0&muted=1&playsinline=1&autopause=0" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
 
         <div class="footer">
@@ -402,7 +311,7 @@
     <script>
     document.addEventListener("DOMContentLoaded", () => {
         
-        // --- 1. Ürün Verileri ---
+        // 1. Veriler
         const foodItems = [
             { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
             { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
@@ -417,7 +326,7 @@
             { title: "ESPRESSO MARTINI", price: "440.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/4aefb242-8c3c-4795-98f7-5221db67e096.jpg" }
         ];
 
-        // --- 2. Slider (Menü) Oluşturucu ---
+        // 2. Slider Üretici
         const sliderContainer = document.getElementById("dynamicSlider");
         if(sliderContainer) {
             const maxItems = Math.max(foodItems.length, drinkItems.length);
@@ -429,15 +338,12 @@
                 const slideElement = document.createElement("div");
                 slideElement.className = `slide ${i === 0 ? "active" : ""}`;
                 
-// İçecek Başlığı Animasyonu
                 let drinkTitleHTML = "";
                 drink.title.split(" ").forEach((word, wordIndex) => {
-                    // Animasyonun başlaması için 350ms (ekran temizlenene kadar) bekler
                     let delay = 350 + ((wordIndex + 1) * 150);
                     drinkTitleHTML += `<span class="word" style="animation-delay: ${delay}ms">${word}</span>&nbsp;`;
                 });
 
-                // Yemek Başlığı Animasyonu
                 let foodTitleHTML = "";
                 food.title.split(" ").forEach((word, wordIndex) => {
                     let delay = 350 + ((wordIndex + 1) * 150);
@@ -464,17 +370,16 @@
             }
         }
 
-        // --- 3. Akıllı Slider ve Vimeo Kontrolü ---
+        // 3. Vimeo ve Slider Kontrolü
         const dynamicSlides = document.querySelectorAll(".slide");
         let currentSlide = 0;
         let sliderInterval;
 
-const videoContainer = document.getElementById("promoVideoContainer");
+        const videoContainer = document.getElementById("promoVideoContainer");
         const iframe = document.getElementById("promoVideo");
-        let vimeoPlayer = null;
+        let vimeoPlayer = new Vimeo.Player(iframe);
         let failsafeTimer = null;
 
-        // Menü Döndürücü
         function startSlider() {
             if(sliderInterval) clearInterval(sliderInterval);
             sliderInterval = setInterval(() => {
@@ -486,124 +391,101 @@ const videoContainer = document.getElementById("promoVideoContainer");
             }, 7000); 
         }
 
-        function stopSlider() {
-            clearInterval(sliderInterval);
-        }
+        function stopSlider() { clearInterval(sliderInterval); }
 
-        // Video Bitişini ve Dönüşü İşleyen Fonksiyon
         function handleVideoEnd() {
-            videoContainer.classList.remove("show"); // Ekranı karartıp menüyü göster
-            if(failsafeTimer) clearTimeout(failsafeTimer); // Güvenlik sayacını durdur
+            videoContainer.classList.remove("show"); 
+            if(failsafeTimer) clearTimeout(failsafeTimer); 
             
             setTimeout(() => {
-                iframe.src = ""; // TV'nin RAM'ini boşaltmak için videoyu tamamen sil
-                startSlider(); // Menü akışını başlat
-                scheduleNextVideo(); // Bir sonraki videonun zamanını kur
+                startSlider(); 
+                vimeoPlayer.pause(); 
+                vimeoPlayer.setCurrentTime(0); 
+                scheduleNextVideo(); 
             }, 1000);
         }
 
-        // Rastgele Reklam Zamanlayıcı (Test için 5 saniye)
+        vimeoPlayer.on('ended', handleVideoEnd);
+
+        vimeoPlayer.on('play', function() {
+            if(failsafeTimer) clearTimeout(failsafeTimer);
+            failsafeTimer = setTimeout(() => {
+                if (videoContainer.classList.contains("show")) {
+                    console.log("Güvenlik önlemi devrede: Video takıldı.");
+                    handleVideoEnd();
+                }
+            }, 90000); 
+        });
+
+        function playPromoVideo() {
+            stopSlider(); 
+            vimeoPlayer.play().then(function() {
+                videoContainer.classList.add("show"); 
+            }).catch(function(error) {
+                console.log("Vimeo başlatılamadı:", error);
+                handleVideoEnd(); 
+            });
+        }
+
         function scheduleNextVideo() {
-            // Sistemi test etmek için 5-10 saniye arası. 
-            // Otelde yayına alırken burayı tekrar (3 * 60 * 1000) yapabilirsin.
             const minTime = 3 * 60 * 1000; 
             const maxTime = 8 * 60 * 1000; 
             const randomDelay = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-            
             setTimeout(() => { playPromoVideo(); }, randomDelay);
-        }
-
-        // Videoyu Zorla Yükle ve Başlat
-        function playPromoVideo() {
-            stopSlider(); 
-            
-            // SİHİRLİ DOKUNUŞ: Videoyu tam oynatacağımız an URL'yi "autoplay=1" ile basıyoruz.
-            iframe.src = "https://player.vimeo.com/video/1207572562?api=1&controls=0&muted=1&autoplay=1&playsinline=1&autopause=0";
-            videoContainer.classList.add("show"); 
-            
-            // Vimeo API'yi yeni linkle tekrar kur ve bitişi dinle
-            vimeoPlayer = new Vimeo.Player(iframe);
-            vimeoPlayer.on('ended', handleVideoEnd);
-
-            // HAYAT KURTARAN GÜVENLİK ÖNLEMİ (Failsafe)
-            // Eğer otelin interneti yavaşlar, video takılır veya oynamazsa, 
-            // 45 saniyelik video için 50 saniyelik bir süre dolduğunda sistemi zorla menüye döndür.
-            failsafeTimer = setTimeout(() => {
-                if (videoContainer.classList.contains("show")) {
-                    console.log("Güvenlik önlemi devrede: Video kapatıldı.");
-                    vimeoPlayer.off('ended'); // Hata vermemesi için dinleyiciyi kapat
-                    handleVideoEnd();
-                }
-            }, 50000); 
         }
 
         startSlider();
         scheduleNextVideo();
 
-        // --- 4. Arka Plan Parçacık Üretici ---
+        // 4. Performans Dostu Parçacıklar (Sadece 10 adet)
         function createParticles() {
             const container = document.getElementById("particlesContainer");
             if(!container) return;
             container.innerHTML = ''; 
-            
             const count = 10; 
             for(let i=0; i<count; i++) {
                 const particle = document.createElement("div");
                 particle.className = "particle";
-                
                 const size = Math.random() * 20 + 10; 
                 particle.style.width = size + "px";
                 particle.style.height = size + "px";
                 particle.style.left = Math.random() * 100 + "vw";
                 particle.style.top = Math.random() * 100 + "vh"; 
-                
-                const delay = Math.random() * 2; 
-                const duration = Math.random() * 8 + 7; 
-                
-                particle.style.animationDelay = delay + "s";
-                particle.style.animationDuration = duration + "s";
-                
+                particle.style.animationDelay = (Math.random() * 2) + "s";
+                particle.style.animationDuration = (Math.random() * 8 + 7) + "s";
                 container.appendChild(particle);
             }
         }
         createParticles();
 
-        // --- 5. Zaman ve Tema Senkronizasyonu ---
+        // 5. Zaman Senkronizasyonu
         let timeOffset = 0; 
         async function syncTimeWithAPI() {
             try {
                 const response = await fetch("https://worldtimeapi.org/api/timezone/Europe/Istanbul", { cache: "no-store" });
                 if(response.ok) {
                     const data = await response.json();
-                    const apiTime = new Date(data.datetime).getTime();
-                    const localTime = new Date().getTime();
-                    timeOffset = apiTime - localTime; 
+                    timeOffset = new Date(data.datetime).getTime() - new Date().getTime(); 
                 }
-            } catch(e) {
-                console.log("Saat senkronizasyonu yapılamadı, TV saatine güveniliyor.");
-            }
+            } catch(e) { console.log("Saat apisi çalışmadı."); }
             checkTheme(); 
         }
 
         function checkTheme() {
             const realTime = new Date(Date.now() + timeOffset);
             const hour = (realTime.getUTCHours() + 3) % 24;
-            const isDaytime = hour >= 8 && hour < 20;
             const body = document.body;
-            
-            if(isDaytime) {
-                body.classList.add("theme-day");
-                body.classList.remove("theme-night");
+            if(hour >= 8 && hour < 20) {
+                body.classList.add("theme-day"); body.classList.remove("theme-night");
             } else {
-                body.classList.add("theme-night");
-                body.classList.remove("theme-day");
+                body.classList.add("theme-night"); body.classList.remove("theme-day");
             }
         }     
 
         syncTimeWithAPI();
         setInterval(checkTheme, 60000);
 
-        // --- 6. Saatleri Güncelleme ---
+        // 6. Saatler
         function updateClocks(){
             try {
                 document.getElementById("antalyaTime").innerHTML = new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Istanbul"});
@@ -612,706 +494,42 @@ const videoContainer = document.getElementById("promoVideoContainer");
                 document.getElementById("moscowTime").innerHTML = new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Moscow"});
             } catch(e) {}
         }
-        updateAll(); 
-        setInterval(updateAll, 1000);
-        function updateAll(){ updateClocks(); }
+        setInterval(updateClocks, 1000);
+        updateClocks();
 
-        // --- 7. Hava Durumu Sistemi ---
+        // 7. Hava Durumu
         async function weather(){
             try {
                 const response = await fetch("https://wttr.in/Antalya?format=j1");
                 if(response.ok) {
                     const data = await response.json();
-                    
-                    const dereceC = data.current_condition[0].temp_C;
-                    const dereceF = data.current_condition[0].temp_F;
-                    document.getElementById("weatherTemp").innerHTML = dereceC + "°C / " + dereceF + "°F";
-                    
+                    document.getElementById("weatherTemp").innerHTML = data.current_condition[0].temp_C + "°C";
                     const conditionCode = parseInt(data.current_condition[0].weatherCode);
-                    const windSpeed = parseInt(data.current_condition[0].windspeedKmph);
+                    const isDaytime = ((new Date().getUTCHours() + 3) % 24) >= 8 && ((new Date().getUTCHours() + 3) % 24) < 20;
                     
-                    const currentUTC = new Date().getUTCHours();
-                    const hour = (currentUTC + 3) % 24;
-                    const isDaytime = hour >= 8 && hour < 20;
-
                     const iconContainer = document.querySelector(".weather-icon");
                     let iconHTML = "";
 
-                    if (conditionCode === 113) {
-                        iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
-                    } else if (conditionCode === 116 || conditionCode === 119 || conditionCode === 122 || conditionCode === 143 || conditionCode === 248 || conditionCode === 260) {
-                        const bg = isDaytime 
-                            ? '<div class="icon-sun" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>' 
-                            : '<div class="icon-moon" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>';
+                    if (conditionCode === 113) iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
+                    else if ([116, 119, 122, 143, 248, 260].includes(conditionCode)) {
+                        const bg = isDaytime ? '<div class="icon-sun" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>' : '<div class="icon-moon" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>';
                         iconHTML = bg + '<div class="icon-cloud"></div>';
-                    } else if (conditionCode >= 176 && conditionCode <= 389) {
-                        iconHTML = '<div class="icon-cloud" style="background:#cbd5e1;"></div><div class="icon-rain"></div>';
-                    } else {
-                        iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
-                    }
+                    } else if (conditionCode >= 176 && conditionCode <= 389) iconHTML = '<div class="icon-cloud" style="background:#cbd5e1;"></div><div class="icon-rain"></div>';
+                    else iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
 
-                    if (windSpeed >= 35) { iconHTML += '<div class="icon-wind"></div>'; }
+                    if (parseInt(data.current_condition[0].windspeedKmph) >= 35) iconHTML += '<div class="icon-wind"></div>';
                     iconContainer.innerHTML = iconHTML;
                 }
-            } catch(e) {
-                console.log("Hava durumu API'sine ulaşılamadı.");
-            }
+            } catch(e) { console.log("Hava durumu yüklenemedi."); }
         }
-        
-        weather(); 
-        setInterval(weather, 600000); 
-// --- 8. RAM TEMİZLEYİCİ (AKILLI OTOMATİK YENİLEME) ---
-        // TV'nin donmasını engellemek için her 2 saatte bir sayfayı yeniler
+        weather(); setInterval(weather, 600000); 
+
+        // 8. RAM Temizleyici (1 Saatte Bir)
         setInterval(() => {
-            const videoContainer = document.getElementById("promoVideoContainer");
-            
-            // Eğer o an ekranda video oynamıyorsa sayfayı yenile
-            if (!videoContainer.classList.contains("show")) {
-                console.log("RAM temizliği için sayfa yenileniyor...");
-                window.location.reload(true); // true parametresi önbelleği de (cache) temizler
+            if (!document.getElementById("promoVideoContainer").classList.contains("show")) {
+                window.location.reload(true); 
             }
-        }, 1 * 60 * 60 * 1000); // 2 Saat (İstersen 1 * 60 * 60 * 1000 yaparak 1 saate düşürebilirsin)
-    });
-    </script>
-</body>
-</html>
-        /* =========================================
-           1. TEMEL AYARLAR VE DEĞİŞKENLER
-           ========================================= */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.12);
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            color: white;
-            background: var(--base-bg, #039dfc);
-            transition: background 2s ease;
-        }
-
-        /* --- Tema Renkleri --- */
-        body.theme-day {
-            --base-bg: #1550b0;
-            --bg-gradient: linear-gradient(135deg, #3db6f2 0%, #3d7ff2 35%, #3df2bc 60%, #fc03f8 100%);
-            --orb1-color: #ed9302; --orb1-opacity: 0.55;
-            --orb2-color: #edc602; --orb2-opacity: 0.55;
-            --orb3-color: #ed02be; --orb3-opacity: 0.20;
-        }
-
-        body.theme-night {
-            --base-bg: #2a405e;
-            --bg-gradient: linear-gradient(135deg, #2a405e 0%, #080f1d 30%, #1c263d 60%, #3a4d7c 100%);
-            --orb1-color: #daa520; --orb1-opacity: 0.40;
-            --orb2-color: #4b0082; --orb2-opacity: 0.40;
-            --orb3-color: #1a237e; --orb3-opacity: 0.15;
-        }
-
-        /* =========================================
-           2. ARKA PLAN VE EFEKTLER
-           ========================================= */
-        .background {
-            position: fixed;
-            inset: 0;
-            overflow: hidden;
-            z-index: -1;
-            background: var(--bg-gradient, linear-gradient(135deg, #04162c 0%, #08345f 35%, #0b4f7d 60%, #ff7a00 100%));
-            transition: background 2s ease;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            transition: background 2s ease, opacity 2s ease;
-            will-change: transform;
-            transform: translateZ(0);
-        }
-
-        .orb1 { width: 700px; height: 700px; background: var(--orb1-color); opacity: var(--orb1-opacity); top: -250px; right: -150px; animation: move1 10s ease-in-out infinite; }
-        .orb2 { width: 850px; height: 850px; background: var(--orb2-color); opacity: var(--orb2-opacity); bottom: -350px; left: -250px; animation: move2 3s ease-in-out infinite; }
-        .orb3 { width: 500px; height: 500px; background: var(--orb3-color); opacity: var(--orb3-opacity); top: 25%; left: 35%; animation: move3 10s ease-in-out infinite; }
-
-        .particles-container {
-            position: fixed; inset: 0; z-index: -10; pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
-            opacity: 0;
-            will-change: transform, opacity;
-            animation: randomGlow ease-in-out infinite;
-        }
-
-        /* =========================================
-           3. GENEL YERLEŞİM (LAYOUT)
-           ========================================= */
-        .dashboard {
-            position: relative;
-            z-index: 10; 
-            height: 100vh;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* --- Üst Kısım (Header) --- */
-        .header {
-            height: 150px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 0 30px; 
-            border-radius: 28px; 
-            background: var(--glass);
-            backdrop-filter: blur(30px); 
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 15px 40px rgba(0,0,0,.20);
-        }
-
-        .tv-bug-container {
-            height: 130px; 
-            width: 320px;
-            overflow: hidden; 
-            display: flex;
-            align-items: flex-start; 
-        }
-
-        .tv-bug-logo {
-            width: 80%;
-            height: 190px;
-            object-fit: cover;
-            object-position: top center;
-            margin-top: -5px; 
-            will-change: transform, filter;
-        }
-
-        /* --- Dünya Saatleri --- */
-        .clocks { display: flex; gap: 45px; }
-        .clock-card {
-            min-width: 195px; text-align: center; padding: 14px 18px; border-radius: 29px;
-            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
-        }
-        .clock-city { font-size: 25px; opacity: .7; letter-spacing: 5px; margin-bottom: 4px; }
-        .clock-time { font-size: 45px; font-weight: 700; }
-
-        /* =========================================
-           4. ANA PANEL VE SLIDER
-           ========================================= */
-        .main-panel {
-            flex: 1; position: relative; border-radius: 34px; overflow: hidden;
-            background: rgba(255,255,255,.06); backdrop-filter: blur(35px);
-            border: 1px solid rgba(255,255,255,.10); display: flex; justify-content: center; align-items: center;
-            perspective: 1000px; 
-        }
-
-        .main-panel::before {
-            content: ""; position: absolute; width: 900px; height: 900px; border-radius: 50%;
-            background: radial-gradient(rgba(255,255,255,.12), transparent 70%);
-            animation: panelLight 18s linear infinite;
-        }
-
-        .slider { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2; }
-
-        .slide { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            display: flex; 
-            flex-direction: row; 
-            justify-content: center; 
-            align-items: center; 
-            padding-bottom: 110px; 
-            opacity: 0; 
-            transform: translateY(50px) scale(0.85) rotateX(-15deg); 
-            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1); 
-        }
-
-        .slide.active { 
-            opacity: 1; 
-            transform: translateY(0) scale(1) rotateX(0); 
-        }
-
-        /* --- İkili Ekran Yerleşimi --- */
-        .split-half {
-            flex: 1; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            padding: 0 20px;
-        }
-
-        .right-half { border-left: 1px solid rgba(255, 255, 255, 0.15); }
-
-        .slide-content { 
-            position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; 
-        }
-
-        .slide img {
-            width: 240px; height: 170px; object-fit: cover; border-radius: 20%; margin-bottom: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 3px solid rgba(255,255,255,0.2);
-            animation: float 4s ease-in-out infinite; 
-        }
-
-        .slide h1 { 
-            font-size: 38px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; 
-            text-shadow: 0 10px 20px rgba(0,0,0,0.4); display: flex; flex-wrap: wrap; 
-            justify-content: center; text-align: center;
-        }
-
-        .word { display: inline-block; opacity: 0; transform: translateY(30px) scale(0.8); }
-        .slide.active .word { animation: wordFadeIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-
-        .price-tag {
-            font-size: 24px; color: #ff8c00; font-weight: bold; background: rgba(0,0,0,0.4);
-            padding: 2px 18px; border-radius: 35px; display: inline-block;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255, 140, 0, 0.3);
-        }
-
-/* VİDEO ARAYÜZÜ (REKLAM ARASI) STİLLERİ */
-        .video-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; 
-            z-index: 50; 
-            opacity: 0;
-            pointer-events: none; /* Görünmezken arkadaki menü etkileşimini bozmaz */
-            transition: opacity 1s ease-in-out; overflow: hidden;
-        }
-
-        .video-overlay.show { 
-            opacity: 1; 
-            pointer-events: auto;
-        }
-
-        #promoVideo {
-            width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; 
-        }
-
-        /* --- Alt Kayan Yazı --- */
-        .ticker { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 110px; 
-            background: rgba(0,0,0,.25); backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255,255,255,.1); display: flex;
-            align-items: center; justify-content: center;
-        }
-
-        .ticker-static {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 8px; font-size: 28px; font-weight: 800; letter-spacing: 1px;
-        }
-
-        /* =========================================
-           6. ALT PANEL (FOOTER)
-           ========================================= */
-        .footer { height: 150px; display: grid; grid-template-columns: 0.5fr 1fr; gap: 16px; }
-
-        .weather-card { 
-            border-radius: 36px; background: var(--glass); backdrop-filter: blur(30px); 
-            border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;
-        }
-
-        .weather-inner { display: flex; align-items: center; }
-        .weather-icon { width: 75px; height: 75px; margin-right: 20px; position: relative; }
-        .temp { font-size: 52px; font-weight: 700; } 
-        .location { font-size: 18px; opacity: .8; }
-
-        /* --- İncelemeler ve Logolar --- */
-        .review-card { padding: 10px 15px; width: 100%; }
-        .review-grid { display: flex; width: 100%; justify-content: space-evenly; align-items: center; }
-        .review-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .score { font-weight: 800; font-size: 19px; color: white; margin-top: 3px; text-shadow: 0 2px 5px rgba(0,0,0,0.4); }
-        .score small { font-size: 12px; opacity: 0.7; margin-left: 2px; }
-        .item-stars { font-size: 12px; letter-spacing: 2px; filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.4)); }
-
-        .brand-logo {
-            height: 38px; width: auto; max-width: 110px; object-fit: contain;
-            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5)); 
-            will-change: transform; animation: float 20s ease-in-out infinite;
-        }
-
-        .review-item:nth-child(1) .brand-logo { animation-delay: 0s; }
-        .review-item:nth-child(2) .brand-logo { animation-delay: 0,5s; }
-        .review-item:nth-child(3) .brand-logo { animation-delay: 1s; }
-
-        /* =========================================
-           7. ANİMASYONLAR (KEYFRAMES)
-           ========================================= */
-        @keyframes move1 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-150px,120px);} }
-        @keyframes move2 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(180px,-100px);} }
-        @keyframes move3 { 0%,100%{transform:scale(1);} 50%{transform:scale(1.25);} }
-        @keyframes panelLight { 0%{transform:translate(-350px,-250px);} 50%{transform:translate(250px,120px);} 100%{transform:translate(-350px,-250px);} }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes randomGlow { 0% { opacity: 0; transform: scale(0.5) translateY(0); } 50% { opacity: 1; transform: scale(4.5) translateY(-30px); } 100% { opacity: 0; transform: scale(0.5) translateY(-60px); } }
-        
-        /* Hava Durumu İkon Animasyonları */
-        .icon-sun { width: 48px; height: 48px; background: #ffd54f; border-radius: 50%; position: absolute; top: 13px; left: 13px; box-shadow: 0 0 20px #ffd54f; animation: pulseIcon 3s ease infinite; will-change: transform, opacity; transform: translateZ(0); }
-        .icon-moon { width: 40px; height: 40px; border-radius: 50%; position: absolute; top: 15px; left: 15px; box-shadow: inset -10px -8px 0 0 #e2e8f0; animation: pulseIcon 4s ease infinite; will-change: transform, opacity; transform: translateZ(0); }
-        .icon-cloud { width: 50px; height: 18px; background: #f8fafc; border-radius: 20px; position: absolute; top: 35px; left: 10px; box-shadow: 0 0 15px rgba(255,255,255,0.4); animation: floatIcon 4s ease-in-out infinite; will-change: transform; transform: translateZ(0); }
-        .icon-cloud::before { content: ''; position: absolute; width: 22px; height: 22px; background: inherit; border-radius: 50%; top: -12px; left: 8px; }
-        .icon-cloud::after { content: ''; position: absolute; width: 16px; height: 16px; background: inherit; border-radius: 50%; top: -8px; right: 8px; }
-        .icon-rain { position: absolute; width: 3px; height: 8px; background: #00d4ff; top: 45px; left: 22px; box-shadow: 10px 0 0 #00d4ff, 20px 0 0 #00d4ff; animation: rainDrop 0.8s linear infinite; will-change: transform, opacity; transform: translateZ(0); }
-        .icon-wind { position: absolute; width: 25px; height: 2px; background: rgba(255,255,255,0.8); top: 38px; left: 15px; border-radius: 2px; box-shadow: -15px -8px 0 0 rgba(255,255,255,0.5), 10px 8px 0 0 rgba(255,255,255,0.6); animation: windBlow 1s linear infinite; will-change: transform, opacity; transform: translateZ(0); }
-
-        @keyframes pulseIcon { 0%,100%{transform: scale(1) translateZ(0);} 50%{transform: scale(1.08) translateZ(0);} }
-        @keyframes floatIcon { 0%, 100% { transform: translateY(0) translateZ(0); } 50% { transform: translateY(-4px) translateZ(0); } }
-        @keyframes rainDrop { 0% { transform: translateY(0) translateZ(0); opacity: 1; } 100% { transform: translateY(15px) translateZ(0); opacity: 0; } }
-        @keyframes windBlow { 0% { transform: translateX(-10px) translateZ(0); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateX(15px) translateZ(0); opacity: 0; } }
-    </style>
-</head>
-
-<body>
-
-    <div class="background">
-        <div class="orb orb1"></div>
-        <div class="orb orb2"></div>
-        <div class="orb orb3"></div>
-        <div class="particles-container" id="particlesContainer"></div>
-    </div>
-
-    <div class="dashboard theme-day" id="dashboard">
-        
-        <div class="header">
-            <div class="tv-bug-container">
-                <img src="https://s6.imgcdn.dev/YmUOTq.gif" border="0" width="1000" height="800" alt="Coastline Orange Hotel Logo" class="tv-bug-logo">
-            </div>
-            <div class="clocks">
-                <div class="clock-card"><div class="clock-city">ANTALYA</div><div class="clock-time" id="antalyaTime">00:00</div></div>
-                <div class="clock-card"><div class="clock-city">LONDON</div><div class="clock-time" id="londonTime">00:00</div></div>
-                <div class="clock-card"><div class="clock-city">BERLIN</div><div class="clock-time" id="berlinTime">00:00</div></div>
-                <div class="clock-card"><div class="clock-city">MOSCOW</div><div class="clock-time" id="moscowTime">00:00</div></div>
-            </div>
-        </div>
-
-<div class="main-panel">
-            <div class="slider" id="dynamicSlider"></div>
-            
-            <div class="ticker">
-                <div class="ticker-static">
-                    <div>🍳 BREAKFAST 08:00 - 10:30 &nbsp; • &nbsp; 🍽️ RESTAURANT 12:00 - 22:00 &nbsp; • &nbsp; 🍹 LOBBY BAR 08:00 - 00:00</div>
-                    <div>🏖️ POOL 08:00 - 20:00 &nbsp; • &nbsp; 💪 GYM 10:00 - 22:00</div>
-                </div>
-            </div>
-        </div>
-
-<div class="video-overlay" id="promoVideoContainer">
-            <iframe id="promoVideo" src="" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-
-        <div class="footer">
-            <div class="weather-card">
-                <div class="weather-inner">
-                    <div class="weather-icon"><div class="sun"></div></div>
-                    <div><div class="temp" id="weatherTemp">--</div><div class="location">Antalya</div></div>
-                </div>
-            </div>
-
-            <div class="weather-card review-card">
-                <div class="review-grid">
-                    <div class="review-item">
-                        <img class="brand-logo" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
-                        <div class="score">4.7<small>/5</small></div>
-                        <div class="item-stars">⭐⭐⭐⭐⭐</div>
-                    </div>
-                    <div class="review-item">
-                        <img class="brand-logo" src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/bookingdotcom/default.svg" alt="Booking.com">
-                        <div class="score">9.1<small>/10</small></div>
-                        <div class="item-stars">⭐⭐⭐⭐<span style="opacity:0.5">⭐</span></div> 
-                    </div>
-                    <div class="review-item">
-                        <img class="brand-logo" src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/expedia/default.svg" alt="Expedia">
-                        <div class="score">9.2<small>/10</small></div>
-                        <div class="item-stars">⭐⭐⭐⭐<span style="opacity:0.5">⭐</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://player.vimeo.com/api/player.js"></script>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        
-        // --- 1. Ürün Verileri ---
-        const foodItems = [
-            { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
-            { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
-            { title: "COASTLINE PIZZA", price: "600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
-            { title: "FETTUCINI ALFREDO", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/66ab2e5d-c8f8-456c-b8b4-f129d008315f.jpeg" }
-        ];
-
-        const drinkItems = [
-            { title: "COSMOPOLITAN", price: "400.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/0460d9ca-09ba-4b5b-8930-b7a81c8e9514.jpg" },
-            { title: "NEGRONI", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/f2b232bf-7a38-4c2b-bbbe-f3eb06497fe9.jpg" },
-            { title: "APEROL SPRITZ", price: "420.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/3c4ce51c-7ade-44dd-b7c9-f74651cea216.jpg" },
-            { title: "ESPRESSO MARTINI", price: "440.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/4aefb242-8c3c-4795-98f7-5221db67e096.jpg" }
-        ];
-
-        // --- 2. Slider (Menü) Oluşturucu ---
-        const sliderContainer = document.getElementById("dynamicSlider");
-        if(sliderContainer) {
-            const maxItems = Math.max(foodItems.length, drinkItems.length);
-
-            for (let i = 0; i < maxItems; i++) {
-                const food = foodItems[i % foodItems.length];
-                const drink = drinkItems[i % drinkItems.length];
-
-                const slideElement = document.createElement("div");
-                slideElement.className = `slide ${i === 0 ? "active" : ""}`;
-                
-                let drinkTitleHTML = "";
-                drink.title.split(" ").forEach((word, wordIndex) => {
-                    drinkTitleHTML += `<span class="word" style="animation-delay: ${(wordIndex + 1) * 150}ms">${word}</span>&nbsp;`;
-                });
-
-                let foodTitleHTML = "";
-                food.title.split(" ").forEach((word, wordIndex) => {
-                    foodTitleHTML += `<span class="word" style="animation-delay: ${(wordIndex + 1) * 150}ms">${word}</span>&nbsp;`;
-                });
-
-                slideElement.innerHTML = `
-                    <div class="split-half left-half">
-                        <img src="${drink.image}" alt="${drink.title}">
-                        <div class="slide-content">
-                            <h1>${drinkTitleHTML}</h1>
-                            <div class="price-tag">${drink.price}</div>
-                        </div>
-                    </div>
-                    <div class="split-half right-half">
-                        <img src="${food.image}" alt="${food.title}">
-                        <div class="slide-content">
-                            <h1>${foodTitleHTML}</h1>
-                            <div class="price-tag">${food.price}</div>
-                        </div>
-                    </div>
-                `;
-                sliderContainer.appendChild(slideElement);
-            }
-        }
-
-        // --- 3. Akıllı Slider ve Vimeo Kontrolü ---
-        const dynamicSlides = document.querySelectorAll(".slide");
-        let currentSlide = 0;
-        let sliderInterval;
-
-const videoContainer = document.getElementById("promoVideoContainer");
-        const iframe = document.getElementById("promoVideo");
-        let vimeoPlayer = null;
-        let failsafeTimer = null;
-
-        // Menü Döndürücü
-        function startSlider() {
-            if(sliderInterval) clearInterval(sliderInterval);
-            sliderInterval = setInterval(() => {
-                if(dynamicSlides.length === 0) return;
-                dynamicSlides[currentSlide].classList.remove("active");
-                currentSlide++;
-                if(currentSlide >= dynamicSlides.length) currentSlide = 0;
-                dynamicSlides[currentSlide].classList.add("active");
-            }, 7000); 
-        }
-
-        function stopSlider() {
-            clearInterval(sliderInterval);
-        }
-
-        // Video Bitişini ve Dönüşü İşleyen Fonksiyon
-        function handleVideoEnd() {
-            videoContainer.classList.remove("show"); // Ekranı karartıp menüyü göster
-            if(failsafeTimer) clearTimeout(failsafeTimer); // Güvenlik sayacını durdur
-            
-            setTimeout(() => {
-                iframe.src = ""; // TV'nin RAM'ini boşaltmak için videoyu tamamen sil
-                startSlider(); // Menü akışını başlat
-                scheduleNextVideo(); // Bir sonraki videonun zamanını kur
-            }, 1000);
-        }
-
-        // Rastgele Reklam Zamanlayıcı (Test için 5 saniye)
-        function scheduleNextVideo() {
-            // Sistemi test etmek için 5-10 saniye arası. 
-            // Otelde yayına alırken burayı tekrar (3 * 60 * 1000) yapabilirsin.
-            const minTime = 3 * 60 * 1000; 
-            const maxTime = 8 * 60 * 1000; 
-            const randomDelay = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-            
-            setTimeout(() => { playPromoVideo(); }, randomDelay);
-        }
-
-        // Videoyu Zorla Yükle ve Başlat
-        function playPromoVideo() {
-            stopSlider(); 
-            
-            // SİHİRLİ DOKUNUŞ: Videoyu tam oynatacağımız an URL'yi "autoplay=1" ile basıyoruz.
-            iframe.src = "https://player.vimeo.com/video/1207572562?api=1&controls=0&muted=1&autoplay=1&playsinline=1&autopause=0";
-            videoContainer.classList.add("show"); 
-            
-            // Vimeo API'yi yeni linkle tekrar kur ve bitişi dinle
-            vimeoPlayer = new Vimeo.Player(iframe);
-            vimeoPlayer.on('ended', handleVideoEnd);
-
-            // HAYAT KURTARAN GÜVENLİK ÖNLEMİ (Failsafe)
-            // Eğer otelin interneti yavaşlar, video takılır veya oynamazsa, 
-            // 45 saniyelik video için 50 saniyelik bir süre dolduğunda sistemi zorla menüye döndür.
-            failsafeTimer = setTimeout(() => {
-                if (videoContainer.classList.contains("show")) {
-                    console.log("Güvenlik önlemi devrede: Video kapatıldı.");
-                    vimeoPlayer.off('ended'); // Hata vermemesi için dinleyiciyi kapat
-                    handleVideoEnd();
-                }
-            }, 50000); 
-        }
-
-        startSlider();
-        scheduleNextVideo();
-
-        // --- 4. Arka Plan Parçacık Üretici ---
-        function createParticles() {
-            const container = document.getElementById("particlesContainer");
-            if(!container) return;
-            container.innerHTML = ''; 
-            
-            const count = 25; 
-            for(let i=0; i<count; i++) {
-                const particle = document.createElement("div");
-                particle.className = "particle";
-                
-                const size = Math.random() * 20 + 10; 
-                particle.style.width = size + "px";
-                particle.style.height = size + "px";
-                particle.style.left = Math.random() * 100 + "vw";
-                particle.style.top = Math.random() * 100 + "vh"; 
-                
-                const delay = Math.random() * 2; 
-                const duration = Math.random() * 8 + 7; 
-                
-                particle.style.animationDelay = delay + "s";
-                particle.style.animationDuration = duration + "s";
-                
-                container.appendChild(particle);
-            }
-        }
-        createParticles();
-
-        // --- 5. Zaman ve Tema Senkronizasyonu ---
-        let timeOffset = 0; 
-        async function syncTimeWithAPI() {
-            try {
-                const response = await fetch("https://worldtimeapi.org/api/timezone/Europe/Istanbul", { cache: "no-store" });
-                if(response.ok) {
-                    const data = await response.json();
-                    const apiTime = new Date(data.datetime).getTime();
-                    const localTime = new Date().getTime();
-                    timeOffset = apiTime - localTime; 
-                }
-            } catch(e) {
-                console.log("Saat senkronizasyonu yapılamadı, TV saatine güveniliyor.");
-            }
-            checkTheme(); 
-        }
-
-        function checkTheme() {
-            const realTime = new Date(Date.now() + timeOffset);
-            const hour = (realTime.getUTCHours() + 3) % 24;
-            const isDaytime = hour >= 8 && hour < 20;
-            const body = document.body;
-            
-            if(isDaytime) {
-                body.classList.add("theme-day");
-                body.classList.remove("theme-night");
-            } else {
-                body.classList.add("theme-night");
-                body.classList.remove("theme-day");
-            }
-        }     
-
-        syncTimeWithAPI();
-        setInterval(checkTheme, 60000);
-
-        // --- 6. Saatleri Güncelleme ---
-        function updateClocks(){
-            try {
-                document.getElementById("antalyaTime").innerHTML = new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Istanbul"});
-                document.getElementById("londonTime").innerHTML = new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
-                document.getElementById("berlinTime").innerHTML = new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Berlin"});
-                document.getElementById("moscowTime").innerHTML = new Date().toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Moscow"});
-            } catch(e) {}
-        }
-        updateAll(); 
-        setInterval(updateAll, 1000);
-        function updateAll(){ updateClocks(); }
-
-        // --- 7. Hava Durumu Sistemi ---
-        async function weather(){
-            try {
-                const response = await fetch("https://wttr.in/Antalya?format=j1");
-                if(response.ok) {
-                    const data = await response.json();
-                    
-                    const dereceC = data.current_condition[0].temp_C;
-                    const dereceF = data.current_condition[0].temp_F;
-                    document.getElementById("weatherTemp").innerHTML = dereceC + "°C / " + dereceF + "°F";
-                    
-                    const conditionCode = parseInt(data.current_condition[0].weatherCode);
-                    const windSpeed = parseInt(data.current_condition[0].windspeedKmph);
-                    
-                    const currentUTC = new Date().getUTCHours();
-                    const hour = (currentUTC + 3) % 24;
-                    const isDaytime = hour >= 8 && hour < 20;
-
-                    const iconContainer = document.querySelector(".weather-icon");
-                    let iconHTML = "";
-
-                    if (conditionCode === 113) {
-                        iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
-                    } else if (conditionCode === 116 || conditionCode === 119 || conditionCode === 122 || conditionCode === 143 || conditionCode === 248 || conditionCode === 260) {
-                        const bg = isDaytime 
-                            ? '<div class="icon-sun" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>' 
-                            : '<div class="icon-moon" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>';
-                        iconHTML = bg + '<div class="icon-cloud"></div>';
-                    } else if (conditionCode >= 176 && conditionCode <= 389) {
-                        iconHTML = '<div class="icon-cloud" style="background:#cbd5e1;"></div><div class="icon-rain"></div>';
-                    } else {
-                        iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
-                    }
-
-                    if (windSpeed >= 35) { iconHTML += '<div class="icon-wind"></div>'; }
-                    iconContainer.innerHTML = iconHTML;
-                }
-            } catch(e) {
-                console.log("Hava durumu API'sine ulaşılamadı.");
-            }
-        }
-        
-        weather(); 
-        setInterval(weather, 600000); 
-// --- 8. RAM TEMİZLEYİCİ (AKILLI OTOMATİK YENİLEME) ---
-        // TV'nin donmasını engellemek için her 2 saatte bir sayfayı yeniler
-        setInterval(() => {
-            const videoContainer = document.getElementById("promoVideoContainer");
-            
-            // Eğer o an ekranda video oynamıyorsa sayfayı yenile
-            if (!videoContainer.classList.contains("show")) {
-                console.log("RAM temizliği için sayfa yenileniyor...");
-                window.location.reload(true); // true parametresi önbelleği de (cache) temizler
-            }
-        }, 1 * 60 * 60 * 1000); // 2 Saat (İstersen 1 * 60 * 60 * 1000 yaparak 1 saate düşürebilirsin)
+        }, 1 * 60 * 60 * 1000); 
     });
     </script>
 </body>
