@@ -31,7 +31,7 @@
           body {
             font-family: 'Segoe UI', sans-serif;
             height: 100vh; /* Burası kesinlikle 100vh kalmalı */
-            width: 100vw;
+            width: auto;
             margin: 0;
             overflow: hidden;
             color: white;
@@ -107,7 +107,7 @@
             gap: 15px;
             
             /* ZOOM AYARI: Ekranın %90'ı kadar küçültür ve tam ortaya hizalar */
-            transform: scale(0.92);
+            transform: scale(1);
             transform-origin: center center; 
         }
 
@@ -169,6 +169,7 @@
 
         .slider { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2; }
 
+/* GİDEN SLAYT (Hızlıca ekrandan silinir) */
         .slide { 
             position: absolute; 
             width: 100%; 
@@ -178,14 +179,22 @@
             justify-content: center; 
             align-items: center; 
             padding-bottom: 110px; 
+            
             opacity: 0; 
-            transform: translateY(50px) scale(0.85) rotateX(-15deg); 
-            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1); 
+            transform: translateY(30px) scale(0.9); 
+            /* Sadece 0.3 saniyede hızlıca yok olur */
+            transition: opacity 0.3s ease, transform 0.3s ease; 
+            pointer-events: none;
         }
 
+        /* GELEN SLAYT (Bekleyip yumuşakça girer) */
         .slide.active { 
             opacity: 1; 
-            transform: translateY(0) scale(1) rotateX(0); 
+            transform: translateY(0) scale(1); 
+            
+            /* Eski slaytın kaybolması için 0.3 saniye bekler (gecikme), sonra 1 saniyede girer */
+            transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1) 0.3s, transform 1s cubic-bezier(0.25, 1, 0.5, 1) 0.3s; 
+            pointer-events: auto;
         }
 
         /* --- İkili Ekran Yerleşimi --- */
@@ -420,14 +429,19 @@
                 const slideElement = document.createElement("div");
                 slideElement.className = `slide ${i === 0 ? "active" : ""}`;
                 
+// İçecek Başlığı Animasyonu
                 let drinkTitleHTML = "";
                 drink.title.split(" ").forEach((word, wordIndex) => {
-                    drinkTitleHTML += `<span class="word" style="animation-delay: ${(wordIndex + 1) * 150}ms">${word}</span>&nbsp;`;
+                    // Animasyonun başlaması için 350ms (ekran temizlenene kadar) bekler
+                    let delay = 350 + ((wordIndex + 1) * 150);
+                    drinkTitleHTML += `<span class="word" style="animation-delay: ${delay}ms">${word}</span>&nbsp;`;
                 });
 
+                // Yemek Başlığı Animasyonu
                 let foodTitleHTML = "";
                 food.title.split(" ").forEach((word, wordIndex) => {
-                    foodTitleHTML += `<span class="word" style="animation-delay: ${(wordIndex + 1) * 150}ms">${word}</span>&nbsp;`;
+                    let delay = 350 + ((wordIndex + 1) * 150);
+                    foodTitleHTML += `<span class="word" style="animation-delay: ${delay}ms">${word}</span>&nbsp;`;
                 });
 
                 slideElement.innerHTML = `
