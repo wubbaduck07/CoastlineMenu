@@ -28,13 +28,16 @@
             --glass-border: rgba(255, 255, 255, 0.12);
         }
 
-        body {
+          body {
             font-family: 'Segoe UI', sans-serif;
-            height: 100vh;
+            height: 100vh; /* Burası kesinlikle 100vh kalmalı */
+            width: 100vw;
+            margin: 0;
             overflow: hidden;
             color: white;
             background: var(--base-bg, #039dfc);
             transition: background 2s ease;
+            /* body'deki tüm transform ve scale kodlarını sildik */
         }
 
         /* --- Tema Renkleri --- */
@@ -66,18 +69,20 @@
             transition: background 2s ease;
         }
 
+
         .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(120px);
+            /* filter: blur(120px); <- TV'Yİ KASAN DÜŞMAN BUYDU, SİLİNDİ */
             transition: background 2s ease, opacity 2s ease;
             will-change: transform;
-            transform: translateZ(0);
+            transform: translateZ(0); /* Donanım hızlandırmayı tetikler */
         }
 
-        .orb1 { width: 700px; height: 700px; background: var(--orb1-color); opacity: var(--orb1-opacity); top: -250px; right: -150px; animation: move1 10s ease-in-out infinite; }
-        .orb2 { width: 850px; height: 850px; background: var(--orb2-color); opacity: var(--orb2-opacity); bottom: -350px; left: -250px; animation: move2 3s ease-in-out infinite; }
-        .orb3 { width: 500px; height: 500px; background: var(--orb3-color); opacity: var(--orb3-opacity); top: 25%; left: 35%; animation: move3 10s ease-in-out infinite; }
+        /* Işık efektini blur yerine radial-gradient ile veriyoruz (0 Kasma) */
+        .orb1 { width: 700px; height: 700px; background: radial-gradient(circle, var(--orb1-color) 0%, transparent 65%); opacity: var(--orb1-opacity); top: -250px; right: -150px; animation: move1 10s ease-in-out infinite; }
+        .orb2 { width: 850px; height: 850px; background: radial-gradient(circle, var(--orb2-color) 0%, transparent 65%); opacity: var(--orb2-opacity); bottom: -350px; left: -250px; animation: move2 13s ease-in-out infinite; }
+        .orb3 { width: 500px; height: 500px; background: radial-gradient(circle, var(--orb3-color) 0%, transparent 65%); opacity: var(--orb3-opacity); top: 25%; left: 35%; animation: move3 15s ease-in-out infinite; }
 
         .particles-container {
             position: fixed; inset: 0; z-index: -10; pointer-events: none;
@@ -91,18 +96,19 @@
             will-change: transform, opacity;
             animation: randomGlow ease-in-out infinite;
         }
-
-        /* =========================================
-           3. GENEL YERLEŞİM (LAYOUT)
-           ========================================= */
-        .dashboard {
+          .dashboard {
             position: relative;
             z-index: 10; 
-            height: 100vh;
-            padding: 18px;
+            height: 100%;
+            padding: 1.5vh 1.5vw; /* Ekrana göre dinamik iç boşluk */
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            justify-content: space-between; /* İçerikleri yukarı ve aşağı iter */
+            gap: 15px;
+            
+            /* ZOOM AYARI: Ekranın %90'ı kadar küçültür ve tam ortaya hizalar */
+            transform: scale(0.92);
+            transform-origin: center center; 
         }
 
         /* --- Üst Kısım (Header) --- */
@@ -526,7 +532,7 @@ const videoContainer = document.getElementById("promoVideoContainer");
             if(!container) return;
             container.innerHTML = ''; 
             
-            const count = 25; 
+            const count = 10; 
             for(let i=0; i<count; i++) {
                 const particle = document.createElement("div");
                 particle.className = "particle";
