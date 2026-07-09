@@ -370,7 +370,7 @@
             }
         }
 
-        // 3. Vimeo ve Slider Kontrolü
+// 3. Vimeo ve Slider Kontrolü
         const dynamicSlides = document.querySelectorAll(".slide");
         let currentSlide = 0;
         let sliderInterval;
@@ -378,7 +378,10 @@
         const videoContainer = document.getElementById("promoVideoContainer");
         const iframe = document.getElementById("promoVideo");
         let vimeoPlayer = new Vimeo.Player(iframe);
+        
         let failsafeTimer = null;
+        let promoTimeout = null; // Eski sayacı temizlemek için hafıza
+        let isVideoActive = false; // İŞTE SİSTEMİ ÇÖKMEKTEN KURTARAN KİLİT
 
         function startSlider() {
             if(sliderInterval) clearInterval(sliderInterval);
@@ -394,6 +397,10 @@
         function stopSlider() { clearInterval(sliderInterval); }
 
         function handleVideoEnd() {
+            // EĞER KAPI KİLİTLİYSE (Sistem zaten menüye döndüyse) İŞLEM YAPMA!
+            if (!isVideoActive) return; 
+            isVideoActive = false; // Sistemi serbest bırak
+
             videoContainer.classList.remove("show"); 
             if(failsafeTimer) clearTimeout(failsafeTimer); 
             
@@ -418,7 +425,10 @@
         });
 
         function playPromoVideo() {
+            if (isVideoActive) return; // Zaten çalışıyorsa üst üste binmeyi engeller
+            isVideoActive = true; // Kapıyı kilitle
             stopSlider(); 
+            
             vimeoPlayer.play().then(function() {
                 videoContainer.classList.add("show"); 
             }).catch(function(error) {
@@ -428,10 +438,11 @@
         }
 
         function scheduleNextVideo() {
+            if (promoTimeout) clearTimeout(promoTimeout); // Çoğalan döngüleri sil!
             const minTime = 3 * 60 * 1000; 
             const maxTime = 8 * 60 * 1000; 
             const randomDelay = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-            setTimeout(() => { playPromoVideo(); }, randomDelay);
+            promoTimeout = setTimeout(() => { playPromoVideo(); }, randomDelay);
         }
 
         startSlider();
