@@ -59,13 +59,11 @@
             background: var(--bg-gradient, linear-gradient(135deg, #04162c 0%, #08345f 35%, #0b4f7d 60%, #ff7a00 100%));
             transition: background 2s ease;
         }
-
         .orb {
-            position: absolute;
-            border-radius: 50%;
+            position: absolute; border-radius: 50%;
             transition: background 2s ease, opacity 2s ease;
-            will-change: transform;
             transform: translateZ(0);
+
         }
 
         .orb1 { width: 700px; height: 700px; background: radial-gradient(circle, var(--orb1-color) 0%, transparent 65%); opacity: var(--orb1-opacity); top: -250px; right: -150px; animation: move1 10s ease-in-out infinite; }
@@ -75,12 +73,8 @@
         .particles-container { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
         .particle {
-            position: absolute;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%;
-            opacity: 0;
-            will-change: transform, opacity;
-            animation: randomGlow ease-in-out infinite;
+            position: absolute; background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%; opacity: 0; animation: randomGlow ease-in-out infinite;
         }
 
         /* =========================================
@@ -115,8 +109,15 @@
         .tv-bug-container { height: 130px; width: 320px; overflow: hidden; display: flex; align-items: flex-start; }
         .tv-bug-logo { width: 80%; height: 190px; object-fit: cover; object-position: top center; margin-top: -5px; will-change: transform, filter; }
 
-        .clocks { display: flex; gap: 45px; }
-        .clock-card { min-width: 195px; text-align: center; padding: 14px 18px; border-radius: 29px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); }
+        .clocks { 
+            display: flex; gap: 45px; 
+            /* SİHİRLİ KOD: Saatlerin her saniye değişmesi arka planı etkilemez */
+            contain: layout paint; 
+        }
+        .clock-card { 
+            min-width: 195px; text-align: center; padding: 14px 18px; border-radius: 29px; 
+            background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); 
+        }
         .clock-city { font-size: 25px; opacity: .7; letter-spacing: 5px; margin-bottom: 4px; }
         .clock-time { font-size: 45px; font-weight: 700; }
 
@@ -196,7 +197,7 @@
         .score small { font-size: 12px; opacity: 0.7; margin-left: 2px; }
         .item-stars { font-size: 12px; letter-spacing: 2px; filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.4)); }
         
-        .brand-logo { height: 38px; width: auto; max-width: 110px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5)); will-change: transform; animation: float 20s ease-in-out infinite; }
+        .brand-logo { height: 38px; width: auto; max-width: 110px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5)); animation: float 20s ease-in-out infinite; }
         .review-item:nth-child(1) .brand-logo { animation-delay: 0s; }
         .review-item:nth-child(2) .brand-logo { animation-delay: 0.5s; }
         .review-item:nth-child(3) .brand-logo { animation-delay: 1s; }
@@ -218,14 +219,14 @@
         @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes randomGlow { 0% { opacity: 0; transform: scale(0.5) translateY(0); } 50% { opacity: 1; transform: scale(4.5) translateY(-30px); } 100% { opacity: 0; transform: scale(0.5) translateY(-60px); } }
         
-        .icon-sun { width: 48px; height: 48px; background: #ffd54f; border-radius: 50%; position: absolute; top: 13px; left: 13px; box-shadow: 0 0 20px #ffd54f; animation: pulseIcon 3s ease infinite; will-change: transform, opacity; transform: translateZ(0); }
-        .icon-moon { width: 40px; height: 40px; border-radius: 50%; position: absolute; top: 15px; left: 15px; box-shadow: inset -10px -8px 0 0 #e2e8f0; animation: pulseIcon 4s ease infinite; will-change: transform, opacity; transform: translateZ(0); }
-        .icon-cloud { width: 50px; height: 18px; background: #f8fafc; border-radius: 20px; position: absolute; top: 35px; left: 10px; box-shadow: 0 0 15px rgba(255,255,255,0.4); animation: floatIcon 4s ease-in-out infinite; will-change: transform; transform: translateZ(0); }
+        /* Hava Durumu İkonlarından TV'yi yoran kodlar temizlendi */
+        .icon-sun { width: 48px; height: 48px; background: #ffd54f; border-radius: 50%; position: absolute; top: 13px; left: 13px; box-shadow: 0 0 20px #ffd54f; animation: pulseIcon 3s ease infinite; transform: translateZ(0); }
+        .icon-moon { width: 40px; height: 40px; border-radius: 50%; position: absolute; top: 15px; left: 15px; box-shadow: inset -10px -8px 0 0 #e2e8f0; animation: pulseIcon 4s ease infinite; transform: translateZ(0); }
+        .icon-cloud { width: 50px; height: 18px; background: #f8fafc; border-radius: 20px; position: absolute; top: 35px; left: 10px; box-shadow: 0 0 15px rgba(255,255,255,0.4); animation: floatIcon 4s ease-in-out infinite; transform: translateZ(0); }
         .icon-cloud::before { content: ''; position: absolute; width: 22px; height: 22px; background: inherit; border-radius: 50%; top: -12px; left: 8px; }
         .icon-cloud::after { content: ''; position: absolute; width: 16px; height: 16px; background: inherit; border-radius: 50%; top: -8px; right: 8px; }
-        .icon-rain { position: absolute; width: 3px; height: 8px; background: #00d4ff; top: 45px; left: 22px; box-shadow: 10px 0 0 #00d4ff, 20px 0 0 #00d4ff; animation: rainDrop 0.8s linear infinite; will-change: transform, opacity; transform: translateZ(0); }
-        .icon-wind { position: absolute; width: 25px; height: 2px; background: rgba(255,255,255,0.8); top: 38px; left: 15px; border-radius: 2px; box-shadow: -15px -8px 0 0 rgba(255,255,255,0.5), 10px 8px 0 0 rgba(255,255,255,0.6); animation: windBlow 1s linear infinite; will-change: transform, opacity; transform: translateZ(0); }
-
+        .icon-rain { position: absolute; width: 3px; height: 8px; background: #00d4ff; top: 45px; left: 22px; box-shadow: 10px 0 0 #00d4ff, 20px 0 0 #00d4ff; animation: rainDrop 0.8s linear infinite; transform: translateZ(0); }
+        .icon-wind { position: absolute; width: 25px; height: 2px; background: rgba(255,255,255,0.8); top: 38px; left: 15px; border-radius: 2px; box-shadow: -15px -8px 0 0 rgba(255,255,255,0.5), 10px 8px 0 0 rgba(255,255,255,0.6); animation: windBlow 1s linear infinite; transform: translateZ(0); }
         @keyframes pulseIcon { 0%,100%{transform: scale(1) translateZ(0);} 50%{transform: scale(1.08) translateZ(0);} }
         @keyframes floatIcon { 0%, 100% { transform: translateY(0) translateZ(0); } 50% { transform: translateY(-4px) translateZ(0); } }
         @keyframes rainDrop { 0% { transform: translateY(0) translateZ(0); opacity: 1; } 100% { transform: translateY(15px) translateZ(0); opacity: 0; } }
