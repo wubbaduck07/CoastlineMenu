@@ -6,9 +6,6 @@
     <title>Coastline Orange Hotel - Menü Ekranı V2</title>
 
     <style>
-        /* =========================================
-           1. TEMEL AYARLAR VE DEĞİŞKENLER
-           ========================================= */
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +28,6 @@
             transition: background 2s ease;
         }
 
-        /* --- Tema Renkleri --- */
         body.theme-day {
             --base-bg: #1550b0;
             --bg-gradient: linear-gradient(135deg, #3db6f2 0%, #3d7ff2 35%, #3df2bc 60%, #fc03f8 100%);
@@ -48,9 +44,6 @@
             --orb3-color: #1a237e; --orb3-opacity: 0.15;
         }
 
-        /* =========================================
-           2. ARKA PLAN VE EFEKTLER (FPS DOSTU)
-           ========================================= */
         .background {
             position: fixed;
             inset: 0;
@@ -77,9 +70,6 @@
             border-radius: 50%; opacity: 0; animation: randomGlow ease-in-out infinite;
         }
 
-        /* =========================================
-           3. GENEL YERLEŞİM (LAYOUT & ZOOM)
-           ========================================= */
         .dashboard {
             position: relative;
             z-index: 10; 
@@ -89,7 +79,7 @@
             flex-direction: column;
             justify-content: space-between; 
             gap: 15px;
-            transform: scale(0.92); /* TV ekranına sığdırma ayarı */
+            transform: scale(0.92);
             transform-origin: center center; 
         }
 
@@ -111,7 +101,6 @@
 
         .clocks { 
             display: flex; gap: 45px; 
-            /* SİHİRLİ KOD: Saatlerin her saniye değişmesi arka planı etkilemez */
             contain: layout paint; 
         }
         .clock-card { 
@@ -121,9 +110,6 @@
         .clock-city { font-size: 25px; opacity: .7; letter-spacing: 5px; margin-bottom: 4px; }
         .clock-time { font-size: 45px; font-weight: 700; }
 
-        /* =========================================
-           4. ANA PANEL VE SLIDER
-           ========================================= */
         .main-panel {
             flex: 1; position: relative; border-radius: 34px; overflow: hidden;
             background: rgba(255,255,255,.06); backdrop-filter: blur(35px);
@@ -164,9 +150,6 @@
         
         .price-tag { font-size: 24px; color: #ff8c00; font-weight: bold; background: rgba(0,0,0,0.4); padding: 2px 18px; border-radius: 35px; display: inline-block; box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255, 140, 0, 0.3); }
 
-        /* =========================================
-           5. REKLAM VİDEOSU VE TICKER
-           ========================================= */
         .video-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; 
             z-index: -10; opacity: 0; pointer-events: none; transition: opacity 1s ease-in-out; overflow: hidden;
@@ -177,16 +160,11 @@
         .ticker { position: absolute; bottom: 0; left: 0; width: 100%; height: 110px; background: rgba(0,0,0,.25); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; }
         .ticker-static { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 28px; font-weight: 800; letter-spacing: 1px; }
 
-/* =========================================
-           6. FOOTER (3'lü Grid Sistemi)
-           ========================================= */
-        /* Ekranı sırasıyla: 360px (Hava), Kalan Boşluk (Logolar), 200px (Döviz) olarak böler */
         .footer { height: 150px; display: grid; grid-template-columns: 360px 1fr 200px; gap: 16px; }
         
         .weather-card { border-radius: 36px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; }
         .weather-inner { display: flex; align-items: center; }
         .weather-icon { width: 75px; height: 75px; margin-right: 15px; position: relative; }
-        /* Fahrenheit sığsın diye yazıyı biraz ufaltıp yan yana dizdik */
         .temp { font-size: 34px; font-weight: 700; white-space: nowrap; } 
         .location { font-size: 18px; opacity: .8; }
 
@@ -202,15 +180,11 @@
         .review-item:nth-child(2) .brand-logo { animation-delay: 0.5s; }
         .review-item:nth-child(3) .brand-logo { animation-delay: 1s; }
 
-        /* YENİ: Döviz Kartı Stilleri */
         .currency-card { border-radius: 36px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 0 20px; }
         .currency-item { display: flex; justify-content: space-between; width: 100%; font-size: 22px; font-weight: 800; letter-spacing: 1px; }
         .currency-item span:first-child { color: #ff8c00; }
         .currency-item span:last-child { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* =========================================
-           7. ANİMASYONLAR
-           ========================================= */
         @keyframes move1 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-150px,120px);} }
         @keyframes move2 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(180px,-100px);} }
         @keyframes move3 { 0%,100%{transform:scale(1);} 50%{transform:scale(1.25);} }
@@ -219,7 +193,6 @@
         @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes randomGlow { 0% { opacity: 0; transform: scale(0.5) translateY(0); } 50% { opacity: 1; transform: scale(4.5) translateY(-30px); } 100% { opacity: 0; transform: scale(0.5) translateY(-60px); } }
         
-        /* Hava Durumu İkonlarından TV'yi yoran kodlar temizlendi */
         .icon-sun { width: 48px; height: 48px; background: #ffd54f; border-radius: 50%; position: absolute; top: 13px; left: 13px; box-shadow: 0 0 20px #ffd54f; animation: pulseIcon 3s ease infinite; transform: translateZ(0); }
         .icon-moon { width: 40px; height: 40px; border-radius: 50%; position: absolute; top: 15px; left: 15px; box-shadow: inset -10px -8px 0 0 #e2e8f0; animation: pulseIcon 4s ease infinite; transform: translateZ(0); }
         .icon-cloud { width: 50px; height: 18px; background: #f8fafc; border-radius: 20px; position: absolute; top: 35px; left: 10px; box-shadow: 0 0 15px rgba(255,255,255,0.4); animation: floatIcon 4s ease-in-out infinite; transform: translateZ(0); }
@@ -314,7 +287,6 @@
                 </div>
             </div>
 
-            <!-- YENİ DÖVİZ KUTUSU -->
             <div class="currency-card">
                 <div class="currency-item"><span>USD</span><span id="usdRate">--</span></div>
                 <div class="currency-item"><span>EUR</span><span id="eurRate">--</span></div>
@@ -329,7 +301,6 @@
     <script>
     document.addEventListener("DOMContentLoaded", () => {
         
-        // 1. Veriler
         const foodItems = [
             { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
             { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
@@ -349,7 +320,6 @@
             { title: "SMOOTHIE", price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/0400dd6b-8458-4775-9997-9868969d0911.jpg" }
         ];
 
-        // 2. Slider Üretici
         const sliderContainer = document.getElementById("dynamicSlider");
         if(sliderContainer) {
             const maxItems = Math.max(foodItems.length, drinkItems.length);
@@ -393,7 +363,6 @@
             }
         }
 
-// 3. Vimeo ve Slider Kontrolü
         const dynamicSlides = document.querySelectorAll(".slide");
         let currentSlide = 0;
         let sliderInterval;
@@ -403,8 +372,8 @@
         let vimeoPlayer = new Vimeo.Player(iframe);
         
         let failsafeTimer = null;
-        let promoTimeout = null; // Eski sayacı temizlemek için hafıza
-        let isVideoActive = false; // İŞTE SİSTEMİ ÇÖKMEKTEN KURTARAN KİLİT
+        let promoTimeout = null;
+        let isVideoActive = false;
 
         function startSlider() {
             if(sliderInterval) clearInterval(sliderInterval);
@@ -420,9 +389,8 @@
         function stopSlider() { clearInterval(sliderInterval); }
 
         function handleVideoEnd() {
-            // EĞER KAPI KİLİTLİYSE (Sistem zaten menüye döndüyse) İŞLEM YAPMA!
             if (!isVideoActive) return; 
-            isVideoActive = false; // Sistemi serbest bırak
+            isVideoActive = false;
 
             videoContainer.classList.remove("show"); 
             if(failsafeTimer) clearTimeout(failsafeTimer); 
@@ -448,8 +416,8 @@
         });
 
         function playPromoVideo() {
-            if (isVideoActive) return; // Zaten çalışıyorsa üst üste binmeyi engeller
-            isVideoActive = true; // Kapıyı kilitle
+            if (isVideoActive) return;
+            isVideoActive = true;
             stopSlider(); 
             
             vimeoPlayer.play().then(function() {
@@ -461,7 +429,7 @@
         }
 
         function scheduleNextVideo() {
-            if (promoTimeout) clearTimeout(promoTimeout); // Çoğalan döngüleri sil!
+            if (promoTimeout) clearTimeout(promoTimeout);
             const minTime = 3 * 60 * 1000; 
             const maxTime = 8 * 60 * 1000; 
             const randomDelay = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
@@ -471,7 +439,6 @@
         startSlider();
         scheduleNextVideo();
 
-        // 4. Performans Dostu Parçacıklar (Sadece 10 adet)
         function createParticles() {
             const container = document.getElementById("particlesContainer");
             if(!container) return;
@@ -492,7 +459,6 @@
         }
         createParticles();
 
-        // 5. Zaman Senkronizasyonu
         let timeOffset = 0; 
         async function syncTimeWithAPI() {
             try {
@@ -519,7 +485,6 @@
         syncTimeWithAPI();
         setInterval(checkTheme, 60000);
 
-        // 6. Saatler
         function updateClocks(){
             try {
                 document.getElementById("antalyaTime").innerHTML = new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Istanbul"});
@@ -531,7 +496,6 @@
         setInterval(updateClocks, 1000);
         updateClocks();
 
-// 7. Hava Durumu (Fahrenheit Geri Eklendi)
         async function weather(){
             try {
                 const response = await fetch("https://wttr.in/Antalya?format=j1");
@@ -560,31 +524,34 @@
             } catch(e) { console.log("Hava durumu yüklenemedi."); }
         }
         weather(); setInterval(weather, 600000); 
-
-        // 8. Döviz Kurları (Alış Simülasyonu)
-        async function fetchRates() {
+        
+async function fetchRates() {
             try {
-                // Ücretsiz, hızlı ve CORS kilidi olmayan uluslararası kur API'si
-                const response = await fetch("https://open.er-api.com/v6/latest/TRY");
+                const response = await fetch("https://open.er-api.com/v6/latest/USD");
                 if(response.ok) {
                     const data = await response.json();
                     
-                    // Merkez Bankası orta kurunu, otel/gişe "Alış" fiyatına çevirmek için 
-                    // %1'lik bir komisyon/makas payı (* 0.99) uygulanmıştır.
-                    const usd = ((1 / data.rates.USD) * 0.99).toFixed(2);
-                    const eur = ((1 / data.rates.EUR) * 0.99).toFixed(2);
-                    const gbp = ((1 / data.rates.GBP) * 0.99).toFixed(2);
+                    const tryRate = data.rates.TRY;
+                    const eurRate = data.rates.EUR;
+                    const gbpRate = data.rates.GBP;
 
-                    document.getElementById("usdRate").innerText = usd;
-                    document.getElementById("eurRate").innerText = eur;
-                    document.getElementById("gbpRate").innerText = gbp;
+                    let usd = tryRate;
+                    let eur = tryRate / eurRate;
+                    let gbp = tryRate / gbpRate;
+                    
+                    usd = usd - 0.40; 
+                    eur = eur - 0.40; 
+                    gbp = gbp - 0.40;
+
+                    document.getElementById("usdRate").innerText = usd.toFixed(2);
+                    document.getElementById("eurRate").innerText = eur.toFixed(2);
+                    document.getElementById("gbpRate").innerText = gbp.toFixed(2);
                 }
-            } catch(e) { console.log("Kurlar çekilemedi."); }
+            } catch(e) { console.log("Kur API hatası."); }
         }
+        
         fetchRates(); 
-        setInterval(fetchRates, 60 * 60 * 1000); // Kurları saatte bir günceller
-
-        // 9. RAM Temizleyici (1 Saatte Bir)
+        setInterval(fetchRates, 60 * 60 * 1000);
         setInterval(() => {
             if (!document.getElementById("promoVideoContainer").classList.contains("show")) {
                 window.location.reload(true); 
