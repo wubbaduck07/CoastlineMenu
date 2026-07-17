@@ -40,15 +40,18 @@
 
         .background {
             position: fixed;
-            top: -10%;
-            left: -10%;
-            width: 120%;
-            height: 120%;
+            /* Dönme esnasında köşelerin boş kalmaması için alanı genişletiyoruz */
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
             overflow: hidden;
             z-index: -1;
             background: var(--bg-gradient, linear-gradient(135deg, #04162c 0%, #08345f 35%, #0b4f7d 60%, #ff7a00 100%));
             transition: background 2s ease;
-            animation: gradientMove 25s ease-in-out infinite;
+            
+            /* Akışkan, hipnotik ve yüksek FPS'li gerçek gradient hareketi */
+            animation: fluidGradient 40s linear infinite;
             will-change: transform;
             transform: translateZ(0);
         }
@@ -105,13 +108,7 @@
             background: rgba(255,255,255,.06); backdrop-filter: blur(35px);
             border: 1px solid rgba(255,255,255,.10); display: flex; justify-content: center; align-items: center;
             perspective: 1000px; 
-        }
-
-        .main-panel::before {
-            content: ""; position: absolute; width: 900px; height: 900px; border-radius: 50%;
-            background: radial-gradient(rgba(255,255,255,.12), transparent 70%);
-            animation: panelLight 18s linear infinite;
-            will-change: transform;
+            /* İllüzyon yaratan iç parlamayı (orb benzeri yapıyı) tamamen kaldırdık */
         }
 
         .slider { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2; }
@@ -149,7 +146,7 @@
         .weather-card { border-radius: 36px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; }
         .weather-inner { display: flex; align-items: center; }
         .weather-icon { width: 75px; height: 75px; margin-right: 15px; position: relative; }
-        .temp { font-size: 34px; font-weight: 700; white-space: nowrap; } 
+        .temp { font-size: 30px; font-weight: 700; white-space: nowrap; } 
         .location { font-size: 18px; opacity: .8; }
 
         .review-card { padding: 10px 15px; width: 100%; }
@@ -169,13 +166,13 @@
         .currency-item span:first-child { color: #ff8c00; }
         .currency-item span:last-child { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        @keyframes gradientMove {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-3%, 2%) scale(1.03); }
-            66% { transform: translate(2%, -2%) scale(1.01); }
+        /* Muazzam bir sıvı/akışkan renk efekti yaratan rotasyon animasyonu */
+        @keyframes fluidGradient {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.12); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
-        @keyframes panelLight { 0%{transform:translate(-350px,-250px) translateZ(0);} 50%{transform:translate(250px,120px) translateZ(0);} 100%{transform:translate(-350px,-250px) translateZ(0);} }
         @keyframes float { 0%, 100% { transform: translateY(0) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
         @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1) translateZ(0); } }
         @keyframes randomGlow { 0% { opacity: 0; transform: scale(0.5) translateY(0) translateZ(0); } 50% { opacity: 1; transform: scale(4.5) translateY(-30px) translateZ(0); } 100% { opacity: 0; transform: scale(0.5) translateY(-60px) translateZ(0); } }
@@ -195,24 +192,15 @@
 </head>
 
 <body>
-    <script>
-        window.onerror = function(message, source, lineno, colno, error) {
-            const errorDiv = document.createElement("div");
-            errorDiv.style.cssText = "position:absolute; top:20px; left:20px; z-index:99999; background:red; color:white; padding:15px; border-radius:10px; font-size:24px; font-weight:bold; max-width: 80%;";
-            errorDiv.innerHTML = "🚨 HATA YAKALANDI:<br>" + message + "<br>Satır: " + lineno;
-            document.body.appendChild(errorDiv);
-            return true;
-        };
-    </script>
-
     <div class="background">
         <div class="particles-container" id="particlesContainer"></div>
     </div>
 
     <div class="dashboard theme-day" id="dashboard">
         <div class="header">
-            <div class="tv-bug-container" id="logoContainer">
-                </div>
+            <div class="tv-bug-container">
+                <img src="https://s6.imgcdn.dev/YmUOTq.gif" border="0" width="1000" height="800" alt="Coastline Orange Hotel Logo" class="tv-bug-logo">
+            </div>
             <div class="clocks">
                 <div class="clock-card"><div class="clock-city">ANTALYA</div><div class="clock-time" id="antalyaTime">00:00</div></div>
                 <div class="clock-card"><div class="clock-city">LONDON</div><div class="clock-time" id="londonTime">00:00</div></div>
@@ -234,8 +222,8 @@
         <div class="footer">
             <div class="weather-card">
                 <div class="weather-inner">
-                    <div class="weather-icon"></div>
-                    <div><div class="temp" id="weatherTemp">--</div><div class="location">Antalya</div></div>
+                    <div class="weather-icon" id="weatherIconContainer"></div>
+                    <div><div class="temp" id="weatherTemp">--°C</div><div class="location">Antalya</div></div>
                 </div>
             </div>
 
@@ -269,128 +257,123 @@
 
     <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const cacheBuster = Date.now();
         
-        // Logoyu önbelleğe takılmaması için dinamik versiyonla yüklüyoruz
-        document.getElementById("logoContainer").innerHTML = `<img src="https://s6.imgcdn.dev/YmUOTq.gif?v=${cacheBuster}" border="0" width="1000" height="800" alt="Coastline Orange Hotel Logo" class="tv-bug-logo">`;
+        // 1. MENÜ İÇERİKLERİ VE SLIDER
+        try {
+            const foodItems = [
+                { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
+                { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
+                { title: "COASTLINE PIZZA", price: "600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
+                { title: "FETTUCINI ALFREDO", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/66ab2e5d-c8f8-456c-b8b4-f129d008315f.jpeg" },
+                { title: "MIXED TOAST", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/821273d9-e170-4eee-b628-103fa1caa167.jpeg" },
+                { title: "MEDITERRANEAN SALAD", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/16ab700c-466a-413b-aba4-abf63102119e.jpg" },
+                { title: "SAN SEBASTIAN", price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/c2d01d40-0310-4293-b0c6-5c87ce07d6eb.jpg" }
+            ];
 
-        const foodItems = [
-            { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
-            { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
-            { title: "COASTLINE PIZZA", price: "600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
-            { title: "FETTUCINI ALFREDO", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/66ab2e5d-c8f8-456c-b8b4-f129d008315f.jpeg" },
-            { title: "MIXED TOAST", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/821273d9-e170-4eee-b628-103fa1caa167.jpeg" },
-            { title: "MEDITERRANEAN SALAD", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/16ab700c-466a-413b-aba4-abf63102119e.jpg" },
-            { title: "SAN SEBASTIAN", price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/c2d01d40-0310-4293-b0c6-5c87ce07d6eb.jpg" }
-        ];
+            const drinkItems = [
+                { title: "MILKSHAKE", price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/6d1ef948-29c7-44bc-96c3-fabc575239d2.jpg" },
+                { title: "NEGRONI", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/f2b232bf-7a38-4c2b-bbbe-f3eb06497fe9.jpg" },
+                { title: "APEROL SPRITZ", price: "420.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/3c4ce51c-7ade-44dd-b7c9-f74651cea216.jpg" },
+                { title: "ESPRESSO MARTINI", price: "440.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/4aefb242-8c3c-4795-98f7-5221db67e096.jpg" },
+                { title: "MOJITO", price: "430.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/c3c253fd-ec6b-44df-af9b-1a008c076a01.jpg" },
+                { title: "SMOOTHIE", price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/0400dd6b-8458-4775-9997-9868969d0911.jpg" }
+            ];
 
-        const drinkItems = [
-            { title: "MILKSHAKE", price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/6d1ef948-29c7-44bc-96c3-fabc575239d2.jpg" },
-            { title: "NEGRONI", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/f2b232bf-7a38-4c2b-bbbe-f3eb06497fe9.jpg" },
-            { title: "APEROL SPRITZ", price: "420.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/3c4ce51c-7ade-44dd-b7c9-f74651cea216.jpg" },
-            { title: "ESPRESSO MARTINI", price: "440.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/4aefb242-8c3c-4795-98f7-5221db67e096.jpg" },
-            { title: "MOJITO", price: "430.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/c3c253fd-ec6b-44df-af9b-1a008c076a01.jpg" },
-            { title: "SMOOTHIE", price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/0400dd6b-8458-4775-9997-9868969d0911.jpg" }
-        ];
+            const sliderContainer = document.getElementById("dynamicSlider");
+            if(sliderContainer) {
+                const maxItems = Math.max(foodItems.length, drinkItems.length);
+                for (let i = 0; i < maxItems; i++) {
+                    const food = foodItems[i % foodItems.length];
+                    const drink = drinkItems[i % drinkItems.length];
+                    const slideElement = document.createElement("div");
+                    slideElement.className = `slide ${i === 0 ? "active" : ""}`;
+                    
+                    let drinkTitleHTML = "";
+                    drink.title.split(" ").forEach((word, wordIndex) => {
+                        let delay = 350 + ((wordIndex + 1) * 150);
+                        drinkTitleHTML += `<span class="word" style="animation-delay: ${delay}ms">${word}</span>&nbsp;`;
+                    });
 
-        const sliderContainer = document.getElementById("dynamicSlider");
-        if(sliderContainer) {
-            const maxItems = Math.max(foodItems.length, drinkItems.length);
-            for (let i = 0; i < maxItems; i++) {
-                const food = foodItems[i % foodItems.length];
-                const drink = drinkItems[i % drinkItems.length];
-                const slideElement = document.createElement("div");
-                slideElement.className = `slide ${i === 0 ? "active" : ""}`;
-                
-                let drinkTitleHTML = "";
-                drink.title.split(" ").forEach((word, wordIndex) => {
-                    let delay = 350 + ((wordIndex + 1) * 150);
-                    drinkTitleHTML += `<span class="word" style="animation-delay: ${delay}ms">${word}</span>&nbsp;`;
-                });
+                    let foodTitleHTML = "";
+                    food.title.split(" ").forEach((word, wordIndex) => {
+                        let delay = 350 + ((wordIndex + 1) * 150);
+                        foodTitleHTML += `<span class="word" style="animation-delay: ${delay}ms">${word}</span>&nbsp;`;
+                    });
 
-                let foodTitleHTML = "";
-                food.title.split(" ").forEach((word, wordIndex) => {
-                    let delay = 350 + ((wordIndex + 1) * 150);
-                    foodTitleHTML += `<span class="word" style="animation-delay: ${delay}ms">${word}</span>&nbsp;`;
-                });
-
-                slideElement.innerHTML = `
-                    <div class="split-half left-half">
-                        <img src="${drink.image}?v=${cacheBuster}" alt="${drink.title}">
-                        <div class="slide-content">
-                            <h1>${drinkTitleHTML}</h1>
-                            <div class="price-tag">${drink.price}</div>
+                    slideElement.innerHTML = `
+                        <div class="split-half left-half">
+                            <img src="${drink.image}" alt="${drink.title}">
+                            <div class="slide-content">
+                                <h1>${drinkTitleHTML}</h1>
+                                <div class="price-tag">${drink.price}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="split-half right-half">
-                        <img src="${food.image}?v=${cacheBuster}" alt="${food.title}">
-                        <div class="slide-content">
-                            <h1>${foodTitleHTML}</h1>
-                            <div class="price-tag">${food.price}</div>
+                        <div class="split-half right-half">
+                            <img src="${food.image}" alt="${food.title}">
+                            <div class="slide-content">
+                                <h1>${foodTitleHTML}</h1>
+                                <div class="price-tag">${food.price}</div>
+                            </div>
                         </div>
-                    </div>
-                `;
-                sliderContainer.appendChild(slideElement);
+                    `;
+                    sliderContainer.appendChild(slideElement);
+                }
             }
-        }
 
-        const dynamicSlides = document.querySelectorAll(".slide");
-        let currentSlide = 0;
-        let sliderInterval;
-
-        function startSlider() {
-            if(sliderInterval) clearInterval(sliderInterval);
-            sliderInterval = setInterval(() => {
+            const dynamicSlides = document.querySelectorAll(".slide");
+            let currentSlide = 0;
+            setInterval(() => {
                 if(dynamicSlides.length === 0) return;
                 dynamicSlides[currentSlide].classList.remove("active");
-                currentSlide++;
-                if(currentSlide >= dynamicSlides.length) currentSlide = 0;
+                currentSlide = (currentSlide + 1) % dynamicSlides.length;
                 dynamicSlides[currentSlide].classList.add("active");
-            }, 7000); 
-        }
-        startSlider();
+            }, 7000);
+        } catch(e) { console.error("Slider hatası:", e); }
 
-        function createParticles() {
+        // 2. PARTİKÜL SİSTEMİ
+        try {
             const container = document.getElementById("particlesContainer");
-            if(!container) return;
-            container.innerHTML = ''; 
-            const count = 10; 
-            for(let i=0; i<count; i++) {
-                const particle = document.createElement("div");
-                particle.className = "particle";
-                const size = Math.random() * 20 + 10; 
-                particle.style.width = size + "px";
-                particle.style.height = size + "px";
-                particle.style.left = Math.random() * 100 + "vw";
-                particle.style.top = Math.random() * 100 + "vh"; 
-                particle.style.animationDelay = (Math.random() * 2) + "s";
-                particle.style.animationDuration = (Math.random() * 8 + 7) + "s";
-                container.appendChild(particle);
+            if(container) {
+                container.innerHTML = ''; 
+                for(let i=0; i<10; i++) {
+                    const particle = document.createElement("div");
+                    particle.className = "particle";
+                    const size = Math.random() * 20 + 10; 
+                    particle.style.width = size + "px";
+                    particle.style.height = size + "px";
+                    particle.style.left = Math.random() * 100 + "vw";
+                    particle.style.top = Math.random() * 100 + "vh"; 
+                    particle.style.animationDelay = (Math.random() * 2) + "s";
+                    particle.style.animationDuration = (Math.random() * 8 + 7) + "s";
+                    container.appendChild(particle);
+                }
             }
-        }
-        createParticles();
+        } catch(e) { console.error("Partikül hatası:", e); }
 
-        let timeOffset = 0; 
+        // 3. SAAT VE TEMA KONTROLÜ
+        let timeOffset = 0;
         async function syncTimeWithAPI() {
             try {
-                const response = await fetch("https://worldtimeapi.org/api/timezone/Europe/Istanbul", { cache: "no-store" });
+                const response = await fetch("https://worldtimeapi.org/api/timezone/Europe/Istanbul");
                 if(response.ok) {
                     const data = await response.json();
                     timeOffset = new Date(data.datetime).getTime() - new Date().getTime(); 
                 }
-            } catch(e) {}
+            } catch(e) { console.log("Zaman API hatası."); }
             checkTheme(); 
         }
 
         function checkTheme() {
-            const realTime = new Date(Date.now() + timeOffset);
-            const hour = (realTime.getUTCHours() + 3) % 24;
-            const body = document.body;
-            if(hour >= 8 && hour < 20) {
-                body.classList.add("theme-day"); body.classList.remove("theme-night");
-            } else {
-                body.classList.add("theme-night"); body.classList.remove("theme-day");
-            }
+            try {
+                const realTime = new Date(Date.now() + timeOffset);
+                const hour = (realTime.getUTCHours() + 3) % 24;
+                const body = document.body;
+                if(hour >= 8 && hour < 20) {
+                    body.classList.add("theme-day"); body.classList.remove("theme-night");
+                } else {
+                    body.classList.add("theme-night"); body.classList.remove("theme-day");
+                }
+            } catch(e) {}
         }     
         syncTimeWithAPI();
         setInterval(checkTheme, 60000);
@@ -406,34 +389,43 @@
         setInterval(updateClocks, 1000);
         updateClocks();
 
+        // 4. HAVA DURUMU SİSTEMİ (CORS Sorunsuz Open-Meteo)
         async function weather(){
             try {
-                const response = await fetch(`https://wttr.in/Antalya?format=j1&cb=${Date.now()}`);
+                const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude=36.8841&longitude=30.7056&current=temperature_2m,weather_code");
                 if(response.ok) {
                     const data = await response.json();
-                    document.getElementById("weatherTemp").innerHTML = data.current_condition[0].temp_C + "°C / " + data.current_condition[0].temp_F + "°F";
-                    const conditionCode = parseInt(data.current_condition[0].weatherCode);
+                    const tempC = Math.round(data.current.temperature_2m);
+                    const tempF = Math.round((tempC * 9/5) + 32);
+                    
+                    document.getElementById("weatherTemp").innerHTML = `${tempC}°C / ${tempF}°F`;
+                    
+                    const code = data.current.weather_code;
                     const isDaytime = ((new Date().getUTCHours() + 3) % 24) >= 8 && ((new Date().getUTCHours() + 3) % 24) < 20;
-                    const iconContainer = document.querySelector(".weather-icon");
+                    const iconContainer = document.getElementById("weatherIconContainer");
+                    
                     let iconHTML = "";
-
-                    if (conditionCode === 113) iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
-                    else if ([116, 119, 122, 143, 248, 260].includes(conditionCode)) {
+                    if (code === 0) {
+                        iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
+                    } else if ([1, 2, 3].includes(code)) {
                         const bg = isDaytime ? '<div class="icon-sun" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>' : '<div class="icon-moon" style="transform: scale(0.65); top: 5px; left: 25px; opacity: 0.6;"></div>';
                         iconHTML = bg + '<div class="icon-cloud"></div>';
-                    } else if (conditionCode >= 176 && conditionCode <= 389) iconHTML = '<div class="icon-cloud" style="background:#cbd5e1;"></div><div class="icon-rain"></div>';
-                    else iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
-
-                    if (parseInt(data.current_condition[0].windspeedKmph) >= 35) iconHTML += '<div class="icon-wind"></div>';
+                    } else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
+                        iconHTML = '<div class="icon-cloud" style="background:#cbd5e1;"></div><div class="icon-rain"></div>';
+                    } else {
+                        iconHTML = isDaytime ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
+                    }
                     iconContainer.innerHTML = iconHTML;
                 }
-            } catch(e) {}
+            } catch(e) { console.error("Hava durumu hatası:", e); }
         }
-        weather(); setInterval(weather, 600000); 
-        
+        weather(); 
+        setInterval(weather, 600000); 
+
+        // 5. DÖVİZ KURLARI SİSTEMİ
         async function fetchRates() {
             try {
-                const response = await fetch(`https://open.er-api.com/v6/latest/USD?cb=${Date.now()}`);
+                const response = await fetch("https://open.er-api.com/v6/latest/USD");
                 if(response.ok) {
                     const data = await response.json();
                     const tryRate = data.rates.TRY;
@@ -441,19 +433,12 @@
                     document.getElementById("eurRate").innerText = (tryRate / data.rates.EUR - 0.40).toFixed(2);
                     document.getElementById("gbpRate").innerText = (tryRate / data.rates.GBP - 0.40).toFixed(2);
                 }
-            } catch(e) {}
+            } catch(e) { console.error("Döviz hatası:", e); }
         }
-        fetchRates(); setInterval(fetchRates, 3600000);
+        fetchRates(); 
+        setInterval(fetchRates, 3600000);
         
-        // Cihaz eski kodu hafızaya almışsa, zorla sunucudan çekmesi için Önbellek Kırıcı Güvenlik Komutu
-        setTimeout(() => {
-            if (typeof isV2Optimized === 'undefined') {
-                window.isV2Optimized = true;
-                window.location.reload(true);
-            }
-        }, 10000);
-
-        // RAM sızıntılarını sıfırlamak için saatlik temiz yenileme
+        // RAM temizliği için saatlik yenileme
         setInterval(() => { window.location.reload(true); }, 3600000);
     });
     </script>
