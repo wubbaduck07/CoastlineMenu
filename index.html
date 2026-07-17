@@ -24,7 +24,7 @@
             margin: 0;
             overflow: hidden;
             color: white;
-            background: var(--base-bg, #039dfc);
+            background: var(--base-bg, #1550b0);
             transition: background 2s ease;
         }
 
@@ -40,18 +40,18 @@
 
         .background {
             position: fixed;
-            /* Dönme esnasında köşelerin boş kalmaması için alanı genişletiyoruz */
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            /* Kayma esnasında açık vermemesi için sadece %15 büyük yapıyoruz */
+            top: -15%;
+            left: -15%;
+            width: 130%;
+            height: 130%;
             overflow: hidden;
             z-index: -1;
             background: var(--bg-gradient, linear-gradient(135deg, #04162c 0%, #08345f 35%, #0b4f7d 60%, #ff7a00 100%));
             transition: background 2s ease;
             
-            /* Akışkan, hipnotik ve yüksek FPS'li gerçek gradient hareketi */
-            animation: fluidGradient 40s linear infinite;
+            /* DÖNME YOK: Sadece renkleri yavaşça kaydıran sıvı akış efekti */
+            animation: gradientWave 20s ease-in-out infinite;
             will-change: transform;
             transform: translateZ(0);
         }
@@ -108,7 +108,6 @@
             background: rgba(255,255,255,.06); backdrop-filter: blur(35px);
             border: 1px solid rgba(255,255,255,.10); display: flex; justify-content: center; align-items: center;
             perspective: 1000px; 
-            /* İllüzyon yaratan iç parlamayı (orb benzeri yapıyı) tamamen kaldırdık */
         }
 
         .slider { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2; }
@@ -166,11 +165,12 @@
         .currency-item span:first-child { color: #ff8c00; }
         .currency-item span:last-child { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* Muazzam bir sıvı/akışkan renk efekti yaratan rotasyon animasyonu */
-        @keyframes fluidGradient {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.12); }
-            100% { transform: rotate(360deg) scale(1); }
+        /* Yumuşak ve lüks bir renk akışı sağlayan yeni animasyon rotası */
+        @keyframes gradientWave {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-4%, -4%) scale(1.04); }
+            50% { transform: translate(-2%, -6%) scale(1.02); }
+            75% { transform: translate(-5%, -2%) scale(1.05); }
         }
 
         @keyframes float { 0%, 100% { transform: translateY(0) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
@@ -389,7 +389,7 @@
         setInterval(updateClocks, 1000);
         updateClocks();
 
-        // 4. HAVA DURUMU SİSTEMİ (CORS Sorunsuz Open-Meteo)
+        // 4. HAVA DURUMU SİSTEMİ (Open-Meteo)
         async function weather(){
             try {
                 const response = await fetch("https://api.open-meteo.com/v1/forecast?latitude=36.8841&longitude=30.7056&current=temperature_2m,weather_code");
