@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coastline Orange Hotel - Menü Ekranı V2 Optimized</title>
+    <title>Coastline Orange Hotel - Menü Ekranı</title>
 
     <style>
         * {
@@ -31,39 +31,30 @@
         body.theme-day {
             --base-bg: #1550b0;
             --bg-gradient: linear-gradient(135deg, #3db6f2 0%, #3d7ff2 35%, #3df2bc 60%, #fc03f8 100%);
-            --orb1-color: #ed9302; --orb1-opacity: 0.55;
-            --orb2-color: #edc602; --orb2-opacity: 0.55;
-            --orb3-color: #ed02be; --orb3-opacity: 0.20;
         }
 
         body.theme-night {
             --base-bg: #2a405e;
             --bg-gradient: linear-gradient(135deg, #2a405e 0%, #080f1d 30%, #1c263d 60%, #3a4d7c 100%);
-            --orb1-color: #daa520; --orb1-opacity: 0.40;
-            --orb2-color: #4b0082; --orb2-opacity: 0.40;
-            --orb3-color: #1a237e; --orb3-opacity: 0.15;
         }
 
         .background {
             position: fixed;
-            inset: 0;
+            /* Ekranın dışına taşırıyoruz ki animasyon esnasında beyazlık görünmesin */
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
             overflow: hidden;
             z-index: -1;
             background: var(--bg-gradient, linear-gradient(135deg, #04162c 0%, #08345f 35%, #0b4f7d 60%, #ff7a00 100%));
             transition: background 2s ease;
-        }
-        
-        .orb {
-            position: absolute; 
-            border-radius: 50%;
-            transition: background 2s ease, opacity 2s ease;
-            transform: translateZ(0);
+            
+            /* Akıcı ve GPU destekli arkaplan hareketi */
+            animation: gradientMove 25s ease-in-out infinite;
             will-change: transform;
+            transform: translateZ(0);
         }
-
-        .orb1 { width: 700px; height: 700px; background: radial-gradient(circle, var(--orb1-color) 0%, transparent 65%); opacity: var(--orb1-opacity); top: -250px; right: -150px; animation: move1 10s ease-in-out infinite; }
-        .orb2 { width: 850px; height: 850px; background: radial-gradient(circle, var(--orb2-color) 0%, transparent 65%); opacity: var(--orb2-opacity); bottom: -350px; left: -250px; animation: move2 13s ease-in-out infinite; }
-        .orb3 { width: 500px; height: 500px; background: radial-gradient(circle, var(--orb3-color) 0%, transparent 65%); opacity: var(--orb3-opacity); top: 25%; left: 35%; animation: move3 15s ease-in-out infinite; }
 
         .particles-container { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
 
@@ -181,9 +172,13 @@
         .currency-item span:first-child { color: #ff8c00; }
         .currency-item span:last-child { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        @keyframes move1 { 0%,100%{transform:translate(0,0) translateZ(0);} 50%{transform:translate(-150px,120px) translateZ(0);} }
-        @keyframes move2 { 0%,100%{transform:translate(0,0) translateZ(0);} 50%{transform:translate(180px,-100px) translateZ(0);} }
-        @keyframes move3 { 0%,100%{transform:scale(1) translateZ(0);} 50%{transform:scale(1.25) translateZ(0);} }
+        /* Yüksek Performanslı Arkaplan Dalgalanma Efekti */
+        @keyframes gradientMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-3%, 2%) scale(1.03); }
+            66% { transform: translate(2%, -2%) scale(1.01); }
+        }
+
         @keyframes panelLight { 0%{transform:translate(-350px,-250px) translateZ(0);} 50%{transform:translate(250px,120px) translateZ(0);} 100%{transform:translate(-350px,-250px) translateZ(0);} }
         @keyframes float { 0%, 100% { transform: translateY(0) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
         @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1) translateZ(0); } }
@@ -221,9 +216,6 @@
     </script>
 
     <div class="background">
-        <div class="orb orb1"></div>
-        <div class="orb orb2"></div>
-        <div class="orb orb3"></div>
         <div class="particles-container" id="particlesContainer"></div>
     </div>
 
@@ -293,7 +285,7 @@
         const foodItems = [
             { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
             { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
-            { title: "COASTLINE PIZza", price: "600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
+            { title: "COASTLINE PIZZA", price: "600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
             { title: "FETTUCINI ALFREDO", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/66ab2e5d-c8f8-456c-b8b4-f129d008315f.jpeg" },
             { title: "MIXED TOAST", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/821273d9-e170-4eee-b628-103fa1caa167.jpeg" },
             { title: "MEDITERRANEAN SALAD", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/16ab700c-466a-413b-aba4-abf63102119e.jpg" },
@@ -483,7 +475,7 @@
         fetchRates(); 
         setInterval(fetchRates, 60 * 60 * 1000);
         
-        // Bellek sızıntılarını önlemek için her saat başı sayfayı temiz bir şekilde yeniler
+        // RAM sızıntılarını sıfırlamak için saatlik güvenli yenileme
         setInterval(() => {
             window.location.reload(true); 
         }, 1 * 60 * 60 * 1000);
