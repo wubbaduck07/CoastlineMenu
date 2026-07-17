@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coastline Orange Hotel - Menü Ekranı V2</title>
+    <title>Coastline Orange Hotel - Menü Ekranı V2 Optimized</title>
 
     <style>
         * {
@@ -52,11 +52,13 @@
             background: var(--bg-gradient, linear-gradient(135deg, #04162c 0%, #08345f 35%, #0b4f7d 60%, #ff7a00 100%));
             transition: background 2s ease;
         }
+        
         .orb {
-            position: absolute; border-radius: 50%;
+            position: absolute; 
+            border-radius: 50%;
             transition: background 2s ease, opacity 2s ease;
             transform: translateZ(0);
-
+            will-change: transform;
         }
 
         .orb1 { width: 700px; height: 700px; background: radial-gradient(circle, var(--orb1-color) 0%, transparent 65%); opacity: var(--orb1-opacity); top: -250px; right: -150px; animation: move1 10s ease-in-out infinite; }
@@ -121,6 +123,7 @@
             content: ""; position: absolute; width: 900px; height: 900px; border-radius: 50%;
             background: radial-gradient(rgba(255,255,255,.12), transparent 70%);
             animation: panelLight 18s linear infinite;
+            will-change: transform;
         }
 
         .slider { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2; }
@@ -142,26 +145,19 @@
         .split-half { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; padding: 0 20px; }
         .right-half { border-left: 1px solid rgba(255, 255, 255, 0.15); }
         .slide-content { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; }
-        
+         
         .slide img { width: 240px; height: 170px; object-fit: cover; border-radius: 20%; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 3px solid rgba(255,255,255,0.2); animation: float 4s ease-in-out infinite; }
         .slide h1 { font-size: 38px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; text-shadow: 0 10px 20px rgba(0,0,0,0.4); display: flex; flex-wrap: wrap; justify-content: center; text-align: center; }
         .word { display: inline-block; opacity: 0; transform: translateY(30px) scale(0.8); }
         .slide.active .word { animation: wordFadeIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        
+         
         .price-tag { font-size: 24px; color: #ff8c00; font-weight: bold; background: rgba(0,0,0,0.4); padding: 2px 18px; border-radius: 35px; display: inline-block; box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 1px solid rgba(255, 140, 0, 0.3); }
-
-        .video-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; 
-            z-index: -10; opacity: 0; pointer-events: none; transition: opacity 1s ease-in-out; overflow: hidden;
-        }
-        .video-overlay.show { z-index: 50; opacity: 1; pointer-events: auto; }
-        #promoVideo { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
 
         .ticker { position: absolute; bottom: 0; left: 0; width: 100%; height: 110px; background: rgba(0,0,0,.25); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center; }
         .ticker-static { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 28px; font-weight: 800; letter-spacing: 1px; }
 
         .footer { height: 150px; display: grid; grid-template-columns: 360px 1fr 200px; gap: 16px; }
-        
+         
         .weather-card { border-radius: 36px; background: var(--glass); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; }
         .weather-inner { display: flex; align-items: center; }
         .weather-icon { width: 75px; height: 75px; margin-right: 15px; position: relative; }
@@ -174,7 +170,7 @@
         .score { font-weight: 800; font-size: 19px; color: white; margin-top: 3px; text-shadow: 0 2px 5px rgba(0,0,0,0.4); }
         .score small { font-size: 12px; opacity: 0.7; margin-left: 2px; }
         .item-stars { font-size: 12px; letter-spacing: 2px; filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.4)); }
-        
+         
         .brand-logo { height: 38px; width: auto; max-width: 110px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5)); animation: float 20s ease-in-out infinite; }
         .review-item:nth-child(1) .brand-logo { animation-delay: 0s; }
         .review-item:nth-child(2) .brand-logo { animation-delay: 0.5s; }
@@ -185,14 +181,14 @@
         .currency-item span:first-child { color: #ff8c00; }
         .currency-item span:last-child { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        @keyframes move1 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-150px,120px);} }
-        @keyframes move2 { 0%,100%{transform:translate(0,0);} 50%{transform:translate(180px,-100px);} }
-        @keyframes move3 { 0%,100%{transform:scale(1);} 50%{transform:scale(1.25);} }
-        @keyframes panelLight { 0%{transform:translate(-350px,-250px);} 50%{transform:translate(250px,120px);} 100%{transform:translate(-350px,-250px);} }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes randomGlow { 0% { opacity: 0; transform: scale(0.5) translateY(0); } 50% { opacity: 1; transform: scale(4.5) translateY(-30px); } 100% { opacity: 0; transform: scale(0.5) translateY(-60px); } }
-        
+        @keyframes move1 { 0%,100%{transform:translate(0,0) translateZ(0);} 50%{transform:translate(-150px,120px) translateZ(0);} }
+        @keyframes move2 { 0%,100%{transform:translate(0,0) translateZ(0);} 50%{transform:translate(180px,-100px) translateZ(0);} }
+        @keyframes move3 { 0%,100%{transform:scale(1) translateZ(0);} 50%{transform:scale(1.25) translateZ(0);} }
+        @keyframes panelLight { 0%{transform:translate(-350px,-250px) translateZ(0);} 50%{transform:translate(250px,120px) translateZ(0);} 100%{transform:translate(-350px,-250px) translateZ(0);} }
+        @keyframes float { 0%, 100% { transform: translateY(0) translateZ(0); } 50% { transform: translateY(-20px) translateZ(0); } }
+        @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0) scale(1) translateZ(0); } }
+        @keyframes randomGlow { 0% { opacity: 0; transform: scale(0.5) translateY(0) translateZ(0); } 50% { opacity: 1; transform: scale(4.5) translateY(-30px) translateZ(0); } 100% { opacity: 0; transform: scale(0.5) translateY(-60px) translateZ(0); } }
+         
         .icon-sun { width: 48px; height: 48px; background: #ffd54f; border-radius: 50%; position: absolute; top: 13px; left: 13px; box-shadow: 0 0 20px #ffd54f; animation: pulseIcon 3s ease infinite; transform: translateZ(0); }
         .icon-moon { width: 40px; height: 40px; border-radius: 50%; position: absolute; top: 15px; left: 15px; box-shadow: inset -10px -8px 0 0 #e2e8f0; animation: pulseIcon 4s ease infinite; transform: translateZ(0); }
         .icon-cloud { width: 50px; height: 18px; background: #f8fafc; border-radius: 20px; position: absolute; top: 35px; left: 10px; box-shadow: 0 0 15px rgba(255,255,255,0.4); animation: floatIcon 4s ease-in-out infinite; transform: translateZ(0); }
@@ -255,14 +251,10 @@
             </div>
         </div>
 
-        <div class="video-overlay" id="promoVideoContainer">
-            <iframe id="promoVideo" src="https://player.vimeo.com/video/1207572562?api=1&controls=0&muted=1&playsinline=1&autopause=0" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-
-<div class="footer">
+        <div class="footer">
             <div class="weather-card">
                 <div class="weather-inner">
-                    <div class="weather-icon"><div class="sun"></div></div>
+                    <div class="weather-icon"></div>
                     <div><div class="temp" id="weatherTemp">--</div><div class="location">Antalya</div></div>
                 </div>
             </div>
@@ -293,10 +285,7 @@
                 <div class="currency-item"><span>GBP</span><span id="gbpRate">--</span></div>
             </div>
         </div>
-        </div>
     </div>
-
-    <script src="https://player.vimeo.com/api/player.js"></script>
 
     <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -304,7 +293,7 @@
         const foodItems = [
             { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
             { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
-            { title: "COASTLINE PIZZA", price: "600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
+            { title: "COASTLINE PIZza", price: "600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
             { title: "FETTUCINI ALFREDO", price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/66ab2e5d-c8f8-456c-b8b4-f129d008315f.jpeg" },
             { title: "MIXED TOAST", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/821273d9-e170-4eee-b628-103fa1caa167.jpeg" },
             { title: "MEDITERRANEAN SALAD", price: "300.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/16ab700c-466a-413b-aba4-abf63102119e.jpg" },
@@ -367,14 +356,6 @@
         let currentSlide = 0;
         let sliderInterval;
 
-        const videoContainer = document.getElementById("promoVideoContainer");
-        const iframe = document.getElementById("promoVideo");
-        let vimeoPlayer = new Vimeo.Player(iframe);
-        
-        let failsafeTimer = null;
-        let promoTimeout = null;
-        let isVideoActive = false;
-
         function startSlider() {
             if(sliderInterval) clearInterval(sliderInterval);
             sliderInterval = setInterval(() => {
@@ -386,58 +367,7 @@
             }, 7000); 
         }
 
-        function stopSlider() { clearInterval(sliderInterval); }
-
-        function handleVideoEnd() {
-            if (!isVideoActive) return; 
-            isVideoActive = false;
-
-            videoContainer.classList.remove("show"); 
-            if(failsafeTimer) clearTimeout(failsafeTimer); 
-            
-            setTimeout(() => {
-                startSlider(); 
-                vimeoPlayer.pause(); 
-                vimeoPlayer.setCurrentTime(0); 
-                scheduleNextVideo(); 
-            }, 1000);
-        }
-
-        vimeoPlayer.on('ended', handleVideoEnd);
-
-        vimeoPlayer.on('play', function() {
-            if(failsafeTimer) clearTimeout(failsafeTimer);
-            failsafeTimer = setTimeout(() => {
-                if (videoContainer.classList.contains("show")) {
-                    console.log("Güvenlik önlemi devrede: Video takıldı.");
-                    handleVideoEnd();
-                }
-            }, 90000); 
-        });
-
-        function playPromoVideo() {
-            if (isVideoActive) return;
-            isVideoActive = true;
-            stopSlider(); 
-            
-            vimeoPlayer.play().then(function() {
-                videoContainer.classList.add("show"); 
-            }).catch(function(error) {
-                console.log("Vimeo başlatılamadı:", error);
-                handleVideoEnd(); 
-            });
-        }
-
-        function scheduleNextVideo() {
-            if (promoTimeout) clearTimeout(promoTimeout);
-            const minTime = 3 * 60 * 1000; 
-            const maxTime = 8 * 60 * 1000; 
-            const randomDelay = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-            promoTimeout = setTimeout(() => { playPromoVideo(); }, randomDelay);
-        }
-
         startSlider();
-        scheduleNextVideo();
 
         function createParticles() {
             const container = document.getElementById("particlesContainer");
@@ -525,7 +455,7 @@
         }
         weather(); setInterval(weather, 600000); 
         
-async function fetchRates() {
+        async function fetchRates() {
             try {
                 const response = await fetch("https://open.er-api.com/v6/latest/USD");
                 if(response.ok) {
@@ -552,10 +482,10 @@ async function fetchRates() {
         
         fetchRates(); 
         setInterval(fetchRates, 60 * 60 * 1000);
+        
+        // Bellek sızıntılarını önlemek için her saat başı sayfayı temiz bir şekilde yeniler
         setInterval(() => {
-            if (!document.getElementById("promoVideoContainer").classList.contains("show")) {
-                window.location.reload(true); 
-            }
+            window.location.reload(true); 
         }, 1 * 60 * 60 * 1000);
     });
     </script>
