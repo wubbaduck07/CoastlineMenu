@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coastline Orange Hotel - Menü Ekranı</title>
+    <title>Coastline Orange Hotel - Menü Ekranı V2 Animated BG</title>
 
     <style>
         * {
@@ -40,7 +40,6 @@
 
         .background {
             position: fixed;
-            /* Ekranın dışına taşırıyoruz ki animasyon esnasında beyazlık görünmesin */
             top: -10%;
             left: -10%;
             width: 120%;
@@ -49,8 +48,6 @@
             z-index: -1;
             background: var(--bg-gradient, linear-gradient(135deg, #04162c 0%, #08345f 35%, #0b4f7d 60%, #ff7a00 100%));
             transition: background 2s ease;
-            
-            /* Akıcı ve GPU destekli arkaplan hareketi */
             animation: gradientMove 25s ease-in-out infinite;
             will-change: transform;
             transform: translateZ(0);
@@ -172,7 +169,6 @@
         .currency-item span:first-child { color: #ff8c00; }
         .currency-item span:last-child { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* Yüksek Performanslı Arkaplan Dalgalanma Efekti */
         @keyframes gradientMove {
             0%, 100% { transform: translate(0, 0) scale(1); }
             33% { transform: translate(-3%, 2%) scale(1.03); }
@@ -207,12 +203,6 @@
             document.body.appendChild(errorDiv);
             return true;
         };
-        window.addEventListener('unhandledrejection', function(event) {
-            const errorDiv = document.createElement("div");
-            errorDiv.style.cssText = "position:absolute; top:120px; left:20px; z-index:99999; background:darkred; color:white; padding:15px; border-radius:10px; font-size:24px; font-weight:bold;";
-            errorDiv.innerHTML = "🚨 PROMISE HATASI:<br>" + (event.reason.message || event.reason);
-            document.body.appendChild(errorDiv);
-        });
     </script>
 
     <div class="background">
@@ -220,11 +210,9 @@
     </div>
 
     <div class="dashboard theme-day" id="dashboard">
-        
         <div class="header">
-            <div class="tv-bug-container">
-                <img src="https://s6.imgcdn.dev/YmUOTq.gif" border="0" width="1000" height="800" alt="Coastline Orange Hotel Logo" class="tv-bug-logo">
-            </div>
+            <div class="tv-bug-container" id="logoContainer">
+                </div>
             <div class="clocks">
                 <div class="clock-card"><div class="clock-city">ANTALYA</div><div class="clock-time" id="antalyaTime">00:00</div></div>
                 <div class="clock-card"><div class="clock-city">LONDON</div><div class="clock-time" id="londonTime">00:00</div></div>
@@ -281,7 +269,11 @@
 
     <script>
     document.addEventListener("DOMContentLoaded", () => {
+        const cacheBuster = Date.now();
         
+        // Logoyu önbelleğe takılmaması için dinamik versiyonla yüklüyoruz
+        document.getElementById("logoContainer").innerHTML = `<img src="https://s6.imgcdn.dev/YmUOTq.gif?v=${cacheBuster}" border="0" width="1000" height="800" alt="Coastline Orange Hotel Logo" class="tv-bug-logo">`;
+
         const foodItems = [
             { title: "BEEF WRAP", price: "575.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
             { title: "COASTLINE BURGER", price: "550.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
@@ -304,11 +296,9 @@
         const sliderContainer = document.getElementById("dynamicSlider");
         if(sliderContainer) {
             const maxItems = Math.max(foodItems.length, drinkItems.length);
-
             for (let i = 0; i < maxItems; i++) {
                 const food = foodItems[i % foodItems.length];
                 const drink = drinkItems[i % drinkItems.length];
-
                 const slideElement = document.createElement("div");
                 slideElement.className = `slide ${i === 0 ? "active" : ""}`;
                 
@@ -326,14 +316,14 @@
 
                 slideElement.innerHTML = `
                     <div class="split-half left-half">
-                        <img src="${drink.image}" alt="${drink.title}">
+                        <img src="${drink.image}?v=${cacheBuster}" alt="${drink.title}">
                         <div class="slide-content">
                             <h1>${drinkTitleHTML}</h1>
                             <div class="price-tag">${drink.price}</div>
                         </div>
                     </div>
                     <div class="split-half right-half">
-                        <img src="${food.image}" alt="${food.title}">
+                        <img src="${food.image}?v=${cacheBuster}" alt="${food.title}">
                         <div class="slide-content">
                             <h1>${foodTitleHTML}</h1>
                             <div class="price-tag">${food.price}</div>
@@ -358,7 +348,6 @@
                 dynamicSlides[currentSlide].classList.add("active");
             }, 7000); 
         }
-
         startSlider();
 
         function createParticles() {
@@ -389,7 +378,7 @@
                     const data = await response.json();
                     timeOffset = new Date(data.datetime).getTime() - new Date().getTime(); 
                 }
-            } catch(e) { console.log("Saat apisi çalışmadı."); }
+            } catch(e) {}
             checkTheme(); 
         }
 
@@ -403,7 +392,6 @@
                 body.classList.add("theme-night"); body.classList.remove("theme-day");
             }
         }     
-
         syncTimeWithAPI();
         setInterval(checkTheme, 60000);
 
@@ -420,16 +408,12 @@
 
         async function weather(){
             try {
-                const response = await fetch("https://wttr.in/Antalya?format=j1");
+                const response = await fetch(`https://wttr.in/Antalya?format=j1&cb=${Date.now()}`);
                 if(response.ok) {
                     const data = await response.json();
-                    const dereceC = data.current_condition[0].temp_C;
-                    const dereceF = data.current_condition[0].temp_F;
-                    document.getElementById("weatherTemp").innerHTML = dereceC + "°C / " + dereceF + "°F";
-                    
+                    document.getElementById("weatherTemp").innerHTML = data.current_condition[0].temp_C + "°C / " + data.current_condition[0].temp_F + "°F";
                     const conditionCode = parseInt(data.current_condition[0].weatherCode);
                     const isDaytime = ((new Date().getUTCHours() + 3) % 24) >= 8 && ((new Date().getUTCHours() + 3) % 24) < 20;
-                    
                     const iconContainer = document.querySelector(".weather-icon");
                     let iconHTML = "";
 
@@ -443,42 +427,34 @@
                     if (parseInt(data.current_condition[0].windspeedKmph) >= 35) iconHTML += '<div class="icon-wind"></div>';
                     iconContainer.innerHTML = iconHTML;
                 }
-            } catch(e) { console.log("Hava durumu yüklenemedi."); }
+            } catch(e) {}
         }
         weather(); setInterval(weather, 600000); 
         
         async function fetchRates() {
             try {
-                const response = await fetch("https://open.er-api.com/v6/latest/USD");
+                const response = await fetch(`https://open.er-api.com/v6/latest/USD?cb=${Date.now()}`);
                 if(response.ok) {
                     const data = await response.json();
-                    
                     const tryRate = data.rates.TRY;
-                    const eurRate = data.rates.EUR;
-                    const gbpRate = data.rates.GBP;
-
-                    let usd = tryRate;
-                    let eur = tryRate / eurRate;
-                    let gbp = tryRate / gbpRate;
-                    
-                    usd = usd - 0.40; 
-                    eur = eur - 0.40; 
-                    gbp = gbp - 0.40;
-
-                    document.getElementById("usdRate").innerText = usd.toFixed(2);
-                    document.getElementById("eurRate").innerText = eur.toFixed(2);
-                    document.getElementById("gbpRate").innerText = gbp.toFixed(2);
+                    document.getElementById("usdRate").innerText = (tryRate - 0.40).toFixed(2);
+                    document.getElementById("eurRate").innerText = (tryRate / data.rates.EUR - 0.40).toFixed(2);
+                    document.getElementById("gbpRate").innerText = (tryRate / data.rates.GBP - 0.40).toFixed(2);
                 }
-            } catch(e) { console.log("Kur API hatası."); }
+            } catch(e) {}
         }
+        fetchRates(); setInterval(fetchRates, 3600000);
         
-        fetchRates(); 
-        setInterval(fetchRates, 60 * 60 * 1000);
-        
-        // RAM sızıntılarını sıfırlamak için saatlik güvenli yenileme
-        setInterval(() => {
-            window.location.reload(true); 
-        }, 1 * 60 * 60 * 1000);
+        // Cihaz eski kodu hafızaya almışsa, zorla sunucudan çekmesi için Önbellek Kırıcı Güvenlik Komutu
+        setTimeout(() => {
+            if (typeof isV2Optimized === 'undefined') {
+                window.isV2Optimized = true;
+                window.location.reload(true);
+            }
+        }, 10000);
+
+        // RAM sızıntılarını sıfırlamak için saatlik temiz yenileme
+        setInterval(() => { window.location.reload(true); }, 3600000);
     });
     </script>
 </body>
