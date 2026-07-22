@@ -364,19 +364,39 @@
         .review-item:nth-child(3) .brand-logo { animation-delay: 1s; }
         .review-item:nth-child(4) .brand-logo { animation-delay: 1.5s; }
 
-.qr-code {
-            width: 85px; /* QR kod epey büyüdü */
-            height: 85px;
-            border-radius: 12px;
-            border: 3px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease;
-            animation: float 20s ease-in-out infinite; /* Logolar gibi süzülsün */
+/* Grafiti Tarzı TripAdvisor Yazısı */
+        .graffiti-rate {
+            font-family: 'Permanent Marker', cursive;
+            color: #ffffff;
+            text-align: center;
+            line-height: 1.1;
+            transform: rotate(-4deg); /* Hafif açılı, sokak stili */
+            animation: float 20s ease-in-out infinite;
             animation-delay: 1.5s;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.5); /* Sprey gölgesi */
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
-        
-        .qr-code:hover {
-            transform: scale(1.1);
+
+        .graffiti-top {
+            font-size: 16px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+
+        .graffiti-bottom {
+            font-size: 24px;
+            color: #34e0a1; /* TripAdvisor Yeşili */
+            letter-spacing: 1px;
+        }
+
+        /* Etraftaki sprey yıldız efektleri */
+        .spray-star {
+            font-family: sans-serif;
+            font-size: 20px;
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .currency-card {
@@ -558,13 +578,19 @@
                         <div class="score">9.2<small>/10</small></div>
                         <div class="item-stars">⭐⭐⭐⭐<span style="opacity:0.5">⭐</span></div>
                     </div>
-<!-- Sadece TripAdvisor QR -->
-                    <div class="review-item">
-                        <img class="qr-code" src="tripadvisor.png" alt="TripAdvisor Yorum Bırak">
+<!-- Grafiti TripAdvisor Alanı -->
+                    <div class="review-item" style="position: relative; justify-content: center; padding: 10px;">
+                        <span class="spray-star" style="top: -5px; left: -10px; transform: rotate(15deg);">*</span>
+                        <span class="spray-star" style="bottom: 5px; right: -15px; transform: rotate(45deg); font-size: 26px;">*</span>
+                        
+                        <div class="graffiti-rate">
+                            <span class="graffiti-top">RATE US ON</span>
+                            <span class="graffiti-bottom">TripAdvisor</span>
+                        </div>
                     </div>
                 </div>
             </div>
-
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
             <div class="currency-card">
                 <div class="currency-item"><span>USD</span><span id="usdRate">--</span></div>
                 <div class="currency-item"><span>EUR</span><span id="eurRate">--</span></div>
