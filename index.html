@@ -332,6 +332,7 @@
             align-items: center;
             gap: 4px;
         }
+
         .score {
             font-weight: 800;
             font-size: 19px;
@@ -361,6 +362,22 @@
         .review-item:nth-child(1) .brand-logo { animation-delay: 0s; }
         .review-item:nth-child(2) .brand-logo { animation-delay: 0.5s; }
         .review-item:nth-child(3) .brand-logo { animation-delay: 1s; }
+        .review-item:nth-child(4) .brand-logo { animation-delay: 1.5s; }
+
+.qr-code {
+            width: 85px; /* QR kod epey büyüdü */
+            height: 85px;
+            border-radius: 12px;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease;
+            animation: float 20s ease-in-out infinite; /* Logolar gibi süzülsün */
+            animation-delay: 1.5s;
+        }
+        
+        .qr-code:hover {
+            transform: scale(1.1);
+        }
 
         .currency-card {
             border-radius: 36px;
@@ -540,6 +557,10 @@
                         <img class="brand-logo" src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/expedia/default.svg" alt="Expedia">
                         <div class="score">9.2<small>/10</small></div>
                         <div class="item-stars">⭐⭐⭐⭐<span style="opacity:0.5">⭐</span></div>
+                    </div>
+<!-- Sadece TripAdvisor QR -->
+                    <div class="review-item">
+                        <img class="qr-code" src="tripadvisor.png" alt="TripAdvisor Yorum Bırak">
                     </div>
                 </div>
             </div>
