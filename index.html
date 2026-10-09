@@ -64,23 +64,26 @@
     /* Header */
     .header {
       display: grid;
-      grid-template-columns: minmax(145px, .82fr) minmax(230px, 1.2fr) minmax(490px, 2.5fr);
-      align-items: center;
-      gap: clamp(10px, 1vw, 22px);
-      padding: 10px clamp(14px, 1.4vw, 30px);
-      min-height: 0;
+      grid-template-columns: minmax(205px, .95fr) minmax(280px, 1.25fr) minmax(560px, 2.5fr);
+      align-items: stretch;
+      gap: clamp(12px, 1.15vw, 24px);
+      padding: 12px clamp(18px, 1.6vw, 34px);
+      min-height: 112px;
+      overflow: visible;
     }
-    .logo-wrap { display: flex; align-items: center; justify-content: flex-start; min-width: 0; height: 100%; }
-    .hotel-logo { display: block; width: min(100%, 230px); max-height: 100%; object-fit: contain; object-position: left center; }
+    .logo-wrap { display: flex; align-items: center; justify-content: flex-start; gap: 13px; min-width: 0; height: 100%; }
+    .hotel-logo { display: block; flex: 0 0 auto; width: clamp(42px, 4vw, 72px); height: clamp(42px, 4vw, 72px); max-height: none; object-fit: contain; object-position: center; }
+    .brand-name { display: flex; flex-direction: column; justify-content: center; color: var(--white); font-weight: 850; font-size: clamp(12px, 1.05vw, 20px); letter-spacing: clamp(1px, .12vw, 2px); line-height: 1.15; white-space: nowrap; }
+    .brand-name span { color: var(--accent); font-size: .62em; letter-spacing: clamp(2px, .2vw, 4px); margin-top: 5px; }
     .logo-fallback { display: none; color: var(--white); font-weight: 900; font-size: clamp(17px, 1.45vw, 28px); letter-spacing: 2px; line-height: 1.1; }
     .logo-fallback span { display: block; color: var(--accent); font-size: .54em; letter-spacing: 4px; margin-top: 7px; }
-    .welcome-area { min-width: 0; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; }
-    .date-display { font-size: clamp(10px, .8vw, 15px); font-weight: 650; opacity: .67; letter-spacing: clamp(1px, .17vw, 3px); text-transform: uppercase; white-space: nowrap; }
-    .welcome-text { font-size: clamp(18px, 1.65vw, 32px); font-weight: 850; letter-spacing: clamp(1px, .2vw, 4px); text-shadow: 0 3px 16px rgba(0,0,0,.35); white-space: nowrap; transition: opacity .4s ease, transform .4s ease; }
-    .clocks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(5px, .55vw, 11px); min-width: 0; height: 100%; align-items: stretch; }
-    .clock-card { border-radius: clamp(13px, 1vw, 22px); display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,.19); border: 1px solid rgba(255,255,255,.075); min-width: 0; padding: 5px; }
-    .clock-city { font-size: clamp(9px, .72vw, 14px); opacity: .68; letter-spacing: clamp(.5px, .14vw, 2.5px); font-weight: 700; white-space: nowrap; }
-    .clock-time { font-variant-numeric: tabular-nums; font-size: clamp(20px, 2.15vw, 42px); line-height: 1.1; font-weight: 800; letter-spacing: -1px; margin-top: 4px; white-space: nowrap; }
+    .welcome-area { min-width: 0; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(7px, .65vw, 12px); padding: 5px 0; }
+    .date-display { font-size: clamp(11px, .88vw, 17px); line-height: 1.3; font-weight: 650; opacity: .75; letter-spacing: clamp(1px, .15vw, 2.8px); text-transform: uppercase; white-space: normal; }
+    .welcome-text { font-size: clamp(20px, 1.75vw, 34px); line-height: 1.2; font-weight: 850; letter-spacing: clamp(1px, .16vw, 3px); text-shadow: 0 3px 16px rgba(0,0,0,.35); white-space: nowrap; transition: opacity .4s ease, transform .4s ease; }
+    .clocks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(7px, .65vw, 13px); min-width: 0; min-height: 78px; height: 100%; align-items: stretch; }
+    .clock-card { border-radius: clamp(13px, 1vw, 22px); display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,.19); border: 1px solid rgba(255,255,255,.10); min-width: 0; min-height: 78px; padding: 8px 4px; }
+    .clock-city { font-size: clamp(10px, .78vw, 15px); line-height: 1.25; opacity: .78; letter-spacing: clamp(.5px, .11vw, 2px); font-weight: 750; white-space: nowrap; }
+    .clock-time { font-variant-numeric: tabular-nums; font-size: clamp(21px, 2.05vw, 40px); line-height: 1.12; font-weight: 800; letter-spacing: -1px; margin-top: 5px; white-space: nowrap; }
 
     /* Main slideshow */
     .main-panel { position: relative; min-height: 0; overflow: hidden; isolation: isolate; }
@@ -188,7 +191,7 @@
 
     @media (max-width: 1450px) {
       .dashboard { grid-template-rows: minmax(88px, 13vh) minmax(0, 1fr) minmax(95px, 13vh); }
-      .header { grid-template-columns: minmax(120px, .72fr) minmax(200px, 1fr) minmax(405px, 2.15fr); }
+      .header { grid-template-columns: minmax(180px, .9fr) minmax(250px, 1.15fr) minmax(500px, 2.3fr); }
       .footer { grid-template-columns: minmax(210px, .95fr) minmax(360px, 1.7fr) minmax(245px, 1fr); }
       .slide { padding-bottom: 80px; }
       .food-photo-wrap { height: clamp(135px, 27vh, 265px); }
@@ -203,7 +206,7 @@
       .slide-dots { bottom: 64px; }
     }
     @media (max-width: 1050px) {
-      .header { grid-template-columns: minmax(90px, .55fr) minmax(155px, .8fr) minmax(330px, 2fr); gap: 8px; padding-inline: 10px; }
+      .header { grid-template-columns: minmax(145px, .8fr) minmax(205px, 1fr) minmax(400px, 2fr); gap: 8px; padding-inline: 12px; }
       .footer { grid-template-columns: minmax(185px, .9fr) minmax(320px, 1.5fr) minmax(205px, .9fr); gap: 7px; }
       .weather-extra { display: none; }
       .review-label { display: none; }
@@ -219,6 +222,7 @@
     <header class="header glass-panel">
       <div class="logo-wrap">
         <img src="logo.gif" alt="Coastline Orange Hotel" class="hotel-logo" id="hotelLogo">
+        <div class="brand-name" id="brandName">COASTLINE<span>ORANGE HOTEL</span></div>
         <div class="logo-fallback" id="logoFallback">COASTLINE<span>ORANGE HOTEL</span></div>
       </div>
       <div class="welcome-area">
@@ -366,24 +370,24 @@
     };
 
     const foodItems = [
-      { title: 'BREAKFAST PLATE', price: '350.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/8919c2d9-20fe-4d80-b52e-fd915f9a5546.jpeg' },
-      { title: 'FRENCH FRIES', price: '225.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/b5e45341-aba4-4531-b3ca-41f213e4f7eb.jpg' },
-      { title: 'TOMATO AND CHEESE TOAST', price: '275.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/9f80c786-ce85-470f-ad78-8d61da06991b.jpeg' },
-      { title: 'CHICKEN WRAP', price: '400.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/81bed449-4af8-47b4-9f29-4a69837a9188.jpeg' },
-      { title: 'DOUBLE BURGER', price: '950.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/b2d518b4-3cdf-44f4-a0f7-17af351d83bb.jpeg' },
-      { title: 'QUATTRO FORMAGGI', price: '675.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/3fc8b280-7aa7-402c-b860-f64dc79e7822.jpeg' },
-      { title: 'PENNE ARABIATA', price: '375.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/e663a3cb-4371-49ca-bd1c-da9fb661af00.jpeg' },
-      { title: 'CHICKEN CAESAR SALAD', price: '450.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/8db05d19-6085-4286-b302-1e05cd19bd5f.jpg' }
+      { title: 'BEEF WRAP', price: '750.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg' },
+      { title: 'COASTLINE BURGER', price: '850.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg' },
+      { title: 'COASTLINE PIZZA', price: '750.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg' },
+      { title: 'FETTUCINI ALFREDO', price: '500.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/66ab2e5d-c8f8-456c-b8b4-f129d008315f.jpeg' },
+      { title: 'BEEF TENDERLOIN', price: '1600.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/f29d7a6a-b9db-419e-a723-904f7ef94a7a.jpeg' },
+      { title: 'MIXED TOAST', price: '400.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/821273d9-e170-4eee-b628-103fa1caa167.jpeg' },
+      { title: 'MEDITERRANEAN SALAD', price: '300.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/16ab700c-466a-413b-aba4-abf63102119e.jpg' },
+      { title: 'SAN SEBASTIAN', price: '300.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/c2d01d40-0310-4293-b0c6-5c87ce07d6eb.jpg' }
     ];
     const drinkItems = [
-      { title: 'WHISKY SOUR', price: '500.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/c347ba45-c3b4-4901-8ade-edc5a169f1b4.jpg' },
-      { title: 'COSMOPOLITAN', price: '400.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/0460d9ca-09ba-4b5b-8930-b7a81c8e9514.jpg' },
-      { title: 'B52', price: '350.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/2f5c96ee-5440-4415-9158-dee431939091.jpg' },
-      { title: 'CHURCHILL', price: '150.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/7300e8a9-7356-488a-87f4-6abc6df7ec1c.jpg' },
       { title: 'MILKSHAKE', price: '250.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/6d1ef948-29c7-44bc-96c3-fabc575239d2.jpg' },
-      { title: 'LATTE', price: '160.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/d2e06aaa-46b5-42c1-b98f-bfd80551db99.jpeg' },
+      { title: 'NEGRONI', price: '450.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/f2b232bf-7a38-4c2b-bbbe-f3eb06497fe9.jpg' },
+      { title: 'APEROL SPRITZ', price: '650.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/3c4ce51c-7ade-44dd-b7c9-f74651cea216.jpg' },
+      { title: 'ESPRESSO MARTINI', price: '440.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/4aefb242-8c3c-4795-98f7-5221db67e096.jpg' },
+      { title: 'CAPPUCCINO', price: '160.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/c82e8f58-8c3d-4c2b-93b0-87f522b14008.jpeg' },
+      { title: 'MOJITO', price: '500.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/c3c253fd-ec6b-44df-af9b-1a008c076a01.jpg' },
       { title: 'EFES MALT', price: '220.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/17fb26bd-b94a-47cf-8c48-b19cd45a2ecd.jpg' },
-      { title: 'CAPPUCCINO', price: '160.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/c82e8f58-49e3-461d-bfcc-054b92b14008.jpeg' }
+      { title: 'SMOOTHIE', price: '250.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/0400dd6b-8458-4775-9997-9868969d0911.jpg' }
     ];
 
     const sliderEl = document.getElementById('dynamicSlider');
@@ -700,6 +704,7 @@
     document.getElementById('hotelLogo').addEventListener('error', () => {
       document.getElementById('hotelLogo').style.display = 'none';
       document.getElementById('logoFallback').style.display = 'block';
+      document.getElementById('brandName').style.display = 'none';
     });
 
     buildSlides();
