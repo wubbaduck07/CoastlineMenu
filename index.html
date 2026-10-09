@@ -140,9 +140,11 @@
     /* Footer */
     .footer { min-height: 0; display: grid; grid-template-columns: minmax(235px, .95fr) minmax(430px, 1.75fr) minmax(275px, 1.05fr); gap: clamp(8px, .9vw, 18px); }
     .footer-card { min-width: 0; border-radius: var(--radius); background: var(--glass); border: 1px solid var(--line); box-shadow: 0 10px 25px rgba(0,0,0,.13); display: flex; align-items: center; justify-content: center; padding: clamp(9px, 1vw, 19px); overflow: hidden; }
-    .weather-inner { display: flex; align-items: center; gap: clamp(10px, 1vw, 19px); width: 100%; justify-content: center; min-width: 0; }
-    .weather-icon { display: flex; align-items: center; justify-content: center; flex: 0 0 clamp(48px, 4.4vw, 78px); width: clamp(48px, 4.4vw, 78px); height: clamp(48px, 4.4vw, 78px); filter: drop-shadow(0 5px 10px rgba(0,0,0,.18)); }
-    .weather-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .weather-inner { display: flex; align-items: center; gap: clamp(18px, 1vw, 19px); width: 100%; justify-content: center; min-width: 0; }
+    .weather-icon { display: flex; align-items: center; justify-content: center; flex: 0 0 clamp(60px, 5.2vw, 90px); width: clamp(60px, 5.2vw, 90px); height: clamp(60px, 5.2vw, 90px); filter: drop-shadow(0 5px 10px rgba(0,0,0,.18)); }
+    .weather-svg { display: block; flex: 0 0 100%; width: 100%; height: 100%; overflow: visible; margin: auto; }
+    /* The clear-sky sun is drawn left of center in its SVG viewBox, so compensate only that icon. */
+    .weather-svg.weather-clear { transform: translateX(18%); }
     .weather-svg .sun-rays { transform-origin: 32px 32px; animation: weatherSunSpin 32s linear infinite; }
     .weather-svg .sun-disc { transform-origin: 32px 32px; animation: weatherSunPulse 4s ease-in-out infinite; }
     .weather-svg .moon-shape { animation: weatherMoonGlow 4s ease-in-out infinite; }
