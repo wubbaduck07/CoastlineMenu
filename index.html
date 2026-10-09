@@ -1,754 +1,732 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coastline Orange Hotel - Menü Ekranı</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#101d2b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+  <title>Coastline Orange Hotel | Reception Display</title>
+  <style>
+    :root {
+      --accent: #ff982e;
+      --accent-soft: rgba(255, 152, 46, .22);
+      --mint: #64e0b2;
+      --glass: rgba(8, 16, 27, .43);
+      --glass-strong: rgba(6, 12, 22, .66);
+      --line: rgba(255, 255, 255, .13);
+      --muted: rgba(255, 255, 255, .68);
+      --white: #fff;
+      --radius: clamp(16px, 1.5vw, 30px);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow: hidden;
+      color: var(--white);
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      background: #0b1725;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    body.theme-day {
+      background:
+        radial-gradient(ellipse at 14% 12%, rgba(47, 166, 220, .68), transparent 33%),
+        radial-gradient(ellipse at 89% 82%, rgba(255, 157, 54, .29), transparent 32%),
+        linear-gradient(120deg, #174e70 0%, #173a5b 43%, #182a43 72%, #263954 100%);
+    }
+    body.theme-night {
+      background:
+        radial-gradient(ellipse at 12% 8%, rgba(42, 83, 125, .4), transparent 35%),
+        radial-gradient(ellipse at 88% 90%, rgba(255, 133, 42, .12), transparent 30%),
+        linear-gradient(125deg, #101d2e 0%, #09121f 56%, #202b43 100%);
+    }
+    .dashboard {
+      width: 100%; height: 100%;
+      padding: clamp(9px, 1.1vw, 23px);
+      display: grid;
+      grid-template-rows: minmax(92px, 13.8vh) minmax(0, 1fr) minmax(100px, 14vh);
+      gap: clamp(9px, 1vw, 20px);
+    }
+    .glass-panel {
+      min-width: 0;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 34px rgba(0,0,0,.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Story+Script&display=swap" rel="stylesheet">
+    /* Header */
+    .header {
+      display: grid;
+      grid-template-columns: minmax(145px, .82fr) minmax(230px, 1.2fr) minmax(490px, 2.5fr);
+      align-items: center;
+      gap: clamp(10px, 1vw, 22px);
+      padding: 10px clamp(14px, 1.4vw, 30px);
+      min-height: 0;
+    }
+    .logo-wrap { display: flex; align-items: center; justify-content: flex-start; min-width: 0; height: 100%; }
+    .hotel-logo { display: block; width: min(100%, 230px); max-height: 100%; object-fit: contain; object-position: left center; }
+    .logo-fallback { display: none; color: var(--white); font-weight: 900; font-size: clamp(17px, 1.45vw, 28px); letter-spacing: 2px; line-height: 1.1; }
+    .logo-fallback span { display: block; color: var(--accent); font-size: .54em; letter-spacing: 4px; margin-top: 7px; }
+    .welcome-area { min-width: 0; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; }
+    .date-display { font-size: clamp(10px, .8vw, 15px); font-weight: 650; opacity: .67; letter-spacing: clamp(1px, .17vw, 3px); text-transform: uppercase; white-space: nowrap; }
+    .welcome-text { font-size: clamp(18px, 1.65vw, 32px); font-weight: 850; letter-spacing: clamp(1px, .2vw, 4px); text-shadow: 0 3px 16px rgba(0,0,0,.35); white-space: nowrap; transition: opacity .4s ease, transform .4s ease; }
+    .clocks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(5px, .55vw, 11px); min-width: 0; height: 100%; align-items: stretch; }
+    .clock-card { border-radius: clamp(13px, 1vw, 22px); display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,.19); border: 1px solid rgba(255,255,255,.075); min-width: 0; padding: 5px; }
+    .clock-city { font-size: clamp(9px, .72vw, 14px); opacity: .68; letter-spacing: clamp(.5px, .14vw, 2.5px); font-weight: 700; white-space: nowrap; }
+    .clock-time { font-variant-numeric: tabular-nums; font-size: clamp(20px, 2.15vw, 42px); line-height: 1.1; font-weight: 800; letter-spacing: -1px; margin-top: 4px; white-space: nowrap; }
 
-    <style>
-        /* ═══════════════════════════════════════
-           RESET & KÖKLER
-        ═══════════════════════════════════════ */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --glass:       rgba(0, 0, 0, 0.28);
-            --glass-b:     rgba(255, 255, 255, 0.10);
-            --accent:      #ff8c00;
-            --accent-glow: rgba(255, 140, 0, 0.30);
-        }
+    /* Main slideshow */
+    .main-panel { position: relative; min-height: 0; overflow: hidden; isolation: isolate; }
+    .main-panel::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: -1; background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.045), transparent 55%); }
+    .slider { position: absolute; inset: 0; }
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: clamp(18px, 2vw, 40px) clamp(16px, 2.5vw, 50px) 88px;
+      opacity: 0; transform: translateY(12px) scale(.995);
+      transition: opacity .75s ease, transform .75s ease;
+      pointer-events: none;
+    }
+    .slide.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+    .menu-slide { display: flex; flex-direction: row; gap: clamp(12px, 2vw, 40px); }
+    .menu-column { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 clamp(8px, 1.3vw, 26px); }
+    .menu-column + .menu-column { border-left: 1px solid rgba(255,255,255,.16); }
+    .food-photo-wrap { width: min(100%, 410px); height: clamp(145px, 29vh, 315px); position: relative; overflow: hidden; border-radius: clamp(16px, 1.4vw, 28px); border: 1px solid rgba(255,255,255,.19); box-shadow: 0 15px 34px rgba(0,0,0,.28); margin-bottom: clamp(12px, 1.5vh, 20px); background: linear-gradient(135deg, rgba(255,152,46,.12), rgba(255,255,255,.04)); }
+    .food-photo { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 7s ease; }
+    .slide.active .food-photo { transform: scale(1.035); }
+    .photo-placeholder { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; color: rgba(255,255,255,.6); font-size: clamp(40px, 5vw, 90px); }
+    .menu-column h1 { text-align: center; font-size: clamp(21px, 2.25vw, 44px); line-height: 1.1; font-weight: 900; letter-spacing: clamp(.5px, .12vw, 2px); text-shadow: 0 5px 16px rgba(0,0,0,.3); margin-bottom: 12px; }
+    .price-tag { display: inline-flex; align-items: center; justify-content: center; padding: 8px 22px; border-radius: 100px; color: var(--accent); background: rgba(0,0,0,.35); border: 1px solid var(--accent-soft); font-size: clamp(17px, 1.35vw, 27px); font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            height: 100vh; width: 100vw;
-            margin: 0; overflow: hidden; color: white;
-        }
-        body.theme-day   { background: linear-gradient(135deg, #3db6f2 0%, #3d7ff2 35%, #3A79A6 60%, #F7D45C 100%); }
-        body.theme-night { background: linear-gradient(135deg, #2a405e 0%, #080f1d 30%, #1c263d 60%, #3a4d7c 100%); }
+    /* Hotel information slide */
+    .info-slide-inner { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.5vw, 30px); width: 100%; height: 100%; max-height: 100%; align-items: stretch; }
+    .info-block { min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: clamp(8px, 1.15vh, 15px); background: rgba(2,8,17,.24); border: 1px solid rgba(255,255,255,.09); border-radius: clamp(18px, 1.8vw, 34px); padding: clamp(14px, 2vw, 38px) clamp(10px, 1.25vw, 24px); box-shadow: 0 12px 28px rgba(0,0,0,.15); }
+    .info-icon { font-size: clamp(37px, 4vw, 74px); line-height: 1; filter: drop-shadow(0 5px 12px rgba(0,0,0,.2)); }
+    .info-accent { width: clamp(40px, 4vw, 78px); height: 3px; border-radius: 10px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+    .info-title { font-size: clamp(16px, 1.7vw, 33px); font-weight: 900; letter-spacing: clamp(.4px, .1vw, 2px); }
+    .info-detail { font-size: clamp(16px, 1.55vw, 30px); font-weight: 800; color: var(--mint); overflow-wrap: anywhere; }
+    .info-sub { font-size: clamp(11px, .95vw, 18px); line-height: 1.4; color: var(--muted); max-width: 28ch; }
 
-        .dashboard {
-            position: relative; z-index: 1;
-            height: 100%; padding: 1.5vh 1.5vw;
-            display: flex; flex-direction: column;
-            justify-content: space-between; gap: 15px;
-            transform: scale(0.92); transform-origin: center center;
-        }
+    /* Find us / QR slide */
+    .guide-slide-content { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(200px, .8fr); align-items: center; gap: clamp(20px, 4vw, 70px); max-width: 1100px; width: 100%; }
+    .guide-copy { padding-left: clamp(8px, 2vw, 35px); }
+    .eyebrow { text-transform: uppercase; font-size: clamp(10px, .85vw, 16px); color: var(--accent); font-weight: 850; letter-spacing: 4px; margin-bottom: 15px; }
+    .guide-title { font-size: clamp(28px, 3vw, 58px); line-height: 1.08; font-weight: 900; margin-bottom: 18px; }
+    .guide-sub { color: var(--muted); font-size: clamp(15px, 1.2vw, 23px); line-height: 1.55; max-width: 36ch; }
+    .qr-card { display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center; justify-self: center; min-width: 220px; background: rgba(255,255,255,.96); color: #13243a; padding: clamp(14px, 1.4vw, 28px); border-radius: 25px; box-shadow: 0 15px 34px rgba(0,0,0,.25); text-decoration: none; cursor: pointer; transition: transform .25s ease, box-shadow .25s ease; }
+    .qr-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+    .qr-code { display: block; width: clamp(150px, 15vw, 250px); height: clamp(150px, 15vw, 250px); object-fit: contain; image-rendering: pixelated; }
+    .qr-caption { font-size: clamp(12px, .9vw, 17px); font-weight: 850; text-align: center; letter-spacing: 1px; }
 
-        /* ═══════════════════════════════════════
-           HEADER
-        ═══════════════════════════════════════ */
-        .header {
-            height: 150px;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px;
-            border-radius: 28px;
-            background: var(--glass); border: 1px solid var(--glass-b);
-            box-shadow: 0 8px 20px rgba(0,0,0,.22);
-            contain: layout paint;
-        }
-        .tv-bug-container {
-            height: 130px; width: 320px;
-            overflow: hidden; display: flex;
-            align-items: flex-start; flex-shrink: 0;
-        }
-        .tv-bug-logo {
-            width: 80%; height: 190px;
-            object-fit: cover; object-position: top center;
-            margin-top: -5px;
-        }
+    /* Ticker and slide controls */
+    .ticker { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; min-height: clamp(58px, 7.6vh, 86px); display: flex; align-items: center; justify-content: center; padding: 8px clamp(10px, 2vw, 40px); background: rgba(3,9,17,.42); border-top: 1px solid rgba(255,255,255,.1); }
+    .ticker-items { width: 100%; display: flex; justify-content: space-evenly; align-items: center; gap: clamp(8px, 1.5vw, 28px); }
+    .ticker-item { display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 0; font-size: clamp(11px, .95vw, 18px); font-weight: 750; white-space: nowrap; }
+    .ticker-item .emoji { font-size: clamp(16px, 1.45vw, 27px); }
+    .ticker-item .label { color: rgba(255,255,255,.68); font-weight: 700; }
+    .coastal-accent { position: absolute; z-index: 6; bottom: clamp(58px, 7.6vh, 86px); left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(68,190,244,.65) 25%, rgba(255,255,255,.5) 50%, rgba(255,152,46,.65) 75%, transparent); animation: shimmer 5s ease-in-out infinite alternate; pointer-events: none; }
+    .slide-dots { position: absolute; z-index: 7; bottom: calc(clamp(58px, 7.6vh, 86px) + 10px); left: 50%; transform: translateX(-50%); display: flex; gap: 6px; max-width: 42%; overflow: hidden; pointer-events: none; }
+    .dot { display: block; flex: 0 0 auto; width: 6px; height: 6px; border-radius: 20px; background: rgba(255,255,255,.25); transition: width .35s ease, background .35s ease; }
+    .dot.active { width: 20px; background: var(--accent); }
+    .dot.info-dot.active { background: var(--mint); }
+    @keyframes shimmer { from { opacity: .35; } to { opacity: .9; } }
 
-        /* ── Header merkez: Tarih + Karşılama ── */
-        .header-center {
-            flex: 1;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 10px; padding: 0 24px;
-        }
-        .date-display {
-            font-size: 15px; font-weight: 600;
-            opacity: 0.55; letter-spacing: 4px;
-            text-transform: uppercase; white-space: nowrap;
-            transition: opacity 0.5s ease; /* Yeni: dil değişimiyle solarak gelir */
-        }
-        .welcome-text {
-            font-size: 30px; font-weight: 700;
-            letter-spacing: 4px; text-align: center;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.4);
-            white-space: nowrap;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            will-change: opacity, transform;
-        }
+    /* Footer */
+    .footer { min-height: 0; display: grid; grid-template-columns: minmax(235px, .95fr) minmax(430px, 1.75fr) minmax(275px, 1.05fr); gap: clamp(8px, .9vw, 18px); }
+    .footer-card { min-width: 0; border-radius: var(--radius); background: var(--glass); border: 1px solid var(--line); box-shadow: 0 10px 25px rgba(0,0,0,.13); display: flex; align-items: center; justify-content: center; padding: clamp(9px, 1vw, 19px); overflow: hidden; }
+    .weather-inner { display: flex; align-items: center; gap: clamp(10px, 1vw, 19px); width: 100%; justify-content: center; min-width: 0; }
+    .weather-icon { display: flex; align-items: center; justify-content: center; flex: 0 0 clamp(48px, 4.4vw, 78px); width: clamp(48px, 4.4vw, 78px); height: clamp(48px, 4.4vw, 78px); filter: drop-shadow(0 5px 10px rgba(0,0,0,.18)); }
+    .weather-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .weather-svg .sun-rays { transform-origin: 32px 32px; animation: weatherSunSpin 32s linear infinite; }
+    .weather-svg .sun-disc { transform-origin: 32px 32px; animation: weatherSunPulse 4s ease-in-out infinite; }
+    .weather-svg .moon-shape { animation: weatherMoonGlow 4s ease-in-out infinite; }
+    .weather-svg .cloud-shape { transform-origin: 50px 50px; animation: weatherCloudFloat 4.5s ease-in-out infinite; }
+    .weather-svg .rain-streaks { animation: weatherRainFall .95s linear infinite; }
+    .weather-svg .snow-flakes { animation: weatherSnowFall 2s ease-in-out infinite alternate; }
+    .weather-svg .fog-lines { animation: weatherFogDrift 3.5s ease-in-out infinite alternate; }
+    .weather-svg .lightning-bolt { animation: weatherLightning 2.5s steps(1, end) infinite; }
+    @keyframes weatherSunSpin { to { transform: rotate(360deg); } }
+    @keyframes weatherSunPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    @keyframes weatherMoonGlow { 0%, 100% { opacity: 1; } 50% { opacity: .78; } }
+    @keyframes weatherCloudFloat { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(2px); } }
+    @keyframes weatherRainFall { 0% { transform: translateY(-2px); opacity: .6; } 100% { transform: translateY(4px); opacity: 1; } }
+    @keyframes weatherSnowFall { from { transform: translateY(-1px); } to { transform: translateY(3px); } }
+    @keyframes weatherFogDrift { from { transform: translateX(-2px); opacity: .65; } to { transform: translateX(3px); opacity: 1; } }
+    @keyframes weatherLightning { 0%, 82%, 100% { opacity: 1; } 84%, 88% { opacity: .45; } }
+    .weather-info { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .temp { font-size: clamp(20px, 1.75vw, 34px); line-height: 1.1; font-weight: 850; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .weather-condition { font-size: clamp(10px, .8vw, 15px); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+    .weather-extra { font-size: clamp(9px, .65vw, 12px); line-height: 1.35; color: rgba(255,255,255,.57); }
+    .review-card { padding: 8px clamp(8px, 1.2vw, 24px); }
+    .review-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: center; gap: clamp(6px, 1vw, 18px); width: 100%; height: 100%; }
+    .review-item { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: clamp(2px, .45vh, 6px); min-width: 0; text-align: center; }
+    .brand-name { color: #fff; font-size: clamp(11px, .94vw, 18px); line-height: 1.1; white-space: nowrap; font-weight: 750; }
+    /* Marka fontları varsa kullanılır; özel fontlar yoksa sitelerin yaklaşımına yakın sistem fontlarına düşer. */
+    .brand-google { font-family: "Google Sans", "Product Sans", "Segoe UI", Arial, sans-serif; font-weight: 650; letter-spacing: -.45px; }
+    .brand-booking { font-family: "Blue Sans", "Booking Sans", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -.75px; }
+    .brand-expedia { font-family: "CentraNo2", "ExpediaGroupPrimary", Inter, "Segoe UI", Arial, sans-serif; font-weight: 750; letter-spacing: -.3px; }
+    .brand-tripadvisor { font-family: "Trip Sans", Poppins, Roboto, "Segoe UI", sans-serif; font-weight: 700; letter-spacing: -.4px; }
+    .score { font-size: clamp(14px, 1.3vw, 25px); line-height: 1; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .score small { font-size: .52em; opacity: .65; margin-left: 2px; }
+    .item-stars { color: #ffbf46; font-size: clamp(8px, .7vw, 13px); letter-spacing: 1px; white-space: nowrap; }
+    .review-label { font-size: clamp(7px, .55vw, 11px); color: rgba(255,255,255,.53); letter-spacing: .5px; }
+    .currency-card { flex-direction: column; align-items: stretch; gap: clamp(4px, .6vh, 9px); padding: clamp(9px, 1vw, 18px) clamp(12px, 1.25vw, 24px); }
+    .currency-heading { font-size: clamp(8px, .6vw, 12px); letter-spacing: 1.7px; font-weight: 850; color: rgba(255,255,255,.53); text-align: center; text-transform: uppercase; }
+    .currency-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .currency-item { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .currency-code { color: var(--accent); font-size: clamp(11px, .88vw, 17px); font-weight: 900; }
+    .currency-rate { font-size: clamp(13px, 1.05vw, 20px); font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .currency-note { color: rgba(255,255,255,.46); font-size: clamp(7px, .53vw, 10px); text-align: center; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-        /* ── Saatler ── */
-        .clocks { display: flex; gap: 45px; flex-shrink: 0; contain: layout paint; }
-        .clock-card {
-            min-width: 195px; text-align: center;
-            padding: 14px 18px; border-radius: 29px;
-            background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,.08);
-            contain: layout paint;
-        }
-        .clock-city { font-size: 25px; opacity: .7; letter-spacing: 5px; margin-bottom: 4px; }
-        .clock-time { font-size: 45px; font-weight: 700; }
-
-        /* ═══════════════════════════════════════
-           ANA PANEL
-        ═══════════════════════════════════════ */
-        .main-panel {
-            flex: 1; position: relative;
-            border-radius: 34px; overflow: hidden;
-            background: rgba(0,0,0,0.22);
-            border: 1px solid rgba(255,255,255,.10);
-            display: flex; justify-content: center; align-items: center;
-            contain: layout paint;
-        }
-        .slider {
-            position: relative; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 2;
-        }
-
-        .slide {
-            position: absolute; width: 100%; height: 100%;
-            display: flex; flex-direction: row;
-            justify-content: center; align-items: center;
-            padding-bottom: 110px;
-            opacity: 0; transform: translateY(30px);
-            transition: opacity 0.9s ease, transform 0.9s ease;
-            pointer-events: none; will-change: opacity, transform;
-        }
-        .slide.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
-
-        /* ── Menü slaydı ── */
-        .split-half {
-            flex: 1; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            height: 100%; padding: 0 20px;
-        }
-        .right-half { border-left: 1px solid rgba(255,255,255,0.15); }
-
-        .category-label {
-            font-size: 13px; letter-spacing: 3px; opacity: 0.5;
-            background: rgba(0,0,0,0.28); padding: 4px 16px;
-            border-radius: 20px; margin-bottom: 14px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .slide img {
-            width: 400px; height: 300px;
-            object-fit: cover; border-radius: 15%;
-            margin-bottom: 20px;
-            box-shadow: 0 12px 28px rgba(0,0,0,0.5);
-            border: 3px solid rgba(255,255,255,0.2);
-            animation: float 4s ease-in-out infinite;
-            will-change: transform;
-        }
-        .slide-content {
-            display: flex; flex-direction: column;
-            align-items: center; width: 100%;
-        }
-        .slide h1 {
-            font-size: 45px; font-weight: 900;
-            letter-spacing: 2px; margin-bottom: 12px;
-            text-shadow: 0 6px 12px rgba(0,0,0,0.4);
-            display: flex; flex-wrap: wrap;
-            justify-content: center; text-align: center;
-        }
-        .word { display: inline-block; opacity: 0; transform: translateY(20px); }
-        .slide.active .word { animation: wordFadeIn 0.7s ease forwards; }
-
-        .price-tag {
-            font-size: 24px; color: var(--accent); font-weight: bold;
-            background: rgba(0,0,0,0.4); padding: 2px 18px;
-            border-radius: 35px; display: inline-block;
-            border: 1px solid var(--accent-glow);
-        }
-
-        /* ── Yeni Bilgi Slaydı (3'lü Kart Tasarımı) ── */
-        .slide.info-slide {
-            flex-direction: row;
-        }
-        .info-slide-inner {
-            display: flex; flex-direction: row;
-            align-items: center; justify-content: space-evenly;
-            text-align: center; gap: 30px;
-            padding: 20px; width: 92%;
-        }
-        .info-block {
-            display: flex; flex-direction: column;
-            align-items: center; gap: 14px;
-            background: rgba(0,0,0,0.25);
-            padding: 45px 20px; border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            flex: 1; height: 100%;
-        }
-        .info-icon {
-            font-size: 65px; line-height: 1;
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.5));
-        }
-        .info-accent {
-            width: 80px; height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            border-radius: 2px; margin: 10px 0;
-        }
-        .info-title {
-            font-size: 32px; font-weight: 900;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        .info-detail {
-            font-size: 24px; opacity: 0.9;
-            font-weight: 700; letter-spacing: 1px;
-            color: #34d399; /* Dikkat çekici yeşil tonu */
-        }
-        .info-sub {
-            font-size: 16px; opacity: 0.6;
-            font-weight: 400; letter-spacing: 1px;
-            margin-top: 5px;
-        }
-
-        /* ── Kıyı shimmer ── */
-        .coastal-accent {
-            position: absolute; bottom: 110px; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg,
-                transparent 0%,
-                rgba(61,182,242,0.7) 25%,
-                rgba(255,255,255,0.45) 50%,
-                rgba(61,182,242,0.7) 75%,
-                transparent 100%);
-            animation: shoreShimmer 4s ease-in-out infinite alternate;
-        }
-        @keyframes shoreShimmer { 0% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        /* ── Slide gösterge noktaları ── */
-        .slide-dots {
-            position: absolute; bottom: 120px;
-            left: 50%; transform: translateX(-50%);
-            display: flex; gap: 8px; z-index: 3;
-            pointer-events: none;
-        }
-        .dot {
-            height: 6px; width: 6px; border-radius: 3px;
-            background: rgba(255,255,255,0.22);
-            transition: background 0.4s ease, width 0.4s ease;
-        }
-        .dot.active      { width: 20px; background: var(--accent); }
-        .dot.info-dot.active { background: #34d399; }
-
-        /* ── Ticker ── */
-        .ticker {
-            position: absolute; bottom: 0; left: 0;
-            width: 100%; height: 110px;
-            background: rgba(0,0,0,.30);
-            border-top: 1px solid rgba(255,255,255,.10);
-            display: flex; align-items: center; justify-content: center;
-            contain: layout paint;
-        }
-        .ticker-static {
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 8px; font-size: 28px;
-            font-weight: 800; letter-spacing: 1px;
-        }
-
-        /* ═══════════════════════════════════════
-           FOOTER (3 sütun: hava | puanlar | döviz)
-        ═══════════════════════════════════════ */
-        .footer {
-            height: 150px;
-            display: grid;
-            grid-template-columns: 300px 1fr 180px; /* Namaz vakitleri kaldırıldığı için düzenlendi */
-            gap: 16px;
-        }
-        .glass-card {
-            border-radius: 36px;
-            background: var(--glass); border: 1px solid var(--glass-b);
-            display: flex; align-items: center; justify-content: center;
-            contain: layout paint;
-        }
-
-        /* Hava durumu */
-        .weather-inner { display: flex; align-items: center; }
-        .weather-icon  { width: 75px; height: 75px; margin-right: 15px; position: relative; }
-        .weather-info  { display: flex; flex-direction: column; gap: 3px; }
-        .temp          { font-size: 26px; font-weight: 700; white-space: nowrap; }
-        .location      { font-size: 15px; opacity: .8; }
-        .weather-extra { font-size: 12px; opacity: 0.5; display: flex; flex-direction: column; gap: 2px; }
-
-        /* Platform puanları */
-        .review-card   { padding: 10px 15px; width: 100%; }
-        .review-grid   { display: flex; width: 100%; justify-content: space-evenly; align-items: center; }
-        .review-item   { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .score         { font-weight: 800; font-size: 19px; color: white; margin-top: 3px; }
-        .score small   { font-size: 12px; opacity: 0.7; margin-left: 2px; }
-        .item-stars    { font-size: 12px; letter-spacing: 2px; }
-        .brand-logo {
-            height: 38px; width: auto; max-width: 110px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
-            animation: float 20s ease-in-out infinite; will-change: transform;
-        }
-        .review-item:nth-child(1) .brand-logo { animation-delay: 0s; }
-        .review-item:nth-child(2) .brand-logo { animation-delay: 0.5s; }
-        .review-item:nth-child(3) .brand-logo { animation-delay: 1s; }
-        .review-item:nth-child(4) .brand-logo { animation-delay: 1.5s; }
-
-        .graffiti-rate {
-            font-family: "Story Script", sans-serif;
-            color: #fff; text-align: center; line-height: 1;
-            transform: rotate(3deg);
-            text-shadow: 2px 5px 5px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column; gap: 0;
-        }
-        .graffiti-top    { font-size: 18px; letter-spacing: 2px; opacity: 0.9; }
-        .graffiti-bottom { font-size: 48px; color: #34e0a1; letter-spacing: 1px; }
-        .spray-star      { font-family: sans-serif; font-size: 24px; position: absolute; color: #34e0a1; }
-
-        /* Döviz */
-        .currency-card { flex-direction: column; gap: 8px; padding: 0 20px; }
-        .currency-item {
-            display: flex; justify-content: space-between;
-            width: 100%; font-size: 22px;
-            font-weight: 800; letter-spacing: 1px;
-        }
-        .currency-item span:first-child { color: var(--accent); }
-
-        /* Animasyonlar */
-        @keyframes float      { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-        @keyframes wordFadeIn { to { opacity: 1; transform: translateY(0); } }
-
-        /* Hava durumu CSS ikonları */
-        .icon-sun {
-            width: 48px; height: 48px; background: #ffd54f;
-            border-radius: 50%; position: absolute;
-            top: 13px; left: 13px; box-shadow: 0 0 18px #ffd54f;
-            animation: pulseIcon 3s ease infinite; will-change: transform;
-        }
-        .icon-moon {
-            width: 40px; height: 40px; border-radius: 50%;
-            position: absolute; top: 15px; left: 15px;
-            box-shadow: inset -10px -8px 0 0 #e2e8f0;
-            animation: pulseIcon 4s ease infinite; will-change: transform;
-        }
-        .icon-cloud {
-            width: 50px; height: 18px; background: #f8fafc;
-            border-radius: 20px; position: absolute;
-            top: 35px; left: 10px;
-            animation: floatIcon 4s ease-in-out infinite; will-change: transform;
-        }
-        .icon-cloud::before {
-            content: ''; position: absolute;
-            width: 22px; height: 22px; background: inherit;
-            border-radius: 50%; top: -12px; left: 8px;
-        }
-        .icon-cloud::after {
-            content: ''; position: absolute;
-            width: 16px; height: 16px; background: inherit;
-            border-radius: 50%; top: -8px; right: 8px;
-        }
-        .icon-rain {
-            position: absolute; width: 3px; height: 8px;
-            background: #00d4ff; top: 45px; left: 22px;
-            box-shadow: 10px 0 0 #00d4ff, 20px 0 0 #00d4ff;
-            animation: rainDrop 0.8s linear infinite; will-change: transform, opacity;
-        }
-        @keyframes pulseIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
-        @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-        @keyframes rainDrop  {
-            0%   { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(15px); opacity: 0; }
-        }
-    </style>
+    @media (max-width: 1450px) {
+      .dashboard { grid-template-rows: minmax(88px, 13vh) minmax(0, 1fr) minmax(95px, 13vh); }
+      .header { grid-template-columns: minmax(120px, .72fr) minmax(200px, 1fr) minmax(405px, 2.15fr); }
+      .footer { grid-template-columns: minmax(210px, .95fr) minmax(360px, 1.7fr) minmax(245px, 1fr); }
+      .slide { padding-bottom: 80px; }
+      .food-photo-wrap { height: clamp(135px, 27vh, 265px); }
+    }
+    @media (max-height: 800px) {
+      .dashboard { grid-template-rows: minmax(78px, 13vh) minmax(0, 1fr) minmax(88px, 13vh); gap: 8px; }
+      .food-photo-wrap { height: clamp(115px, 26vh, 205px); margin-bottom: 10px; }
+      .info-block { gap: 7px; }
+      .slide { padding-top: 12px; padding-bottom: 70px; }
+      .ticker { min-height: 55px; }
+      .coastal-accent { bottom: 55px; }
+      .slide-dots { bottom: 64px; }
+    }
+    @media (max-width: 1050px) {
+      .header { grid-template-columns: minmax(90px, .55fr) minmax(155px, .8fr) minmax(330px, 2fr); gap: 8px; padding-inline: 10px; }
+      .footer { grid-template-columns: minmax(185px, .9fr) minmax(320px, 1.5fr) minmax(205px, .9fr); gap: 7px; }
+      .weather-extra { display: none; }
+      .review-label { display: none; }
+      .ticker-item { gap: 4px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    }
+  </style>
 </head>
-
 <body class="theme-day">
-<div class="dashboard">
+  <main class="dashboard" aria-label="Coastline Orange Hotel resepsiyon ekranı">
+    <header class="header glass-panel">
+      <div class="logo-wrap">
+        <img src="logo.gif" alt="Coastline Orange Hotel" class="hotel-logo" id="hotelLogo">
+        <div class="logo-fallback" id="logoFallback">COASTLINE<span>ORANGE HOTEL</span></div>
+      </div>
+      <div class="welcome-area">
+        <div id="dateDisplay" class="date-display">...</div>
+        <div id="welcomeText" class="welcome-text">Hoş Geldiniz</div>
+      </div>
+      <div class="clocks" aria-label="Dünya saatleri">
+        <div class="clock-card"><div class="clock-city">ANTALYA</div><div class="clock-time" id="antalyaTime">--:--</div></div>
+        <div class="clock-card"><div class="clock-city">LONDON</div><div class="clock-time" id="londonTime">--:--</div></div>
+        <div class="clock-card"><div class="clock-city">BERLIN</div><div class="clock-time" id="berlinTime">--:--</div></div>
+        <div class="clock-card"><div class="clock-city">MOSCOW</div><div class="clock-time" id="moscowTime">--:--</div></div>
+      </div>
+    </header>
 
-    <!-- ═══ HEADER ═══ -->
-    <div class="header">
-        <div class="tv-bug-container">
-            <img src="logo.gif" width="1000" height="800" alt="Coastline Orange Hotel" class="tv-bug-logo">
+    <section class="main-panel glass-panel" aria-label="Otel menüsü ve bilgilendirme slaytları">
+      <div class="slider" id="dynamicSlider"></div>
+      <div class="coastal-accent"></div>
+      <div class="slide-dots" id="slideDots" aria-hidden="true"></div>
+      <div class="ticker">
+        <div class="ticker-items">
+          <div class="ticker-item"><span class="emoji">🍳</span><span class="label" data-i18n="breakfast">BREAKFAST</span><span>08:00–10:30</span></div>
+          <div class="ticker-item"><span class="emoji">🍽️</span><span class="label" data-i18n="restaurant">RESTAURANT</span><span>12:00–22:00</span></div>
+          <div class="ticker-item"><span class="emoji">🍹</span><span class="label" data-i18n="lobbyBar">LOBBY BAR</span><span>08:00–00:00</span></div>
+          <div class="ticker-item"><span class="emoji">🏊</span><span class="label" data-i18n="pool">POOL</span><span>08:00–20:00</span></div>
+          <div class="ticker-item"><span class="emoji">💪</span><span class="label" data-i18n="gym">GYM</span><span>10:00–22:00</span></div>
         </div>
+      </div>
+    </section>
 
-        <!-- Merkez — Çok Dilli Tarih ve Karşılama -->
-        <div class="header-center">
-            <div class="date-display" id="dateDisplay">...</div>
-            <div class="welcome-text"  id="welcomeText">Hoş Geldiniz</div>
+    <footer class="footer">
+      <section class="footer-card weather-card" aria-label="Antalya hava durumu">
+        <div class="weather-inner">
+          <div class="weather-icon" id="weatherIcon" aria-hidden="true"><svg class="weather-svg" viewBox="0 0 100 100" focusable="false"><g class="sun-rays" stroke="#ffc45c" stroke-width="4" stroke-linecap="round"><path d="M32 8v5M32 51v5M8 32h5M51 32h5M15 15l4 4M45 45l4 4M15 49l4-4M45 19l4-4"/></g><circle class="sun-disc" cx="32" cy="32" r="12" fill="#ffc45c" stroke="#ffe6a4" stroke-width="2"/></svg></div>
+          <div class="weather-info">
+            <div class="temp" id="weatherTemp">--°C</div>
+            <div class="weather-condition" id="weatherCondition">Loading weather</div>
+            <div class="weather-extra" id="weatherExtra">Antalya</div>
+          </div>
         </div>
+      </section>
 
-        <div class="clocks">
-            <div class="clock-card"><div class="clock-city">ANTALYA</div><div class="clock-time" id="antalyaTime">00:00</div></div>
-            <div class="clock-card"><div class="clock-city">LONDON</div><div class="clock-time"  id="londonTime">00:00</div></div>
-            <div class="clock-card"><div class="clock-city">BERLIN</div><div class="clock-time"  id="berlinTime">00:00</div></div>
-            <div class="clock-card"><div class="clock-city">MOSCOW</div><div class="clock-time"  id="moscowTime">00:00</div></div>
+      <section class="footer-card review-card" aria-label="Değerlendirme platformları">
+        <div class="review-grid">
+          <div class="review-item">
+            <div class="brand-name brand-google">Google</div>
+            <div class="score">4.8<small>/5</small></div><div class="item-stars">★★★★★</div>
+          </div>
+          <div class="review-item">
+            <div class="brand-name brand-booking">booking.com</div>
+            <div class="score">8.9<small>/10</small></div><div class="item-stars">★★★★★</div>
+          </div>
+          <div class="review-item">
+            <div class="brand-name brand-expedia">Expedia</div>
+            <div class="score">9.2<small>/10</small></div><div class="item-stars">★★★★★</div>
+          </div>
+          <div class="review-item">
+            <div class="brand-name brand-tripadvisor">Tripadvisor</div>
+            <div class="item-stars">★★★★★</div><div class="review-label" data-i18n="rateUs">RATE YOUR STAY</div>
+          </div>
         </div>
-    </div>
+      </section>
 
-    <!-- ═══ ANA PANEL ═══ -->
-    <div class="main-panel">
-        <div class="slider" id="dynamicSlider"></div>
-        <div class="coastal-accent"></div>
-        <div class="slide-dots" id="slideDots"></div>
-        <div class="ticker">
-            <div class="ticker-static">
-                <div>🍳 BREAKFAST 08:00 - 10:30 &nbsp;•&nbsp; 🍽️ RESTAURANT 12:00 - 22:00 &nbsp;•&nbsp; 🍹 LOBBY BAR 08:00 - 00:00</div>
-                <div>🏖️ POOL 08:00 - 20:00 &nbsp;•&nbsp; 💪 GYM 10:00 - 22:00</div>
-            </div>
+      <section class="footer-card currency-card" aria-label="Gösterge döviz kurları">
+        <div class="currency-heading" data-i18n="currencyHeading">REFERENCE EXCHANGE RATES</div>
+        <div class="currency-grid">
+          <div class="currency-item"><span class="currency-code">USD</span><span class="currency-rate" id="usdRate">--</span></div>
+          <div class="currency-item"><span class="currency-code">EUR</span><span class="currency-rate" id="eurRate">--</span></div>
+          <div class="currency-item"><span class="currency-code">GBP</span><span class="currency-rate" id="gbpRate">--</span></div>
         </div>
-    </div>
+        <div class="currency-note" id="currencyNote">Approximate market reference • not a transaction rate</div>
+      </section>
+    </footer>
+  </main>
 
-    <!-- ═══ FOOTER ═══ -->
-    <div class="footer">
+  <script>
+  (() => {
+    'use strict';
 
-        <!-- Hava Durumu -->
-        <div class="glass-card">
-            <div class="weather-inner">
-                <div class="weather-icon" id="weatherIconContainer"></div>
-                <div class="weather-info">
-                    <div class="temp"          id="weatherTemp">--°C</div>
-                    <div class="location">Antalya</div>
-                    <div class="weather-extra" id="weatherExtra"></div>
-                </div>
-            </div>
-        </div>
+    // Otel bilgileri ve içerikler, önceki ekranınızdan korunmuştur.
+    const CONFIG = {
+      location: { latitude: 36.8841, longitude: 30.7056, timezone: 'Europe/Istanbul' },
+      weatherRefreshMs: 10 * 60 * 1000,
+      currencyRefreshMs: 60 * 60 * 1000,
+      slideDurationMs: 7000,
+      qrSlideDurationMs: 10000,
+      languageDurationMs: 20000,
+      // Google Maps konum QR kodu.
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=Coastline+Orange+Hotel+Antalya',
+      // Otelin Elektraweb dijital menüsü.
+      menuUrl: 'https://sm.elektraweb.com/menu?P1=ACDD80F8-FA8A-4EED-96A1-3C948BE948BE&P2=201062'
+    };
 
-        <!-- Platform Puanları -->
-        <div class="glass-card review-card">
-            <div class="review-grid">
-                <div class="review-item">
-                    <img class="brand-logo" src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google" loading="lazy" decoding="async">
-                    <div class="score">4.8<small>/5</small></div>
-                    <div class="item-stars">⭐⭐⭐⭐<span style="opacity:0.8">⭐</span></div>
-                </div>
-                <div class="review-item">
-                    <img class="brand-logo" src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/bookingdotcom/default.svg" alt="Booking.com" loading="lazy" decoding="async">
-                    <div class="score">8.9<small>/10</small></div>
-                    <div class="item-stars">⭐⭐⭐⭐<span style="opacity:0.3">⭐</span></div>
-                </div>
-                <div class="review-item">
-                    <img class="brand-logo" src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/expedia/default.svg" alt="Expedia" loading="lazy" decoding="async">
-                    <div class="score">9.2<small>/10</small></div>
-                    <div class="item-stars">⭐⭐⭐⭐<span style="opacity:0.7">⭐</span></div>
-                </div>
-                <div class="review-item" style="position:relative;justify-content:center;padding:10px;">
-                    <span class="spray-star" style="top:-5px;left:-10px;transform:rotate(15deg);">*</span>
-                    <span class="spray-star" style="bottom:5px;right:-15px;transform:rotate(45deg);font-size:26px;">*</span>
-                    <div class="graffiti-rate">
-                        <span class="graffiti-top">Rate us on</span>
-                        <span class="graffiti-bottom">Tripadvisor</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Döviz -->
-        <div class="glass-card currency-card">
-            <div class="currency-item"><span>USD</span><span id="usdRate">--</span></div>
-            <div class="currency-item"><span>EUR</span><span id="eurRate">--</span></div>
-            <div class="currency-item"><span>GBP</span><span id="gbpRate">--</span></div>
-        </div>
-
-    </div>
-</div>
-
-<script>
-(function () {
-    "use strict";
-
-    /* ── DOM referansları ── */
-    const sliderEl       = document.getElementById("dynamicSlider");
-    const slideDotsEl    = document.getElementById("slideDots");
-    const antalyaEl      = document.getElementById("antalyaTime");
-    const londonEl       = document.getElementById("londonTime");
-    const berlinEl       = document.getElementById("berlinTime");
-    const moscowEl       = document.getElementById("moscowTime");
-    const dateDisplayEl  = document.getElementById("dateDisplay");
-    const welcomeTextEl  = document.getElementById("welcomeText");
-    const weatherTempEl  = document.getElementById("weatherTemp");
-    const weatherIconEl  = document.getElementById("weatherIconContainer");
-    const weatherExtraEl = document.getElementById("weatherExtra");
-    const usdRateEl      = document.getElementById("usdRate");
-    const eurRateEl      = document.getElementById("eurRate");
-    const gbpRateEl      = document.getElementById("gbpRate");
-
-    /* Zaman hesaplaması (İstanbul Saati) */
-    let timeOffset = 0;
-    function istNow() {
-        return new Date(Date.now() + timeOffset + 3 * 3600_000);
-    }
-
-    /* ════════════════════════════════════════════
-       1. ÇOK DİLLİ KARŞILAMA VE TARİH
-    ════════════════════════════════════════════ */
-    const LANGS = [
-        { text: "Hoş Geldiniz", locale: "tr-TR" },
-        { text: "Welcome", locale: "en-US" },
-        { text: "Willkommen", locale: "de-DE" },
-        { text: "Добро пожаловать", locale: "ru-RU" }
+    const LANGUAGES = [
+      { code: 'tr', locale: 'tr-TR', welcome: 'Hoş Geldiniz' },
+      { code: 'en', locale: 'en-GB', welcome: 'Welcome' },
+      { code: 'de', locale: 'de-DE', welcome: 'Willkommen' },
+      { code: 'ru', locale: 'ru-RU', welcome: 'Добро пожаловать' }
     ];
-    let langIdx = 0;
 
-    function updateDateDisplay(locale) {
-        const d = istNow();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        dateDisplayEl.textContent = d.toLocaleDateString(locale, options);
-    }
+    const TEXT = {
+      tr: {
+        drinks: 'İÇECEKLER', food: 'YEMEKLER', breakfast: 'KAHVALTI', restaurant: 'RESTORAN', lobbyBar: 'LOBBY BAR', pool: 'HAVUZ', gym: 'SPOR SALONU',
+        wifiTitle: 'ÜCRETSİZ WI-FI', wifiDetail: 'COASTLINE_ORANGE', wifiSub: 'Şifre için resepsiyona danışın',
+        roomTitle: 'ODA SERVİSİ', roomDetail: '12:00 – 22:00', roomSub: 'Sipariş için resepsiyonla iletişime geçin',
+        checkoutTitle: 'ÇIKIŞ SAATİ', checkoutDetail: '12:00', checkoutSub: 'Geç çıkış için resepsiyona danışın',
+        guideEyebrow: 'COASTLINE ORANGE HOTEL', guideTitle: 'BİZİ BULUN', guideSub: 'Otelimizin konumunu haritada açmak için telefonunuzla QR kodunu okutun.', guideQr: 'HARİTADA AÇ',
+        menuEyebrow: 'COASTLINE ORANGE HOTEL', menuTitle: 'DİJİTAL MENÜ', menuSub: 'Güncel yemek ve içecek menümüzü telefonunuzda görüntülemek için QR kodunu okutun.', menuQr: 'MENÜYÜ AÇ',
+        loadingWeather: 'Hava durumu yükleniyor', weatherUnavailable: 'Hava durumu alınamadı', feelsLike: 'Hissedilen', humidity: 'Nem', wind: 'Rüzgâr', rainChance: 'Yağış', today: 'Bugün', sunset: 'Gün batımı',
+        clear: 'Açık', mainlyClear: 'Çoğunlukla açık', partlyCloudy: 'Parçalı bulutlu', cloudy: 'Bulutlu', fog: 'Sisli', drizzle: 'Çisenti', freezingDrizzle: 'Donan çisenti', rain: 'Yağmurlu', freezingRain: 'Donan yağmur', snow: 'Karlı', snowGrains: 'Kar taneleri', showers: 'Sağanak', snowShowers: 'Karlı sağanak', thunderstorm: 'Gök gürültülü fırtına', hailStorm: 'Dolu ve gök gürültülü fırtına', mixed: 'Değişken hava',
+        currencyHeading: 'REFERANS DÖVİZ KURU', currencyNote: 'Yaklaşık piyasa referansı • işlem kuru değildir', rateUnavailable: 'Kur verisi alınamadı', rateUpdated: 'Güncellendi', rateUs: 'BİZİ DEĞERLENDİRİN'
+      },
+      en: {
+        drinks: 'DRINKS', food: 'FOOD', breakfast: 'BREAKFAST', restaurant: 'RESTAURANT', lobbyBar: 'LOBBY BAR', pool: 'POOL', gym: 'GYM',
+        wifiTitle: 'FREE WI-FI', wifiDetail: 'COASTLINE_ORANGE', wifiSub: 'Please ask reception for the password',
+        roomTitle: 'ROOM SERVICE', roomDetail: '12:00 – 22:00', roomSub: 'Please contact reception to order',
+        checkoutTitle: 'CHECK-OUT', checkoutDetail: '12:00', checkoutSub: 'Please ask reception about late check-out',
+        guideEyebrow: 'COASTLINE ORANGE HOTEL', guideTitle: 'FIND US', guideSub: 'Scan the QR code with your phone to open our location in Maps.', guideQr: 'OPEN IN MAPS',
+        menuEyebrow: 'COASTLINE ORANGE HOTEL', menuTitle: 'DIGITAL MENU', menuSub: 'Scan this QR code to view our current food and drinks menu on your phone.', menuQr: 'OPEN MENU',
+        loadingWeather: 'Loading weather', weatherUnavailable: 'Weather unavailable', feelsLike: 'Feels like', humidity: 'Humidity', wind: 'Wind', rainChance: 'Rain chance', today: 'Today', sunset: 'Sunset',
+        clear: 'Clear', mainlyClear: 'Mainly clear', partlyCloudy: 'Partly cloudy', cloudy: 'Cloudy', fog: 'Foggy', drizzle: 'Drizzle', freezingDrizzle: 'Freezing drizzle', rain: 'Rainy', freezingRain: 'Freezing rain', snow: 'Snow', snowGrains: 'Snow grains', showers: 'Showers', snowShowers: 'Snow showers', thunderstorm: 'Thunderstorm', hailStorm: 'Thunderstorm with hail', mixed: 'Mixed conditions',
+        currencyHeading: 'REFERENCE EXCHANGE RATES', currencyNote: 'Approximate market reference • not a transaction rate', rateUnavailable: 'Rates unavailable', rateUpdated: 'Updated', rateUs: 'RATE YOUR STAY'
+      },
+      de: {
+        drinks: 'GETRÄNKE', food: 'SPEISEN', breakfast: 'FRÜHSTÜCK', restaurant: 'RESTAURANT', lobbyBar: 'LOBBYBAR', pool: 'POOL', gym: 'FITNESS',
+        wifiTitle: 'KOSTENLOSES WLAN', wifiDetail: 'COASTLINE_ORANGE', wifiSub: 'Das Passwort erhalten Sie an der Rezeption',
+        roomTitle: 'ZIMMERSERVICE', roomDetail: '12:00 – 22:00', roomSub: 'Bestellungen bitte über die Rezeption',
+        checkoutTitle: 'CHECK-OUT', checkoutDetail: '12:00', checkoutSub: 'Für einen späten Check-out fragen Sie bitte an der Rezeption',
+        guideEyebrow: 'COASTLINE ORANGE HOTEL', guideTitle: 'SO FINDEN SIE UNS', guideSub: 'Scannen Sie den QR-Code, um unseren Standort in Maps zu öffnen.', guideQr: 'IN MAPS ÖFFNEN',
+        menuEyebrow: 'COASTLINE ORANGE HOTEL', menuTitle: 'DIGITALE SPEISEKARTE', menuSub: 'Scannen Sie den QR-Code, um unsere aktuelle Speisen- und Getränkekarte auf Ihrem Telefon zu öffnen.', menuQr: 'MENÜ ÖFFNEN',
+        loadingWeather: 'Wetter wird geladen', weatherUnavailable: 'Wetter nicht verfügbar', feelsLike: 'Gefühlt', humidity: 'Luftfeuchtigkeit', wind: 'Wind', rainChance: 'Regenrisiko', today: 'Heute', sunset: 'Sonnenuntergang',
+        clear: 'Klar', mainlyClear: 'Überwiegend klar', partlyCloudy: 'Teilweise bewölkt', cloudy: 'Bewölkt', fog: 'Neblig', drizzle: 'Nieselregen', freezingDrizzle: 'Gefrierender Nieselregen', rain: 'Regen', freezingRain: 'Gefrierender Regen', snow: 'Schnee', snowGrains: 'Schneekörner', showers: 'Regenschauer', snowShowers: 'Schneeschauer', thunderstorm: 'Gewitter', hailStorm: 'Gewitter mit Hagel', mixed: 'Wechselhaft',
+        currencyHeading: 'WECHSELKURS-REFERENZ', currencyNote: 'Ungefähre Marktreferenz • kein Transaktionskurs', rateUnavailable: 'Kurse nicht verfügbar', rateUpdated: 'Aktualisiert', rateUs: 'BEWERTEN SIE UNS'
+      },
+      ru: {
+        drinks: 'НАПИТКИ', food: 'ЕДА', breakfast: 'ЗАВТРАК', restaurant: 'РЕСТОРАН', lobbyBar: 'ЛОББИ-БАР', pool: 'БАССЕЙН', gym: 'ТРЕНАЖЁРНЫЙ ЗАЛ',
+        wifiTitle: 'БЕСПЛАТНЫЙ WI-FI', wifiDetail: 'COASTLINE_ORANGE', wifiSub: 'Пароль можно узнать на стойке регистрации',
+        roomTitle: 'ОБСЛУЖИВАНИЕ В НОМЕРЕ', roomDetail: '12:00 – 22:00', roomSub: 'Для заказа обратитесь на ресепшен',
+        checkoutTitle: 'ВЫЕЗД', checkoutDetail: '12:00', checkoutSub: 'По позднему выезду обратитесь на ресепшен',
+        guideEyebrow: 'COASTLINE ORANGE HOTEL', guideTitle: 'КАК НАС НАЙТИ', guideSub: 'Отсканируйте QR-код телефоном, чтобы открыть наше местоположение в картах.', guideQr: 'ОТКРЫТЬ КАРТУ',
+        menuEyebrow: 'COASTLINE ORANGE HOTEL', menuTitle: 'ЦИФРОВОЕ МЕНЮ', menuSub: 'Отсканируйте QR-код, чтобы открыть актуальное меню еды и напитков на телефоне.', menuQr: 'ОТКРЫТЬ МЕНЮ',
+        loadingWeather: 'Загрузка погоды', weatherUnavailable: 'Погода недоступна', feelsLike: 'Ощущается', humidity: 'Влажность', wind: 'Ветер', rainChance: 'Вероятность дождя', today: 'Сегодня', sunset: 'Закат',
+        clear: 'Ясно', mainlyClear: 'Преимущественно ясно', partlyCloudy: 'Переменная облачность', cloudy: 'Облачно', fog: 'Туман', drizzle: 'Морось', freezingDrizzle: 'Ледяная морось', rain: 'Дождь', freezingRain: 'Ледяной дождь', snow: 'Снег', snowGrains: 'Снежная крупа', showers: 'Ливень', snowShowers: 'Снегопад', thunderstorm: 'Гроза', hailStorm: 'Гроза с градом', mixed: 'Переменная погода',
+        currencyHeading: 'СПРАВОЧНЫЙ КУРС', currencyNote: 'Примерный рыночный курс • не курс обмена отеля', rateUnavailable: 'Курсы недоступны', rateUpdated: 'Обновлено', rateUs: 'ОЦЕНИТЕ НАС'
+      }
+    };
 
-    setInterval(() => {
-        /* Fade-out */
-        welcomeTextEl.style.opacity   = "0";
-        welcomeTextEl.style.transform = "translateY(8px)";
-        dateDisplayEl.style.opacity   = "0";
-        
-        /* Metin/Tarih değiştir → fade-in */
-        setTimeout(() => {
-            langIdx = (langIdx + 1) % LANGS.length;
-            
-            welcomeTextEl.textContent     = LANGS[langIdx].text;
-            welcomeTextEl.style.opacity   = "1";
-            welcomeTextEl.style.transform = "translateY(0)";
-            
-            updateDateDisplay(LANGS[langIdx].locale);
-            dateDisplayEl.style.opacity   = "0.55";
-        }, 500);
-    }, 3600);
-
-
-    /* ════════════════════════════════════════════
-       2. SLIDER — Menü + Otel Bilgi Slaytları
-    ════════════════════════════════════════════ */
     const foodItems = [
-        { title: "BEEF WRAP",           price: "750.00 ₺",  image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/e3996b28-bb02-4919-842e-4a76b6e08587.jpeg" },
-        { title: "COASTLINE BURGER",    price: "850.00 ₺",  image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/d63031bb-8be5-4a98-8f67-6ad1f381aba6.jpeg" },
-        { title: "COASTLINE PIZZA",     price: "750.00 ₺",  image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/074d5fb2-e84b-44a3-b334-c7fff3ad861f.jpeg" },
-        { title: "FETTUCINI ALFREDO",   price: "500.00 ₺",  image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/66ab2e5d-c8f8-456c-b8b4-f129d008315f.jpeg" },
-        { title: "BEEF TENDERLOIN",     price: "1600.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/f29d7a6a-b9db-419e-a723-904f7ef94a7a.jpeg" },
-        { title: "MIXED TOAST",         price: "400.00 ₺",  image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/821273d9-e170-4eee-b628-103fa1caa167.jpeg" },
-        { title: "MEDITERRANEAN SALAD", price: "300.00 ₺",  image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/16ab700c-466a-413b-aba4-abf63102119e.jpg" },
-        { title: "SAN SEBASTIAN",       price: "300.00 ₺",  image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/c2d01d40-0310-4293-b0c6-5c87ce07d6eb.jpg" }
+      { title: 'BREAKFAST PLATE', price: '350.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/8919c2d9-20fe-4d80-b52e-fd915f9a5546.jpeg' },
+      { title: 'FRENCH FRIES', price: '225.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/b5e45341-aba4-4531-b3ca-41f213e4f7eb.jpg' },
+      { title: 'TOMATO AND CHEESE TOAST', price: '275.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/9f80c786-ce85-470f-ad78-8d61da06991b.jpeg' },
+      { title: 'CHICKEN WRAP', price: '400.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/81bed449-4af8-47b4-9f29-4a69837a9188.jpeg' },
+      { title: 'DOUBLE BURGER', price: '950.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/b2d518b4-3cdf-44f4-a0f7-17af351d83bb.jpeg' },
+      { title: 'QUATTRO FORMAGGI', price: '675.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/3fc8b280-7aa7-402c-b860-f64dc79e7822.jpeg' },
+      { title: 'PENNE ARABIATA', price: '375.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/e663a3cb-4371-49ca-bd1c-da9fb661af00.jpeg' },
+      { title: 'CHICKEN CAESAR SALAD', price: '450.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/8db05d19-6085-4286-b302-1e05cd19bd5f.jpg' }
     ];
     const drinkItems = [
-        { title: "MILKSHAKE",        price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/6d1ef948-29c7-44bc-96c3-fabc575239d2.jpg" },
-        { title: "NEGRONI",          price: "450.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/f2b232bf-7a38-4c2b-bbbe-f3eb06497fe9.jpg" },
-        { title: "APEROL SPRITZ",    price: "650.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/3c4ce51c-7ade-44dd-b7c9-f74651cea216.jpg" },
-        { title: "ESPRESSO MARTINI", price: "440.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/4aefb242-8c3c-4795-98f7-5221db67e096.jpg" },
-        { title: "CAPPUCCINO",       price: "160.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/c82e8f58-49e3-461d-bfcc-054b92b14008.jpeg" },
-        { title: "MOJITO",           price: "500.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/c3c253fd-ec6b-44df-af9b-1a008c076a01.jpg" },
-        { title: "EFES MALT",        price: "220.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/17fb26bd-b94a-47cf-8c48-b19cd45a2ecd.jpg" },
-        { title: "SMOOTHIE",         price: "250.00 ₺", image: "https://files.cdn.elektraweb.com/bdcac343/34135/images/0400dd6b-8458-4775-9997-9868969d0911.jpg" }
+      { title: 'WHISKY SOUR', price: '500.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/c347ba45-c3b4-4901-8ade-edc5a169f1b4.jpg' },
+      { title: 'COSMOPOLITAN', price: '400.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/0460d9ca-09ba-4b5b-8930-b7a81c8e9514.jpg' },
+      { title: 'B52', price: '350.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/2f5c96ee-5440-4415-9158-dee431939091.jpg' },
+      { title: 'CHURCHILL', price: '150.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/7300e8a9-7356-488a-87f4-6abc6df7ec1c.jpg' },
+      { title: 'MILKSHAKE', price: '250.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/6d1ef948-29c7-44bc-96c3-fabc575239d2.jpg' },
+      { title: 'LATTE', price: '160.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/d2e06aaa-46b5-42c1-b98f-bfd80551db99.jpeg' },
+      { title: 'EFES MALT', price: '220.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/17fb26bd-b94a-47cf-8c48-b19cd45a2ecd.jpg' },
+      { title: 'CAPPUCCINO', price: '160.00 ₺', image: 'https://files.cdn.elektraweb.com/bdcac343/34135/images/c82e8f58-49e3-461d-bfcc-054b92b14008.jpeg' }
     ];
 
-    /* Birleştirilmiş Bilgi Slaytı İçeriği (3 Bilgi) */
-    const infoBlocksData = [
-        { icon: "📶", title: "FREE Wi-Fi",   detail: "COASTLINE_ORANGE", sub: "Please ask reception for the password" },
-        { icon: "🛎️", title: "ROOM SERVICE", detail: "12:00 – 22:00",    sub: "Please ask reception" },
-        { icon: "🕛", title: "CHECK-OUT",    detail: "12:00",            sub: "Late check-out: Reception" }
-    ];
+    const sliderEl = document.getElementById('dynamicSlider');
+    const dotsEl = document.getElementById('slideDots');
+    let slides = [];
+    let dots = [];
+    let currentSlide = 0;
+    let currentLanguageIndex = 0;
+    let latestWeatherPayload = null;
+    let latestRatePayload = null;
 
-    function makeTitle(text) {
-        return text.split(" ").map((w, i) =>
-            `<span class="word" style="animation-delay:${350 + (i + 1) * 150}ms">${w}</span>&nbsp;`
-        ).join("");
+    // All non-header content stays English; only date and welcome use the selected language.
+    function tr(key) { return (TEXT.en || {})[key] || key; }
+
+    function menuColumn(item, emoji) {
+      return `
+        <div class="menu-column">
+          <div class="food-photo-wrap">
+            <img class="food-photo" src="${item.image}" alt="${item.title}" loading="eager" decoding="async"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-placeholder" aria-hidden="true">${emoji}</div>
+          </div>
+          <h1>${item.title}</h1>
+          <div class="price-tag">${item.price}</div>
+        </div>`;
     }
 
-    /* Slayt dizisi: 3 Menü -> 1 Bilgi -> 3 Menü -> 1 Bilgi şeklinde sıralar */
-    const allSlides = [];
-    const N = Math.max(foodItems.length, drinkItems.length); // 8
-    
-    for (let i = 0; i < N; i++) {
-        allSlides.push({ type: "menu", food: foodItems[i], drink: drinkItems[i] });
-        
-        // Her 3 menü slaydından sonra veya en son slaytta bilgi paneli ekle
-        if ((i + 1) % 3 === 0 || i === N - 1) {
-            allSlides.push({ type: "info", data: infoBlocksData });
-        }
+    function infoSlide() {
+      return `
+        <div class="info-slide-inner">
+          <article class="info-block">
+            <div class="info-icon" aria-hidden="true">📶</div><div class="info-accent"></div>
+            <div class="info-title" data-i18n="wifiTitle">${tr('wifiTitle')}</div>
+            <div class="info-detail" data-i18n="wifiDetail">${tr('wifiDetail')}</div>
+            <div class="info-sub" data-i18n="wifiSub">${tr('wifiSub')}</div>
+          </article>
+          <article class="info-block">
+            <div class="info-icon" aria-hidden="true">🛎️</div><div class="info-accent"></div>
+            <div class="info-title" data-i18n="roomTitle">${tr('roomTitle')}</div>
+            <div class="info-detail" data-i18n="roomDetail">${tr('roomDetail')}</div>
+            <div class="info-sub" data-i18n="roomSub">${tr('roomSub')}</div>
+          </article>
+          <article class="info-block">
+            <div class="info-icon" aria-hidden="true">🕛</div><div class="info-accent"></div>
+            <div class="info-title" data-i18n="checkoutTitle">${tr('checkoutTitle')}</div>
+            <div class="info-detail" data-i18n="checkoutDetail">${tr('checkoutDetail')}</div>
+            <div class="info-sub" data-i18n="checkoutSub">${tr('checkoutSub')}</div>
+          </article>
+        </div>`;
     }
 
-    /* DOM oluştur */
-    const sliderFrag = document.createDocumentFragment();
-    allSlides.forEach((s, i) => {
-        const el = document.createElement("div");
-        el.className = "slide"
-            + (i === 0 ? " active" : "")
-            + (s.type === "info" ? " info-slide" : "");
+    function guideSlide() {
+      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=420x420&margin=8&data=' + encodeURIComponent(CONFIG.mapUrl);
+      return `
+        <div class="guide-slide-content">
+          <div class="guide-copy">
+            <div class="eyebrow" data-i18n="guideEyebrow">${tr('guideEyebrow')}</div>
+            <div class="guide-title" data-i18n="guideTitle">${tr('guideTitle')}</div>
+            <div class="guide-sub" data-i18n="guideSub">${tr('guideSub')}</div>
+          </div>
+          <a class="qr-card" href="${CONFIG.mapUrl}" target="_blank" rel="noopener noreferrer" aria-label="Open hotel location in Google Maps">
+            <img class="qr-code" src="${qrUrl}" alt="Coastline Orange Hotel Google Maps QR code" loading="eager">
+            <div class="qr-caption" data-i18n="guideQr">${tr('guideQr')}</div>
+          </a>
+        </div>`;
+    }
 
-        if (s.type === "menu") {
-            el.innerHTML = `
-                <div class="split-half left-half">
-                    <div class="category-label">🍹 DRINKS</div>
-                    <img src="${s.drink.image}" alt="${s.drink.title}" loading="lazy" decoding="async">
-                    <div class="slide-content">
-                        <h1>${makeTitle(s.drink.title)}</h1>
-                        <div class="price-tag">${s.drink.price}</div>
-                    </div>
-                </div>
-                <div class="split-half right-half">
-                    <div class="category-label">🍽️ FOOD</div>
-                    <img src="${s.food.image}" alt="${s.food.title}" loading="lazy" decoding="async">
-                    <div class="slide-content">
-                        <h1>${makeTitle(s.food.title)}</h1>
-                        <div class="price-tag">${s.food.price}</div>
-                    </div>
-                </div>`;
+    function menuQrSlide() {
+      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=420x420&margin=8&data=' + encodeURIComponent(CONFIG.menuUrl);
+      return `
+        <div class="guide-slide-content menu-qr-content">
+          <div class="guide-copy">
+            <div class="eyebrow" data-i18n="menuEyebrow">${tr('menuEyebrow')}</div>
+            <div class="guide-title" data-i18n="menuTitle">${tr('menuTitle')}</div>
+            <div class="guide-sub" data-i18n="menuSub">${tr('menuSub')}</div>
+          </div>
+          <a class="qr-card" href="${CONFIG.menuUrl}" target="_blank" rel="noopener noreferrer" aria-label="Open the Coastline Orange Hotel digital menu">
+            <img class="qr-code" src="${qrUrl}" alt="Coastline Orange Hotel digital menu QR code" loading="eager">
+            <div class="qr-caption" data-i18n="menuQr">${tr('menuQr')}</div>
+          </a>
+        </div>`;
+    }
+
+    function buildSlides() {
+      const items = [];
+      const count = Math.max(foodItems.length, drinkItems.length);
+      for (let i = 0; i < count; i++) {
+        items.push({ type: 'menu', food: foodItems[i], drink: drinkItems[i] });
+        if ((i + 1) % 3 === 0 || i === count - 1) items.push({ type: 'info' });
+      }
+      items.push({ type: 'guide' });
+      items.push({ type: 'menuQr' });
+      const slideFrag = document.createDocumentFragment();
+      const dotsFrag = document.createDocumentFragment();
+      items.forEach((item, index) => {
+        const slide = document.createElement('div');
+        const kindClass = item.type === 'menu' ? 'menu-slide' : item.type === 'info' ? 'info-slide' : item.type === 'guide' ? 'guide-slide qr-slide' : 'menu-qr-slide qr-slide';
+        slide.className = 'slide' + (index === 0 ? ' active' : '') + ' ' + kindClass;
+        if (item.type === 'menu') {
+          slide.innerHTML = menuColumn(item.drink, '🍹') + menuColumn(item.food, '🍽️');
+        } else if (item.type === 'info') {
+          slide.innerHTML = infoSlide();
+        } else if (item.type === 'guide') {
+          slide.innerHTML = guideSlide();
         } else {
-            let infoHtml = `<div class="info-slide-inner">`;
-            s.data.forEach(block => {
-                infoHtml += `
-                    <div class="info-block">
-                        <div class="info-icon">${block.icon}</div>
-                        <div class="info-accent"></div>
-                        <div class="info-title">${block.title}</div>
-                        <div class="info-detail">${block.detail}</div>
-                        <div class="info-sub">${block.sub}</div>
-                    </div>`;
-            });
-            infoHtml += `</div>`;
-            el.innerHTML = infoHtml;
+          slide.innerHTML = menuQrSlide();
         }
-        sliderFrag.appendChild(el);
-    });
-    sliderEl.appendChild(sliderFrag);
-
-    /* Gösterge noktaları */
-    const dotFrag = document.createDocumentFragment();
-    allSlides.forEach((s, i) => {
-        const d = document.createElement("div");
-        d.className = "dot"
-            + (i === 0 ? " active" : "")
-            + (s.type === "info" ? " info-dot" : "");
-        dotFrag.appendChild(d);
-    });
-    slideDotsEl.appendChild(dotFrag);
-
-    /* Slider döngüsü */
-    const slides = sliderEl.querySelectorAll(".slide");
-    const dots   = slideDotsEl.querySelectorAll(".dot");
-    let curSlide = 0;
-    setInterval(() => {
-        slides[curSlide].classList.remove("active");
-        dots[curSlide].classList.remove("active");
-        curSlide = (curSlide + 1) % slides.length;
-        slides[curSlide].classList.add("active");
-        dots[curSlide].classList.add("active");
-    }, 7000);
-
-    /* ════════════════════════════════════════════
-       3. SAAT + TEMA
-    ════════════════════════════════════════════ */
-    let lastMin = -1;
-
-    async function syncTime() {
-        try {
-            const r = await fetch("https://worldtimeapi.org/api/timezone/Europe/Istanbul");
-            if (r.ok) {
-                const d = await r.json();
-                timeOffset = new Date(d.datetime).getTime() - Date.now();
-            }
-        } catch (_) {}
-        setTheme();
+        slideFrag.appendChild(slide);
+        const dot = document.createElement('span');
+        dot.className = 'dot' + (index === 0 ? ' active' : '') + (item.type === 'info' ? ' info-dot' : '');
+        dotsFrag.appendChild(dot);
+      });
+      sliderEl.replaceChildren(slideFrag);
+      dotsEl.replaceChildren(dotsFrag);
+      slides = Array.from(sliderEl.querySelectorAll('.slide'));
+      dots = Array.from(dotsEl.querySelectorAll('.dot'));
     }
 
-    function setTheme() {
-        const h = istNow().getUTCHours();
-        document.body.classList.toggle("theme-day",   h >= 8 && h < 20);
-        document.body.classList.toggle("theme-night", h < 8  || h >= 20);
+    function applyLanguage() {
+      const lang = LANGUAGES[currentLanguageIndex];
+      document.documentElement.lang = lang.code;
+      const welcomeEl = document.getElementById('welcomeText');
+      welcomeEl.style.opacity = '0';
+      welcomeEl.style.transform = 'translateY(5px)';
+      window.setTimeout(() => {
+        welcomeEl.textContent = lang.welcome;
+        welcomeEl.style.opacity = '1';
+        welcomeEl.style.transform = 'translateY(0)';
+      }, 180);
+      updateDate();
     }
 
-    function clockLoop() {
-        const now = new Date();
-        const min = now.getMinutes();
-        if (min !== lastMin) {
-            lastMin = min;
-            antalyaEl.textContent = now.toLocaleTimeString("tr-TR", { hour:"2-digit", minute:"2-digit", timeZone:"Europe/Istanbul" });
-            londonEl.textContent  = now.toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit", timeZone:"Europe/London" });
-            berlinEl.textContent  = now.toLocaleTimeString("de-DE", { hour:"2-digit", minute:"2-digit", timeZone:"Europe/Berlin" });
-            moscowEl.textContent  = now.toLocaleTimeString("ru-RU", { hour:"2-digit", minute:"2-digit", timeZone:"Europe/Moscow" });
-            setTheme();
-        }
-        requestAnimationFrame(clockLoop);
+    function updateDate() {
+      const lang = LANGUAGES[currentLanguageIndex];
+      const now = new Date();
+      document.getElementById('dateDisplay').textContent = new Intl.DateTimeFormat(lang.locale, {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: CONFIG.location.timezone
+      }).format(now);
     }
 
-    // İlk yükleme öncesi
-    updateDateDisplay(LANGS[0].locale);
-    syncTime();
-    requestAnimationFrame(clockLoop);
-    setInterval(syncTime, 6 * 3600_000); // 6 saatte bir senkronize et
+    function updateClock(id, zone, locale) {
+      const now = new Date();
+      document.getElementById(id).textContent = new Intl.DateTimeFormat(locale, {
+        hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: zone
+      }).format(now);
+    }
 
-    /* ════════════════════════════════════════════
-       4. HAVA DURUMU — 10 dakikada bir
-    ════════════════════════════════════════════ */
+    function updateClocksAndTheme() {
+      updateClock('antalyaTime', 'Europe/Istanbul', 'tr-TR');
+      updateClock('londonTime', 'Europe/London', 'en-GB');
+      updateClock('berlinTime', 'Europe/Berlin', 'de-DE');
+      updateClock('moscowTime', 'Europe/Moscow', 'ru-RU');
+      const hour = Number(new Intl.DateTimeFormat('en-GB', { hour: '2-digit', hourCycle: 'h23', timeZone: CONFIG.location.timezone }).format(new Date()));
+      document.body.classList.toggle('theme-day', hour >= 8 && hour < 20);
+      document.body.classList.toggle('theme-night', hour < 8 || hour >= 20);
+    }
+
+    function rotateHeaderLanguage() {
+      // Only the welcome message and date rotate. Menus, QR copy and footer stay English.
+      currentLanguageIndex = (currentLanguageIndex + 1) % LANGUAGES.length;
+      applyLanguage();
+    }
+
+    function activateSlide(next) {
+      if (!slides.length) return;
+      slides[currentSlide].classList.remove('active');
+      dots[currentSlide].classList.remove('active');
+      currentSlide = (next + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+
+    function scheduleNextSlide() {
+      const isQrSlide = slides[currentSlide] && slides[currentSlide].classList.contains('qr-slide');
+      const duration = isQrSlide ? CONFIG.qrSlideDurationMs : CONFIG.slideDurationMs;
+      window.setTimeout(() => {
+        activateSlide(currentSlide + 1);
+        scheduleNextSlide();
+      }, duration);
+    }
+
+    function weatherLabel(code) {
+      // Open-Meteo / WMO weather codes: each condition receives its own drawn icon.
+      if (code === 0) return { type: 'clear', key: 'clear' };
+      if (code === 1) return { type: 'mainly-clear', key: 'mainlyClear' };
+      if (code === 2) return { type: 'partly-cloudy', key: 'partlyCloudy' };
+      if (code === 3) return { type: 'cloudy', key: 'cloudy' };
+      if ([45, 48].includes(code)) return { type: 'fog', key: 'fog' };
+      if ([51, 53, 55].includes(code)) return { type: 'drizzle', key: 'drizzle' };
+      if ([56, 57].includes(code)) return { type: 'freezing-drizzle', key: 'freezingDrizzle' };
+      if ([61, 63, 65].includes(code)) return { type: 'rain', key: 'rain' };
+      if ([66, 67].includes(code)) return { type: 'freezing-rain', key: 'freezingRain' };
+      if ([71, 73, 75].includes(code)) return { type: 'snow', key: 'snow' };
+      if (code === 77) return { type: 'snow-grains', key: 'snowGrains' };
+      if ([80, 81, 82].includes(code)) return { type: 'showers', key: 'showers' };
+      if ([85, 86].includes(code)) return { type: 'snow-showers', key: 'snowShowers' };
+      if (code === 95) return { type: 'thunderstorm', key: 'thunderstorm' };
+      if ([96, 99].includes(code)) return { type: 'hail-storm', key: 'hailStorm' };
+      return { type: 'mixed', key: 'mixed' };
+    }
+
+    function weatherIconSvg(type, isDay) {
+      const sun = `<g class="sun-rays" stroke="#ffc45c" stroke-width="4" stroke-linecap="round"><path d="M32 8v5M32 51v5M8 32h5M51 32h5M15 15l4 4M45 45l4 4M15 49l4-4M45 19l4-4"/></g><circle class="sun-disc" cx="32" cy="32" r="12" fill="#ffc45c" stroke="#ffe6a4" stroke-width="2"/>`;
+      const moon = `<g class="moon-shape"><path d="M39 12a22 22 0 1 0 25 32A19 19 0 0 1 39 12Z" fill="#dbeaff" stroke="#f7fbff" stroke-width="1.5"/><g fill="#ffffff"><circle cx="68" cy="20" r="2.2"/><circle cx="77" cy="35" r="1.5"/><path d="M67 43l1.5 3.5L72 48l-3.5 1.5L67 53l-1.5-3.5L62 48l3.5-1.5Z"/></g></g>`;
+      const baseCloud = `<path class="cloud-shape" d="M24 65h48a15 15 0 0 0 0-30c-1.7 0-3.3.3-4.8.8A23 23 0 0 0 23 40a13 13 0 0 0 1 25Z" fill="#edf6ff" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>`;
+      const smallCloud = `<path class="cloud-shape" d="M58 42h20a9 9 0 0 0 0-18c-1 0-2 .1-3 .4A14 14 0 0 0 48 30a8 8 0 0 0 10 12Z" fill="#edf6ff" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>`;
+      const rain = `<g class="rain-streaks" stroke="#78d8ff" stroke-width="4" stroke-linecap="round"><path d="M31 72l-4 9M48 72l-4 9M65 72l-4 9"/></g>`;
+      const drizzle = `<g class="rain-streaks" stroke="#a6e6ff" stroke-width="3" stroke-linecap="round"><path d="M35 73l-2 5M50 73l-2 5M65 73l-2 5"/></g>`;
+      const snow = `<g class="snow-flakes" stroke="#b5eaff" stroke-width="2.5" stroke-linecap="round"><path d="M30 76v10M25 81h10M26.5 77.5l7 7M33.5 77.5l-7 7M50 72v10M45 77h10M46.5 73.5l7 7M53.5 73.5l-7 7M69 76v10M64 81h10M65.5 77.5l7 7M72.5 77.5l-7 7"/></g>`;
+      const ice = `<g class="snow-flakes" stroke="#9de8ff" stroke-width="2.5" stroke-linecap="round"><path d="M39 73v9M34.5 77.5h9M62 73v9M57.5 77.5h9"/></g>`;
+      const fog = `<g class="fog-lines" fill="none" stroke="#c6d8e7" stroke-width="4" stroke-linecap="round"><path d="M17 73h29M52 73h30M22 83h21M49 83h29"/></g>`;
+      const bolt = `<path class="lightning-bolt" d="M52 65 39 83h10l-4 13 19-23H53l7-8Z" fill="#ffd15c" stroke="#fff1af" stroke-width="1.4" stroke-linejoin="round"/>`;
+      const hail = `<g fill="#bcecff" stroke="#f3fbff" stroke-width="1.3"><circle cx="34" cy="80" r="3.5"/><circle cx="65" cy="82" r="3.5"/></g>`;
+      const sky = isDay ? sun : moon;
+      let contents = '';
+      switch (type) {
+        case 'clear': contents = sky; break;
+        case 'mainly-clear': contents = sky + smallCloud; break;
+        case 'partly-cloudy': contents = sky + baseCloud; break;
+        case 'cloudy': contents = baseCloud; break;
+        case 'fog': contents = baseCloud + fog; break;
+        case 'drizzle': contents = baseCloud + drizzle; break;
+        case 'freezing-drizzle': contents = baseCloud + drizzle + ice; break;
+        case 'rain': contents = baseCloud + rain; break;
+        case 'freezing-rain': contents = baseCloud + rain + ice; break;
+        case 'snow': contents = baseCloud + snow; break;
+        case 'snow-grains': contents = baseCloud + ice; break;
+        case 'showers': contents = sky + baseCloud + rain; break;
+        case 'snow-showers': contents = sky + baseCloud + snow; break;
+        case 'thunderstorm': contents = baseCloud + rain + bolt; break;
+        case 'hail-storm': contents = baseCloud + bolt + hail; break;
+        default: contents = sky + baseCloud;
+      }
+      return `<svg class="weather-svg weather-${type}" viewBox="0 0 100 100" aria-hidden="true" focusable="false">${contents}</svg>`;
+    }
+
+    function renderWeather(data) {
+      const c = data.current;
+      if (!c) return;
+      const condition = weatherLabel(Number(c.weather_code));
+      const localHour = Number(new Intl.DateTimeFormat('en-GB', { hour: '2-digit', hourCycle: 'h23', timeZone: CONFIG.location.timezone }).format(new Date()));
+      const isDay = c.is_day === 0 || c.is_day === 1 ? Number(c.is_day) === 1 : localHour >= 6 && localHour < 19;
+      document.getElementById('weatherIcon').innerHTML = weatherIconSvg(condition.type, isDay);
+      document.getElementById('weatherTemp').textContent = Math.round(c.temperature_2m) + '°C';
+      document.getElementById('weatherCondition').textContent = tr(condition.key);
+      const timePrefix = String(c.time || '').slice(0, 13);
+      const hIdx = Array.isArray(data.hourly?.time) ? data.hourly.time.findIndex(t => t.startsWith(timePrefix)) : -1;
+      const rain = hIdx >= 0 ? data.hourly.precipitation_probability?.[hIdx] : null;
+      const max = data.daily?.temperature_2m_max?.[0];
+      const min = data.daily?.temperature_2m_min?.[0];
+      // Open-Meteo returns sunset in the requested Europe/Istanbul local time.
+      const sunsetIso = data.daily?.sunset?.[0];
+      const sunset = sunsetIso ? String(sunsetIso).slice(11, 16) : '--:--';
+      const parts = [tr('feelsLike') + ' ' + Math.round(c.apparent_temperature) + '°C'];
+      parts.push(tr('humidity') + ' ' + Math.round(c.relative_humidity_2m) + '% · ' + tr('wind') + ' ' + Math.round(c.wind_speed_10m) + ' km/h');
+      if (Number.isFinite(Number(max)) && Number.isFinite(Number(min))) parts.push(tr('today') + ' ' + Math.round(min) + '° / ' + Math.round(max) + '°');
+      if (rain !== null && rain !== undefined) parts.push(tr('rainChance') + ' ' + Math.round(rain) + '%');
+      parts.push(tr('sunset') + ' ' + sunset);
+      document.getElementById('weatherExtra').textContent = parts.join(' · ');
+    }
+
     async function fetchWeather() {
-        try {
-            const r = await fetch(
-                "https://api.open-meteo.com/v1/forecast" +
-                "?latitude=36.8841&longitude=30.7056" +
-                "&current=temperature_2m,apparent_temperature," +
-                "relative_humidity_2m,wind_speed_10m,weather_code"
-            );
-            if (!r.ok) return;
-            const c    = (await r.json()).current;
-            const tC   = Math.round(c.temperature_2m);
-            const tF   = Math.round(tC * 9 / 5 + 32);
-            const fC   = Math.round(c.apparent_temperature);
-            const hum  = Math.round(c.relative_humidity_2m);
-            const wnd  = Math.round(c.wind_speed_10m);
-
-            weatherTempEl.textContent = `${tC}°C / ${tF}°F`;
-            weatherExtraEl.innerHTML  =
-                `<span>Hissedilen: ${fC}°C</span>` +
-                `<span>💧 ${hum}% &nbsp;💨 ${wnd} km/h</span>`;
-
-            const code  = c.weather_code;
-            const isDay = (istNow().getUTCHours() >= 8 && istNow().getUTCHours() < 20);
-            const sun   = isDay ? '<div class="icon-sun"></div>' : '<div class="icon-moon"></div>';
-            let icon;
-
-            if (code === 0) {
-                icon = sun;
-            } else if ([1, 2, 3].includes(code)) {
-                const mini = isDay
-                    ? '<div class="icon-sun"  style="transform:scale(0.65);top:5px;left:25px;opacity:0.6;"></div>'
-                    : '<div class="icon-moon" style="transform:scale(0.65);top:5px;left:25px;opacity:0.6;"></div>';
-                icon = mini + '<div class="icon-cloud"></div>';
-            } else if ([51,53,55,61,63,65,80,81,82].includes(code)) {
-                icon = '<div class="icon-cloud" style="background:#cbd5e1;"></div><div class="icon-rain"></div>';
-            } else {
-                icon = sun;
-            }
-            weatherIconEl.innerHTML = icon;
-        } catch (_) {}
+      const params = new URLSearchParams({
+        latitude: String(CONFIG.location.latitude), longitude: String(CONFIG.location.longitude),
+        current: 'temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code,is_day',
+        hourly: 'precipitation_probability', daily: 'temperature_2m_max,temperature_2m_min,sunset',
+        timezone: CONFIG.location.timezone, forecast_days: '1'
+      });
+      try {
+        const response = await fetch('https://api.open-meteo.com/v1/forecast?' + params.toString(), { cache: 'no-store' });
+        if (!response.ok) throw new Error('Weather HTTP ' + response.status);
+        const data = await response.json();
+        if (!data.current) throw new Error('Weather data missing');
+        latestWeatherPayload = data;
+        renderWeather(data);
+      } catch (error) {
+        console.warn('Hava durumu güncellenemedi:', error);
+        const conditionEl = document.getElementById('weatherCondition');
+        if (document.getElementById('weatherTemp').textContent === '--°C') conditionEl.textContent = tr('weatherUnavailable');
+      }
     }
-    fetchWeather();
-    setInterval(fetchWeather, 600_000);
 
-    /* ════════════════════════════════════════════
-       5. DÖVİZ KURLARI — saatte bir
-    ════════════════════════════════════════════ */
+    function renderRates(data) {
+      const rates = data.rates;
+      const usdTry = Number(rates?.TRY);
+      const eur = Number(rates?.EUR);
+      const gbp = Number(rates?.GBP);
+      if (!(usdTry > 0 && eur > 0 && gbp > 0)) return;
+      const fmt = value => new Intl.NumberFormat('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+      document.getElementById('usdRate').textContent = fmt(usdTry) + ' ₺';
+      document.getElementById('eurRate').textContent = fmt(usdTry / eur) + ' ₺';
+      document.getElementById('gbpRate').textContent = fmt(usdTry / gbp) + ' ₺';
+      const updated = data.time_last_update_utc ? new Date(data.time_last_update_utc) : new Date();
+      document.getElementById('currencyNote').textContent = tr('rateUpdated') + ': ' + new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: CONFIG.location.timezone }).format(updated) + ' · ' + tr('currencyNote');
+    }
+
     async function fetchRates() {
-        try {
-            const r = await fetch("https://open.er-api.com/v6/latest/USD");
-            if (!r.ok) return;
-            const d = await r.json();
-            const t = d.rates.TRY;
-            usdRateEl.textContent = (t - 0.40).toFixed(2);
-            eurRateEl.textContent = (t / d.rates.EUR - 0.40).toFixed(2);
-            gbpRateEl.textContent = (t / d.rates.GBP - 0.40).toFixed(2);
-        } catch (_) {}
+      try {
+        const response = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Rates HTTP ' + response.status);
+        const data = await response.json();
+        if (!data.rates) throw new Error('Rates missing');
+        latestRatePayload = data;
+        renderRates(data);
+      } catch (error) {
+        console.warn('Döviz kurları güncellenemedi:', error);
+        if (document.getElementById('usdRate').textContent === '--') {
+          document.getElementById('currencyNote').textContent = tr('rateUnavailable') + ' · ' + tr('currencyNote');
+        }
+      }
     }
+
+    // Logo dosyası yoksa ekranın geri kalanı çalışmaya devam eder.
+    document.getElementById('hotelLogo').addEventListener('error', () => {
+      document.getElementById('hotelLogo').style.display = 'none';
+      document.getElementById('logoFallback').style.display = 'block';
+    });
+
+    buildSlides();
+    applyLanguage();
+    updateClocksAndTheme();
+    fetchWeather();
     fetchRates();
-    setInterval(fetchRates, 3_600_000);
 
-})();
-</script>
+    // Normal slaytlar 7 sn, QR ekranları 10 sn gösterilir.
+    // Dil yalnızca üst başlıkta, slayt ve QR sürelerinden bağımsız değişir.
+    scheduleNextSlide();
+    window.setInterval(rotateHeaderLanguage, CONFIG.languageDurationMs);
+    window.setInterval(updateClocksAndTheme, 1000);
+    window.setInterval(updateDate, 60 * 1000);
+    window.setInterval(fetchWeather, CONFIG.weatherRefreshMs);
+    window.setInterval(fetchRates, CONFIG.currencyRefreshMs);
 
-<!-- Cloudflare Analytics — değiştirilmedi -->
-<script type="module"
-    src="https://static.cloudflareinsights.com/beacon.min.js/v3d52b47920f24c319d37e2661827c42b1787588026925"
-    integrity="sha512-d9sL6GJLXn6fInD1+TVXhTcQOsmxeHfmHAvwGDIxp5TO+uo1fiWW7mHomMj4MLRlCsJDTqXzWLHJFFlPCEIj/A=="
-    data-cf-beacon='{"version":"2024.11.0","token":"f0f03d0605bf45f1a3b17cf7d5e6861f"}'
-    crossorigin="anonymous"></script>
+    // TV tarayıcısında sekme geri plana dönerse güncel saati ve temayı yeniden hesapla.
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        updateClocksAndTheme();
+        updateDate();
+        fetchWeather();
+        fetchRates();
+      }
+    });
+  })();
+  </script>
 </body>
 </html>
