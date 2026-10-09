@@ -71,12 +71,8 @@
       min-height: 112px;
       overflow: visible;
     }
-    .logo-wrap { display: flex; align-items: center; justify-content: flex-start; gap: 13px; min-width: 0; height: 100%; }
-    .hotel-logo { display: block; flex: 0 0 auto; width: clamp(42px, 4vw, 72px); height: clamp(42px, 4vw, 72px); max-height: none; object-fit: contain; object-position: center; }
-    .brand-name { display: flex; flex-direction: column; justify-content: center; color: var(--white); font-weight: 850; font-size: clamp(12px, 1.05vw, 20px); letter-spacing: clamp(1px, .12vw, 2px); line-height: 1.15; white-space: nowrap; }
-    .brand-name span { color: var(--accent); font-size: .62em; letter-spacing: clamp(2px, .2vw, 4px); margin-top: 5px; }
-    .logo-fallback { display: none; color: var(--white); font-weight: 900; font-size: clamp(17px, 1.45vw, 28px); letter-spacing: 2px; line-height: 1.1; }
-    .logo-fallback span { display: block; color: var(--accent); font-size: .54em; letter-spacing: 4px; margin-top: 7px; }
+    .logo-wrap { display: flex; align-items: center; justify-content: flex-start; min-width: 0; height: 100%; overflow: hidden; }
+    .hotel-logo { display: block; flex: 0 1 auto; width: clamp(125px, 13vw, 230px); height: 100%; max-height: 100%; object-fit: contain; object-position: left center; }
     .welcome-area { min-width: 0; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(7px, .65vw, 12px); padding: 5px 0; }
     .date-display { font-size: clamp(11px, .88vw, 17px); line-height: 1.3; font-weight: 650; opacity: .75; letter-spacing: clamp(1px, .15vw, 2.8px); text-transform: uppercase; white-space: normal; }
     .welcome-text { font-size: clamp(20px, 1.75vw, 34px); line-height: 1.2; font-weight: 850; letter-spacing: clamp(1px, .16vw, 3px); text-shadow: 0 3px 16px rgba(0,0,0,.35); white-space: nowrap; transition: opacity .4s ease, transform .4s ease; }
@@ -222,8 +218,6 @@
     <header class="header glass-panel">
       <div class="logo-wrap">
         <img src="logo.gif" alt="Coastline Orange Hotel" class="hotel-logo" id="hotelLogo">
-        <div class="brand-name" id="brandName">COASTLINE<span>ORANGE HOTEL</span></div>
-        <div class="logo-fallback" id="logoFallback">COASTLINE<span>ORANGE HOTEL</span></div>
       </div>
       <div class="welcome-area">
         <div id="dateDisplay" class="date-display">...</div>
@@ -700,11 +694,10 @@
       }
     }
 
-    // Logo dosyası yoksa ekranın geri kalanı çalışmaya devam eder.
+    // Logo dosyası bulunamazsa metinle sahte logo oluşturma; yalnızca logo.gif kullanılır.
     document.getElementById('hotelLogo').addEventListener('error', () => {
-      document.getElementById('hotelLogo').style.display = 'none';
-      document.getElementById('logoFallback').style.display = 'block';
-      document.getElementById('brandName').style.display = 'none';
+      document.getElementById('hotelLogo').style.visibility = 'hidden';
+      console.warn('logo.gif yüklenemedi. Dosyanın HTML ile aynı klasörde olduğundan emin olun.');
     });
 
     buildSlides();
