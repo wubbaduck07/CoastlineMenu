@@ -149,7 +149,7 @@
     .info-accent { width: clamp(40px, 4vw, 78px); height: 3px; border-radius: 10px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
     .info-title { font-size: clamp(16px, 1.7vw, 33px); font-weight: 900; letter-spacing: clamp(.4px, .1vw, 2px); }
     .info-detail { font-size: clamp(16px, 1.55vw, 30px); font-weight: 800; color: var(--mint); overflow-wrap: anywhere; }
-    .info-sub { font-size: clamp(13px, 1.1vw, 21px); line-height: 1.4; color: var(--muted); max-width: 28ch; }
+    .info-sub { font-size: clamp(13px, 1.1vw, 21px); line-height: 1.4; min-height: 2.8em; color: var(--muted); max-width: 28ch; }
 
     /* QR slaytları (dokunmatik değil: link yok, QR büyük) */
     .guide-slide-content { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(200px, .9fr); align-items: center; gap: clamp(20px, 4vw, 70px); max-width: 1300px; width: 100%; }
@@ -180,7 +180,7 @@
     .extra-body { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
     .extra-label { font-size: clamp(10px, 1.7vh, 17px); letter-spacing: 1.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; }
     .extra-value { font-size: clamp(18px, 3.4vh, 36px); font-weight: 900; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .extra-value small { font-size: .58em; font-weight: 850; letter-spacing: 1px; margin-left: .35em; }
+    .extra-value small { font-size: .58em; font-weight: 850; letter-spacing: 1px; margin: 0 .35em; }
     .extra-note { font-size: clamp(11px, 1.8vh, 19px); color: var(--muted); }
     .uv-low { color: var(--mint); } .uv-mid { color: #ffd45e; } .uv-high { color: var(--accent); } .uv-vhigh { color: #ff6f61; }
 
@@ -279,9 +279,8 @@
       .footer { grid-template-columns: minmax(185px, .9fr) minmax(320px, 1.5fr) minmax(205px, .9fr); gap: 7px; }
       .ticker-item { gap: 4px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-    }
+    /* NOT: "prefers-reduced-motion" kuralı bilerek yok. TV'de Android animasyon ayarı kapalıysa
+       tarayıcı bu modu bildirir ve ekrandaki tüm animasyonlar donardı. */
   </style>
 </head>
 <body class="theme-day">
